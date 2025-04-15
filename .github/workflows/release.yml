@@ -2,10 +2,6 @@ name: Build for Windows ARM64
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - "v*.*.*"
 
 jobs:
   build-windows-arm64:
