@@ -2,6 +2,10 @@ name: Build for Windows ARM64
 
 on:
   push:
+    branches:
+      - master
+    tags:
+      - "v*.*.*"
 
 jobs:
   build-windows-arm64:
@@ -12,7 +16,7 @@ jobs:
       libssh2_version: "1.11.0"
       llvm_path: "${{ github.workspace }}/llvm-mingw"
       libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,11 +32,12 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
           ./bootstrap-vcpkg.sh
-          
+
       - name: Install libraries from vcpkg
         run: |
           PATH=$PATH:${{ env.llvm_path }}/bin
           cd vcpkg
+          git apply ${{ github.workspace }}/patches/aria2-fast.patch
           git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
@@ -76,4 +81,3 @@ jobs:
         with:
           files: |
             aria2*.zip
-    

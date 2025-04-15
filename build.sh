@@ -55,7 +55,7 @@ cd aria2-${aria2_ver}
 make -j$(nproc)
 pushd src
 $TARGET-strip aria2c.exe
-7z a aria2_${aria2_ver}_$arch.zip aria2c.exe
-mv aria2_${aria2_ver}_$arch.zip $work_dir
+7z a aria2-${aria2_ver}-win$arch.zip aria2c.exe
+mv aria2-${aria2_ver}-win$arch.zip $work_dir
 popd
 make clean
