@@ -47,10 +47,15 @@ make clean
 popd
 
 # Build aria2
-wget -nc https://github.com/aria2/aria2/releases/download/release-${aria2_ver}/aria2-${aria2_ver}.tar.xz
-tar xf aria2-${aria2_ver}.tar.xz
-cd aria2-${aria2_ver}
+# wget -nc https://github.com/aria2/aria2/releases/download/release-${aria2_ver}/aria2-${aria2_ver}.tar.xz
+# tar xf aria2-${aria2_ver}.tar.xz
+# cd aria2-${aria2_ver}
+git clone https://github.com/aria2/aria2.git
+cd aria2
+git checkout tags/release-${aria2_ver}
 git apply ${work_dir}/patches/aria2-fast.patch
+autoreconf -i
+
 ./configure --host=$TARGET \
     --without-libxml2 --with-libexpat
 make -j$(nproc)
