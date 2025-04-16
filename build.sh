@@ -40,18 +40,19 @@ tar xf libssh2-${libssh2_ver}.tar.gz
 pushd libssh2-${libssh2_ver}
 autoreconf -fi
 ./configure --disable-debug --disable-shared --enable-static \
---prefix=$work_dir/libssh2-$arch --host=$TARGET \
---without-openssl --with-wincng
+    --prefix=$work_dir/libssh2-$arch --host=$TARGET \
+    --without-openssl --with-wincng
 make install
 make clean
 popd
 
 # Build aria2
 wget -nc https://github.com/aria2/aria2/releases/download/release-${aria2_ver}/aria2-${aria2_ver}.tar.xz
+git apply ${work_dir}/patches/aria2-fast.patch
 tar xf aria2-${aria2_ver}.tar.xz
 cd aria2-${aria2_ver}
-./configure --host=$TARGET  \
---without-libxml2 --with-libexpat
+./configure --host=$TARGET \
+    --without-libxml2 --with-libexpat
 make -j$(nproc)
 pushd src
 $TARGET-strip aria2c.exe

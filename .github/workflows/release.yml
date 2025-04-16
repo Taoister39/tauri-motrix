@@ -33,7 +33,6 @@ jobs:
         run: |
           PATH=$PATH:${{ env.llvm_path }}/bin
           cd vcpkg
-          git apply ${{ github.workspace }}/patches/aria2-fast.patch
           git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
