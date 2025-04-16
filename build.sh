@@ -48,9 +48,9 @@ popd
 
 # Build aria2
 wget -nc https://github.com/aria2/aria2/releases/download/release-${aria2_ver}/aria2-${aria2_ver}.tar.xz
-git apply ${work_dir}/patches/aria2-fast.patch
 tar xf aria2-${aria2_ver}.tar.xz
 cd aria2-${aria2_ver}
+git apply ${work_dir}/patches/aria2-fast.patch
 ./configure --host=$TARGET \
     --without-libxml2 --with-libexpat
 make -j$(nproc)
