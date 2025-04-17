@@ -64,7 +64,9 @@ make clean
 popd
 
 # Build aria2
-git clone https://github.com/aria2/aria2.git aria2-${aria2_ver}
+if [ ! -d aria2-${aria2_ver} ]; then
+    git clone https://github.com/aria2/aria2.git aria2-${aria2_ver}
+fi
 cd aria2-${aria2_ver}
 git fetch --tags
 git checkout tags/release-${aria2_ver}
@@ -74,9 +76,9 @@ autoreconf -i
 ./configure --host=$TARGET \
     --without-libxml2 --with-libexpat
 make -j$(nproc)
-# pushd src
+pushd src
 $TARGET-strip aria2c.exe
 7z a aria2-${aria2_ver}-win$arch.zip aria2c.exe
 mv aria2-${aria2_ver}-win$arch.zip $work_dir
-# popd
-# make clean
+popd
+make clean
