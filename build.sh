@@ -32,7 +32,8 @@ handle_arch() {
         exit 1
         ;;
     esac
-    vcpkg_libs_dir=$vcpkg_dir/installed/arm-mingw-static-release
+    vcpkg_libs_dir="$vcpkg_dir/installed/${vcpkg_arch}-mingw-static-release"
+
 }
 
 if [ $# == 1 ]; then
