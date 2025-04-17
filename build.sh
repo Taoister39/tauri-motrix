@@ -64,7 +64,7 @@ popd
 
 # Build aria2
 git clone https://github.com/aria2/aria2.git aria2-${aria2_ver}
-cd aria2 -${aria2_ver}
+cd aria2-${aria2_ver}
 git fetch --tags
 git checkout tags/release-${aria2_ver}
 git apply ${work_dir}/patches/aria2-fast.patch
