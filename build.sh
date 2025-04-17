@@ -64,14 +64,17 @@ make clean
 popd
 
 # Build aria2
-if [ ! -d aria2-${aria2_ver} ]; then
-    git clone https://github.com/aria2/aria2.git aria2-${aria2_ver}
+aria2_folder=aria2-${aria2_ver}
+if [ ! -d ${aria2_folder} ]; then
+    git clone https://github.com/aria2/aria2.git ${aria2_folder}
+    cd ${aria2_folder}
+    git fetch --tags
+    git checkout tags/release-${aria2_ver}
+    git apply ${work_dir}/patches/aria2-fast.patch
+    autoreconf -i
+else
+    cd ${aria2_folder}
 fi
-cd aria2-${aria2_ver}
-git fetch --tags
-git checkout tags/release-${aria2_ver}
-git apply ${work_dir}/patches/aria2-fast.patch
-autoreconf -i
 
 ./configure --host=$TARGET \
     --without-libxml2 --with-libexpat
