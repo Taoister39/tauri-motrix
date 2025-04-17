@@ -17,16 +17,16 @@ handle_arch() {
         vcpkg_arch=arm64
         TARGET=aarch64-w64-mingw32
         ;;
-    # x64)
-    #     arch=x64
-    #     vcpkg_arch=x64
-    #     TARGET=x86_64-w64-mingw32
-    #     ;;
-    # x86)
-    #     arch=x86
-    #     vcpkg_arch=x86
-    #     TARGET=i686-w64-mingw32
-    #     ;;
+    x64)
+        arch=x64
+        vcpkg_arch=x64
+        TARGET=x86_64-w64-mingw32
+        ;;
+    x86)
+        arch=x86
+        vcpkg_arch=x86
+        TARGET=i686-w64-mingw32
+        ;;
     *)
         echo "$help_msg"
         exit 1
@@ -74,9 +74,9 @@ autoreconf -i
 ./configure --host=$TARGET \
     --without-libxml2 --with-libexpat
 make -j$(nproc)
-pushd src
+# pushd src
 $TARGET-strip aria2c.exe
 7z a aria2-${aria2_ver}-win$arch.zip aria2c.exe
 mv aria2-${aria2_ver}-win$arch.zip $work_dir
-popd
-make clean
+# popd
+# make clean
