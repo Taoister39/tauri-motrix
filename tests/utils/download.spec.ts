@@ -1,4 +1,4 @@
-import { parseByte, parseByteVo, toByte } from "../../src/utils/download";
+import { parseByte, parseByteVo, toByte } from "@/utils/download";
 
 describe("parseByteVo", () => {
   it("should return ['NaN', ''] for invalid input", () => {

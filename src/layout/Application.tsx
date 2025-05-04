@@ -16,6 +16,7 @@ import { SWRConfig } from "swr";
 import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog from "@/business/task/AddTaskDialog";
 import { DialogRef } from "@/components/BaseDialog";
+import { ADD_DIALOG } from "@/constant/url";
 import { useMotrix } from "@/hooks/motrix";
 import { useCustomTheme } from "@/hooks/theme";
 import LayoutItem from "@/layout/LayoutItem";
@@ -65,7 +66,7 @@ function Application() {
   const routerElements = useRoutes(routers);
 
   useEffect(() => {
-    const unlisten = listen("motrix://open-add-task-dialog", () => {
+    const unlisten = listen(ADD_DIALOG, () => {
       addRef.current?.open();
     });
 

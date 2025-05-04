@@ -1,14 +1,13 @@
+import { emit } from "@tauri-apps/api/event";
 import { useMount } from "ahooks";
-import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import AddTaskDialog from "@/business/task/AddTaskDialog";
 import TaskAllAction from "@/business/task/TaskAllAction";
 import TaskItem from "@/business/task/TaskItem";
 import { TaskFab, TaskList } from "@/client/task_compose";
-import { DialogRef } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
 import { TASK_STATUS_ENUM } from "@/constant/task";
+import { ADD_DIALOG } from "@/constant/url";
 import { useTaskStore } from "@/store/task";
 
 function DownloadingPage() {
@@ -27,8 +26,6 @@ function DownloadingPage() {
     setFetchType,
   } = useTaskStore();
 
-  const addRef = useRef<DialogRef>(null);
-
   useMount(() => {
     setFetchType(TASK_STATUS_ENUM.Active);
   });
@@ -45,7 +42,7 @@ function DownloadingPage() {
           fetchType={fetchType}
         />
       }
-      fab={<TaskFab onClick={() => addRef.current?.open()} />}
+      fab={<TaskFab onClick={() => emit(ADD_DIALOG)} />}
     >
       <TaskList
         dataSource={tasks}
@@ -63,8 +60,6 @@ function DownloadingPage() {
           />
         )}
       />
-
-      <AddTaskDialog ref={addRef} />
     </BasePage>
   );
 }

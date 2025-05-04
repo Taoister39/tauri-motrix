@@ -23,3 +23,6 @@ export const patchMotrixConfig = (data: Partial<MotrixConfig>) =>
 
 export const patchAria2Config = (data: Partial<Aria2Config>) =>
   invoke<null>("patch_aria2_config", { data });
+
+export const getAutoLaunchStatus = () =>
+  invoke<boolean>("get_auto_launch_status");

@@ -28,6 +28,8 @@ pub struct IMotrix {
     /// 2 -> 30 day
     /// 3 -> 90 day
     pub auto_log_clean: Option<i32>,
+
+    pub enable_auto_launch: Option<bool>,
 }
 
 impl IMotrix {
@@ -51,6 +53,8 @@ impl IMotrix {
                 }
 
                 config = serde_yaml::from_value(config_value).unwrap_or(config);
+
+                logging!(info, Type::Core, true, "Finally config: {:?}", config);
                 config
             }
             Err(err) => {
@@ -67,6 +71,8 @@ impl IMotrix {
             language: i18n::get_system_language().into(),
             theme_mode: Some("system".into()),
             app_log_level: Some("info".into()),
+            enable_auto_launch: Some(false),
+            auto_log_clean: Some(3),
             ..Self::default()
         }
     }
@@ -93,5 +99,6 @@ impl IMotrix {
         patch!(aria2_engine);
         patch!(app_hide_window);
         patch!(language);
+        patch!(enable_auto_launch);
     }
 }

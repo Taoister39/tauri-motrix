@@ -43,5 +43,6 @@ reqwest = "0.12.15"
 uuid = "1.16.0"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-autostart = "2"
 tauri-plugin-updater = "2"
 

@@ -14,7 +14,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 1420,
+    port: 2539,
     strictPort: true,
     host,
   },
@@ -28,7 +28,7 @@ export default defineConfig({
       ? {
           protocol: "ws",
           host,
-          port: 1421,
+          port: 2540,
         }
       : undefined,
   },

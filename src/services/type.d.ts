@@ -143,6 +143,7 @@ interface MotrixConfig {
   app_log_level: "silent" | "error" | "warning" | "info" | "debug" | "trace";
   theme_mode: "light" | "dark" | "system";
   auto_log_clean: 0 | 1 | 2 | 3;
+  enable_auto_launch: boolean;
 }
 
 interface Aria2Option {

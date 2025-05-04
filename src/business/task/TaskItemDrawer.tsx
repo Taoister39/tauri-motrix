@@ -10,6 +10,7 @@ import {
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import TaskGraphic from "@/business/task/TaskGraphic";
 import { TaskItemProps } from "@/business/task/TaskItem";
 import TaskItemAction from "@/business/task/TaskItemAction";
 import { TaskDrawerItem, TaskDrawerList } from "@/client/task_compose";
@@ -43,9 +44,6 @@ const TheContainer = styled(Box)(
       padding: "8px 0",
     },
     overflow: "auto",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
   }),
 );
 
@@ -62,7 +60,7 @@ function TaskItemDrawer({
   const { t } = useTranslation();
   const taskName = getTaskName(task);
 
-  const { status } = task;
+  const { status, bitfield } = task;
 
   const totalLength = Number(task.totalLength) || 0;
   const completedLength = Number(task.completedLength) || 0;
@@ -82,35 +80,43 @@ function TaskItemDrawer({
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <TheContainer role="presentation">
-        <section>
-          <Typography
-            variant="h6"
-            sx={({ palette: { mode } }) => ({
-              marginBottom: "16px",
-              color: mode === "dark" ? "#bb86fc" : "#333",
-              fontWeight: "700",
-            })}
-          >
-            {t("task.Details")}
-          </Typography>
-          <TaskDrawerList title={t("task.InfoDetails")}>
-            <TaskDrawerItem label="GID" value={task.gid} />
-            <Divider />
-            <TaskDrawerItem label="Task Name" value={taskName} />
-            <Divider />
-            <TaskDrawerItem label="Save to" value={task.dir} />
-            <Divider />
-            <TaskDrawerItem label="Status" value={task.status} />
-          </TaskDrawerList>
+        <Typography
+          variant="h6"
+          sx={({ palette: { mode } }) => ({
+            marginBottom: "16px",
+            color: mode === "dark" ? "#bb86fc" : "#333",
+            fontWeight: "700",
+          })}
+        >
+          {t("task.Details")}
+        </Typography>
+        <TaskDrawerList title={t("task.InfoDetails")}>
+          <TaskDrawerItem label="GID" value={task.gid} />
+          <Divider />
+          <TaskDrawerItem label="Task Name" value={taskName} />
+          <Divider />
+          <TaskDrawerItem label="Save to" value={task.dir} />
+          <Divider />
+          <TaskDrawerItem label="Status" value={task.status} />
+        </TaskDrawerList>
 
-          <TaskDrawerList title={t("task.SpeedDetails")}>
-            <LinearProgressWithLabel value={progress} color={progressColor} />
-            <TaskDrawerItem label="Progress" value={progressText} />
-            <TaskDrawerItem label="Connections" value={task.connections} />
-            <TaskDrawerItem label="Download Speed" value={speedVo} />
-          </TaskDrawerList>
-        </section>
-        <section style={{ alignSelf: "center" }}>
+        <TaskDrawerList title={t("task.SpeedDetails")}>
+          <LinearProgressWithLabel value={progress} color={progressColor} />
+          <TaskDrawerItem label="Progress" value={progressText} />
+          <TaskDrawerItem label="Connections" value={task.connections} />
+          <TaskDrawerItem label="Download Speed" value={speedVo} />
+        </TaskDrawerList>
+
+        {bitfield && (
+          <section>
+            <TaskGraphic bitfield={bitfield} outerWidth={400} />
+          </section>
+        )}
+        <section
+          style={{
+            textAlign: "center",
+          }}
+        >
           <TaskItemAction
             status={task.status}
             gid={task.gid}

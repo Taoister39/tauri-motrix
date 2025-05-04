@@ -5,7 +5,7 @@
   "identifier": "com.tauri-motrix.app",
   "build": {
     "beforeDevCommand": "pnpm run dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:2539",
     "beforeBuildCommand": "pnpm run build",
     "frontendDist": "../dist"
   },

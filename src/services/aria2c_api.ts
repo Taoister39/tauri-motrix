@@ -46,7 +46,7 @@ export interface Aria2BitTorrent {
 export interface Aria2Task {
   infoHash?: unknown;
   bittorrent?: Aria2BitTorrent;
-  bitfield: string;
+  bitfield?: string;
   completedLength: string;
   connections: string;
   dir: string;

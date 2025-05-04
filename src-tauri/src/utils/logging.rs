@@ -51,3 +51,19 @@ macro_rules! logging {
         log::$level!(target: "app", "{} {}", $type, format_args!($($arg)*));
     };
 }
+
+#[macro_export]
+macro_rules! logging_error {
+    ($type:expr, $print:expr, $result:expr) => {
+        match $result {
+            Ok(_) => (),
+            Err(e) => {
+                if $print {
+                    logging!(error, $type, true, "{}", e.to_string());
+                }
+
+                logging!(error, $type, false, "{}", e.to_string());
+            }
+        }
+    };
+}

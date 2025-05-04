@@ -1,3 +1,5 @@
+// Nothing to do with motrix conf
+
 use crate::{feat, utils::dirs, wrap_err};
 
 use super::CmdResult;
@@ -24,4 +26,10 @@ pub fn open_app_dir() -> CmdResult<()> {
 #[tauri::command]
 pub fn exit_app() {
     feat::quit(Some(0));
+}
+
+#[tauri::command]
+pub fn get_auto_launch_status() -> CmdResult<bool> {
+    use crate::core::sys_opt::SysOpt;
+    wrap_err!(SysOpt::global().get_auto_launch())
 }

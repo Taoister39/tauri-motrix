@@ -31,7 +31,8 @@
         "LogLevelInfo": "Log Level",
         "SpeedLimit": "Speed Limit",
         "UploadSpeedLimit": "Upload Speed Limit",
-        "DownloadSpeedLimit": "Download Speed Limit"
+        "DownloadSpeedLimit": "Download Speed Limit",
+        "AutoLaunch": "Auto Launch"
     },
     "task": {
         "CloseAll": "Close All Tasks",
