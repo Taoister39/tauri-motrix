@@ -81,11 +81,12 @@ export function TaskActionButton(props: {
 export function TaskList<T>(props: {
   dataSource: T[];
   renderItem: (item: T, index: number, arr: T[]) => ReactNode;
+  emptyText?: string;
 }) {
-  const { dataSource, renderItem } = props;
+  const { dataSource, renderItem, emptyText = "task.Empty" } = props;
 
   if (!dataSource.length) {
-    return <BaseEmpty text="task.Empty" />;
+    return <BaseEmpty text={emptyText} />;
   }
 
   return (

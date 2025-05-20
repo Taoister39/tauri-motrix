@@ -24,4 +24,5 @@ pub async fn resolve_setup(app: &App) {
     log_err!(CoreManager::global().init().await);
 
     log_err!(tray::create_tray(app));
+    log_err!(tray::update_tray_menu());
 }

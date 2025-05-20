@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { BaseEmpty } from "@/components/BaseEmpty";
 
-describe("BaseEmpty", () => {
+describe("BaseEmpty Component", () => {
   it("should render without crashing", () => {
     // Mock the useTranslation hook
     jest.mock("react-i18next", () => ({

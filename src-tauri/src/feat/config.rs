@@ -13,7 +13,11 @@ use crate::{
 #[derive(Clone, Copy)]
 enum UpdateFlags {
     None = 0,
+    // RestartCore = 1 << 0,
+    // Aria2Config = 1 << 1,
+    // MotrixConfig = 1 << 2,
     Launch = 1 << 3,
+    TrayMenu = 1 << 4,
 }
 
 /// expose outside for motrix config
@@ -26,7 +30,9 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
     let res: Result<()> = {
         let mut flag_signal: i32 = UpdateFlags::None as i32;
 
-        if language.is_some() {}
+        if language.is_some() {
+            flag_signal |= UpdateFlags::TrayMenu as i32;
+        }
 
         if auto_launch.is_some() {
             flag_signal |= UpdateFlags::Launch as i32;
@@ -35,6 +41,10 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
         // Process updates based on flags
         if (flag_signal & (UpdateFlags::Launch as i32)) != 0 {
             sys_opt::SysOpt::global().update_launch()?;
+        }
+
+        if (flag_signal & (UpdateFlags::TrayMenu as i32)) != 0 {
+            service::tray::update_tray_menu()?;
         }
 
         Ok(())

@@ -1,23 +1,22 @@
+import { Grid3x3Outlined, InfoOutline } from "@mui/icons-material";
 import {
   Box,
-  Divider,
   Drawer,
   listItemClasses,
   ModalProps,
   styled,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import TaskGraphic from "@/business/task/TaskGraphic";
+import TaskInfoPanel from "@/business/task/TaskInfoPanel";
 import { TaskItemProps } from "@/business/task/TaskItem";
 import TaskItemAction from "@/business/task/TaskItemAction";
-import { TaskDrawerItem, TaskDrawerList } from "@/client/task_compose";
-import LinearProgressWithLabel from "@/components/LinearProgressWithLabel";
+import TaskSpeedPanel from "@/business/task/TaskSpeedPanel";
 import { Aria2Task } from "@/services/aria2c_api";
-import { parseByteVo } from "@/utils/download";
-import { getTaskName, getTaskProgressColor } from "@/utils/task";
 
 export interface TaskItemDrawerProps
   extends Pick<
@@ -44,8 +43,14 @@ const TheContainer = styled(Box)(
       padding: "8px 0",
     },
     overflow: "auto",
+    display: "flex",
+    flexDirection: "column",
   }),
 );
+const enum TAB_TYPE {
+  Info = "info",
+  Speed = "speed",
+}
 
 function TaskItemDrawer({
   open,
@@ -58,24 +63,17 @@ function TaskItemDrawer({
   onStop,
 }: TaskItemDrawerProps) {
   const { t } = useTranslation();
-  const taskName = getTaskName(task);
 
-  const { status, bitfield } = task;
+  const [tab, setTab] = useState<TAB_TYPE>(TAB_TYPE.Info);
 
-  const totalLength = Number(task.totalLength) || 0;
-  const completedLength = Number(task.completedLength) || 0;
-  const progress = (completedLength / totalLength) * 100 || 0;
-
-  const speedVo = parseByteVo(task.downloadSpeed, "/s").join("");
-
-  const completed = parseByteVo(completedLength).join("");
-  const total = parseByteVo(totalLength).join("");
-  const progressText = `${completed} / ${total}`;
-
-  const progressColor = useMemo(
-    () => getTaskProgressColor(progress, status),
-    [progress, status],
-  );
+  const mainElements = useMemo(() => {
+    switch (tab) {
+      case TAB_TYPE.Info:
+        return <TaskInfoPanel task={task} />;
+      case TAB_TYPE.Speed:
+        return <TaskSpeedPanel task={task} />;
+    }
+  }, [tab, task]);
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -83,36 +81,27 @@ function TaskItemDrawer({
         <Typography
           variant="h6"
           sx={({ palette: { mode } }) => ({
-            marginBottom: "16px",
             color: mode === "dark" ? "#bb86fc" : "#333",
             fontWeight: "700",
           })}
         >
           {t("task.Details")}
         </Typography>
-        <TaskDrawerList title={t("task.InfoDetails")}>
-          <TaskDrawerItem label="GID" value={task.gid} />
-          <Divider />
-          <TaskDrawerItem label="Task Name" value={taskName} />
-          <Divider />
-          <TaskDrawerItem label="Save to" value={task.dir} />
-          <Divider />
-          <TaskDrawerItem label="Status" value={task.status} />
-        </TaskDrawerList>
 
-        <TaskDrawerList title={t("task.SpeedDetails")}>
-          <LinearProgressWithLabel value={progress} color={progressColor} />
-          <TaskDrawerItem label="Progress" value={progressText} />
-          <TaskDrawerItem label="Connections" value={task.connections} />
-          <TaskDrawerItem label="Download Speed" value={speedVo} />
-        </TaskDrawerList>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: "16px" }}>
+          <Tabs
+            value={tab}
+            onChange={(_, newValue) => setTab(newValue)}
+            aria-label="basic tabs example"
+          >
+            <Tab icon={<InfoOutline />} value={TAB_TYPE.Info} />
+            <Tab icon={<Grid3x3Outlined />} value={TAB_TYPE.Speed} />
+          </Tabs>
+        </Box>
 
-        {bitfield && (
-          <section>
-            <TaskGraphic bitfield={bitfield} outerWidth={400} />
-          </section>
-        )}
-        <section
+        <Box sx={{ flex: "1 1 auto" }}>{mainElements}</Box>
+
+        <Box
           style={{
             textAlign: "center",
           }}
@@ -126,7 +115,7 @@ function TaskItemDrawer({
             onOpenFile={onOpenFile}
             onCopyLink={onCopyLink}
           />
-        </section>
+        </Box>
       </TheContainer>
     </Drawer>
   );

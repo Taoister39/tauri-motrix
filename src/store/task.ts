@@ -3,10 +3,11 @@ import { confirm } from "@tauri-apps/plugin-dialog";
 import { sendNotification } from "@tauri-apps/plugin-notification";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { t } from "i18next";
+import { mutate } from "swr";
 import { create } from "zustand";
 
 import { Notice } from "@/components/Notice";
-import { TASK_STATUS_ENUM } from "@/constant/task";
+import { DOWNLOAD_ENGINE, TASK_STATUS_ENUM } from "@/constant/task";
 import {
   addTaskApi,
   Aria2Task,
@@ -27,7 +28,9 @@ import {
   waitingTasksApi,
 } from "@/services/aria2c_api";
 import { DownloadOption } from "@/services/aria2c_api";
+import { createHistory } from "@/services/download_history";
 import { usePollingStore } from "@/store/polling";
+import { arrayAddOrRemove } from "@/utils/array_add_or_remove";
 import { compactUndefined } from "@/utils/compact_undefined";
 import { getTaskFullPath, getTaskName, getTaskUri } from "@/utils/task";
 
@@ -88,16 +91,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   },
   handleTaskSelect(taskId: string) {
     const { selectedTaskIds } = get();
-
-    const idsSet = new Set(selectedTaskIds);
-
-    if (idsSet.has(taskId)) {
-      idsSet.delete(taskId);
-    } else {
-      idsSet.add(taskId);
-    }
-
-    set({ selectedTaskIds: Array.from(idsSet) });
+    set({ selectedTaskIds: arrayAddOrRemove(selectedTaskIds, taskId) });
   },
   async setFetchType(type: TASK_STATUS_ENUM) {
     set({ fetchType: type, selectedTaskIds: [] });
@@ -200,20 +194,33 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     usePollingStore.getState().resetInterval();
 
     const task = await taskItemApi({ gid });
-    const taskName = getTaskName(task, "unknown", 16);
+    const taskName = getTaskName(task, "unknown_start", 64);
+
     Notice.success(t("task.StartMessage", { taskName }));
+
+    mutate("getDownloadHistory");
   },
   async onDownloadStop([{ gid }]) {
     const task = await taskItemApi({ gid });
-    const taskName = getTaskName(task, "unknown", 16);
+    const taskName = getTaskName(task, "unknown_stop", 64);
     Notice.success(t("task.StopMessage", { taskName }));
   },
   async onDownloadComplete([{ gid }]) {
     get().fetchTasks();
     const task = await taskItemApi({ gid });
-    const title = getTaskName(task, "unknown", 16);
+    const title = getTaskName(task, "unknown_complete", 64);
 
     sendNotification({ title, body: t("common.Complete") });
+
+    const link = await getTaskUri(task);
+    const path = await getTaskFullPath(task);
+
+    await createHistory({
+      engine: DOWNLOAD_ENGINE.Aria2,
+      link,
+      name: title,
+      path,
+    });
   },
   async registerEvent() {
     const { onDownloadComplete, onDownloadStart, onDownloadStop } = get();

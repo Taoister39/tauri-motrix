@@ -1,7 +1,8 @@
 use crate::{core::handle, logging, utils::logging::Type};
 
 /// create main window
-pub fn create_window(is_showup: bool) {
+/// return true if window is minimized
+pub fn create_window(is_showup: bool) -> bool {
     logging!(info, Type::Window, true, "Creating window");
 
     let app_handle = handle::Handle::global().app_handle().unwrap();
@@ -25,7 +26,7 @@ pub fn create_window(is_showup: bool) {
         }
         let _ = window.show();
         let _ = window.set_focus();
-        return;
+        return true;
     }
 
     #[cfg(target_os = "windows")]
@@ -62,5 +63,7 @@ pub fn create_window(is_showup: bool) {
                 e
             );
         }
-    }
+    };
+
+    false
 }

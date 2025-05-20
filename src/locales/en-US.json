@@ -15,7 +15,6 @@
         "system": "System"
     },
     "setting": {
-        "AutoHideWindow": "Auto Hide Window",
         "ThemeMode": "Theme Mode",
         "Language": "Language",
         "Display": "Display Setting",
@@ -32,7 +31,8 @@
         "SpeedLimit": "Speed Limit",
         "UploadSpeedLimit": "Upload Speed Limit",
         "DownloadSpeedLimit": "Download Speed Limit",
-        "AutoLaunch": "Auto Launch"
+        "AutoLaunch": "Auto Launch",
+        "TaskManagement": "Task Management"
     },
     "task": {
         "CloseAll": "Close All Tasks",
@@ -84,5 +84,8 @@
     "about": {
         "Title": "App About",
         "License": "Open Source License"
+    },
+    "history": {
+        "Empty": "No download history"
     }
 }

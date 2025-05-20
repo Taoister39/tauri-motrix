@@ -1,4 +1,6 @@
-export default {
+import type { Config } from "jest";
+
+const config: Config = {
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
   transform: {
@@ -28,4 +30,7 @@ export default {
     "^@root/(.*)$": "<rootDir>/$1",
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  watchPathIgnorePatterns: ["<rootDir>/src-tauri/"],
 };
+
+export default config;

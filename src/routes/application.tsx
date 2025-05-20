@@ -1,5 +1,6 @@
 import {
   DoneRounded,
+  HistoryRounded,
   PlayArrowRounded,
   SettingsRounded,
 } from "@mui/icons-material";
@@ -8,6 +9,7 @@ import { Navigate, RouteObject } from "react-router-dom";
 
 import DonePage from "@/pages/Done";
 import DownloadingPage from "@/pages/Downloading";
+import HistoryPage from "@/pages/History";
 import SettingsPage from "@/pages/Settings";
 
 type IRoute = RouteObject & { label?: string; icon?: ReactNode };
@@ -28,6 +30,12 @@ export const routers: IRoute[] = [
     path: "/task-done",
     icon: <DoneRounded />,
     element: <DonePage />,
+  },
+  {
+    label: "Label-Task-History",
+    path: "/history",
+    icon: <HistoryRounded />,
+    element: <HistoryPage />,
   },
   {
     label: "Label-Settings",

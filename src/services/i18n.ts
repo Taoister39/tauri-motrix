@@ -27,4 +27,8 @@ export function getLanguage(locale = "en-US") {
   if (locale.startsWith("en")) {
     return "en-US";
   }
+
+  if (locale.startsWith("zh")) {
+    return "zh-CN";
+  }
 }

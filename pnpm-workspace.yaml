@@ -1,2 +1,7 @@
 packages:
-  - "packages/*"
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - core-js
+  - es5-ext

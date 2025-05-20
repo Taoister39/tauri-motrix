@@ -19,10 +19,19 @@ export type SocketPendingMap = Record<
   }
 >;
 
+export type OfflineSubscribeMap = Record<
+  string,
+  Array<{
+    time: number;
+    data: unknown;
+  }>
+>;
+
 export interface Aria2InstanceConfig {
   server: string;
   timeout: number;
   eventSubscribeMap?: EventSubscribeMap;
+  offlineSubscribeMap?: OfflineSubscribeMap;
   socketPendingMap?: SocketPendingMap;
   isHttps?: boolean;
   isWss?: boolean;
@@ -30,6 +39,8 @@ export interface Aria2InstanceConfig {
 
 export class Aria2 {
   eventSubscribeMap: EventSubscribeMap;
+  offlineSubscribeMap: OfflineSubscribeMap;
+
   socketPendingMap: SocketPendingMap;
 
   webSocketIns?: WebSocket;
@@ -38,8 +49,14 @@ export class Aria2 {
   instanceConfig: Aria2InstanceConfig;
 
   constructor(instanceConfig: Aria2InstanceConfig) {
-    const { server, eventSubscribeMap, socketPendingMap, isHttps, timeout } =
-      instanceConfig;
+    const {
+      server,
+      eventSubscribeMap,
+      socketPendingMap,
+      isHttps,
+      timeout,
+      offlineSubscribeMap,
+    } = instanceConfig;
 
     this.fetcher = createFetcherFactory(
       `http${isHttps ? "s" : ""}://${server}/jsonrpc`,
@@ -47,6 +64,7 @@ export class Aria2 {
     );
 
     this.eventSubscribeMap = eventSubscribeMap || {};
+    this.offlineSubscribeMap = offlineSubscribeMap || {};
     this.socketPendingMap = socketPendingMap || {};
     this.instanceConfig = instanceConfig;
   }
@@ -148,13 +166,39 @@ export class Aria2 {
 
   #dispatchEvent(name: string, data: unknown) {
     const callbacks = this.eventSubscribeMap[name];
-    callbacks?.forEach((fn) => fn(data));
+
+    if (callbacks) {
+      callbacks.forEach((fn) => fn(data));
+    } else {
+      this.offlineSubscribeMap[name] ??= [];
+      this.offlineSubscribeMap[name].push({
+        data,
+        time: Date.now(),
+      });
+    }
+  }
+
+  #dispatchOffline<T>(method: string, callback: (data: T) => void): boolean {
+    const { offlineSubscribeMap } = this;
+
+    if (method in offlineSubscribeMap) {
+      offlineSubscribeMap[method].forEach(({ data, time }) => {
+        console.log(`offline queue call ${method}, cached at ${time}`);
+        callback(data as T);
+      });
+      delete offlineSubscribeMap[method];
+      return true;
+    }
+    return false;
   }
 
   addListener<T>(method: string, callback: (data: T) => void) {
-    const { eventSubscribeMap } = this;
-    const key = ensurePrefix(method);
+    if (this.#dispatchOffline(method, callback)) {
+      return;
+    }
 
+    const key = ensurePrefix(method);
+    const { eventSubscribeMap } = this;
     if (eventSubscribeMap[key]?.includes(callback)) {
       return;
     }
@@ -162,10 +206,14 @@ export class Aria2 {
     eventSubscribeMap[key] ??= [];
     eventSubscribeMap[key].push(callback);
   }
+
   setListener<T>(method: string, callback: (data: T) => void) {
-    const { eventSubscribeMap } = this;
+    if (this.#dispatchOffline(method, callback)) {
+      return;
+    }
+
     const key = ensurePrefix(method);
-    eventSubscribeMap[key] = [callback];
+    this.eventSubscribeMap[key] = [callback];
   }
 
   removeListener<T>(method: string, callback: (data: T) => void) {

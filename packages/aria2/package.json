@@ -1,11 +1,15 @@
 {
   "name": "@tauri-motrix/aria2",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./mocks": "./src/mocks.ts"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
-  "packageManager": "pnpm@10.8.0",
+  "packageManager": "pnpm@10.11.0",
   "devDependencies": {
     "typescript": "~5.6.3"
   }

@@ -92,8 +92,8 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
       <DialogTitle>{t("common.DownloadFile")}</DialogTitle>
       <DialogContent
         sx={{
-          "& > :not(:last-child)": {
-            mb: 2,
+          "& > *": {
+            mt: 2,
           },
           "& .MuiBox-root": {
             display: "inline-flex",
@@ -111,6 +111,7 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
               variant="standard"
               label={t("common.DownloadLink")}
               fullWidth
+              multiline
               error={!!errors.link}
               {...field}
             />

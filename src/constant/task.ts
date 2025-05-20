@@ -6,3 +6,8 @@ export const enum TASK_STATUS_ENUM {
   Recycle = "removed",
   Error = "error",
 }
+
+export const enum DOWNLOAD_ENGINE {
+  Aria2 = "aria2c",
+  // more
+}

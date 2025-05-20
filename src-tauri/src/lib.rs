@@ -11,6 +11,7 @@ mod utils;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
+        .plugin(tauri_plugin_sql::Builder::default().build())
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
             None,
@@ -50,6 +51,19 @@ pub fn run() {
                 api.prevent_exit();
             }
         }
+        tauri::RunEvent::WindowEvent { label, event, .. } => {
+            if label == "main" {
+                match event {
+                    tauri::WindowEvent::CloseRequested { api, .. } => {
+                        api.prevent_close();
+                        let window = core::handle::Handle::global().get_window().unwrap();
+                        let _ = window.hide();
+                    }
+                    _ => {}
+                }
+            }
+        }
+
         _ => {}
     });
 }

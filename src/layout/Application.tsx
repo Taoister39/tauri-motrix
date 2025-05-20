@@ -6,7 +6,7 @@ import {
   SvgIcon,
   ThemeProvider,
 } from "@mui/material";
-import { listen } from "@tauri-apps/api/event";
+import { emit, listen } from "@tauri-apps/api/event";
 import { useMount } from "ahooks";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -91,6 +91,7 @@ function Application() {
 
   useMount(() => {
     registerEvent();
+    emit("motrix://web-ready");
   });
 
   if (!routerElements) {

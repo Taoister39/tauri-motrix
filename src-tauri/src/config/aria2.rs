@@ -14,12 +14,18 @@ pub struct IAria2Temp(pub HashMap<String, String>);
 impl IAria2Temp {
     pub fn new() -> Self {
         let aria2_path = aria2_path().unwrap();
+
+        if !aria2_path.exists() {
+            return Self::template();
+        }
+
         let aria2_path = path_to_str(&aria2_path).unwrap();
 
         let str = read_to_string(aria2_path).unwrap();
         let template = Self::template();
         let mut map = template.0;
 
+        let mut is_changed = false;
         for line in str.lines() {
             if line.starts_with('#') || line.is_empty() {
                 continue;
@@ -30,9 +36,16 @@ impl IAria2Temp {
             let value = split.next().unwrap().trim().to_string();
 
             map.insert(key, value);
+            is_changed = true;
         }
 
-        Self(map)
+        let aria2_instance = Self(map);
+
+        if is_changed {
+            let _ = Self::save_file(&aria2_instance);
+        }
+
+        aria2_instance
     }
 
     pub fn template() -> Self {
@@ -117,8 +130,40 @@ impl fmt::Display for IAria2Temp {
 }
 
 // expose to web
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
 pub struct Aria2Info {
     pub port: u16,
     pub server: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+
+    use crate::config::Aria2Info;
+
+    use super::IAria2Temp;
+
+    #[test]
+    fn test_get_client_info() {
+        let mut map = HashMap::new();
+        map.insert("rpc-listen-port".into(), "2239".into());
+        let aria2 = IAria2Temp(map);
+
+        assert_eq!(
+            aria2.get_client_info(),
+            Aria2Info {
+                port: 2239,
+                server: "127.0.0.1:2239".into()
+            }
+        );
+    }
+
+    #[test]
+    fn test_guard_port() {
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("rpc-listen-port".into(), "1234".into());
+
+        assert_eq!(IAria2Temp::guard_port(&map), 1234);
+    }
 }

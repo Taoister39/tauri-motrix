@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import TaskGraphicAtom from "@/business/task/TaskGraphicAtom";
 import { buildAtom } from "@/utils/build_atom";
@@ -73,4 +73,4 @@ function TaskGraphic({
   );
 }
 
-export default TaskGraphic;
+export default memo(TaskGraphic);

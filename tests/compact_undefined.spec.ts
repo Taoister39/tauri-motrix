@@ -17,9 +17,9 @@ describe("compactUndefined", () => {
     expect(compactUndefined(input)).toEqual({});
   });
 
-  it.skip("should handle nested objects", () => {
+  it("should handle nested objects", () => {
     const input = { a: { b: undefined }, c: "test" };
-    const expected = { c: "test" };
+    const expected = { a: {}, c: "test" };
     expect(compactUndefined(input)).toEqual(expected);
   });
 });

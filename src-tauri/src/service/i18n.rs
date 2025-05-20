@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use crate::{config::Config, utils::dirs};
 
+// fallbackLng: "en-US",
 const DEFAULT_LANGUAGE: &str = "en-US";
 
 static TRANSLATIONS: Lazy<HashMap<String, Value>> = Lazy::new(|| {

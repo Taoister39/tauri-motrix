@@ -2,7 +2,7 @@ import { Aria2, Aria2InstanceConfig } from "./aria2";
 import { defaultOption } from "./util";
 
 export interface Aria2Instance
-  extends Omit<Aria2, "handleMessage" | "dispatchEvent"> {
+  extends Omit<Aria2, "handleMessage" | "dispatchEvent" | "dispatchOffline"> {
   <T>(...arr: Parameters<Aria2["call"]>): Promise<T>;
   create(config?: Partial<Aria2InstanceConfig>): Aria2Instance;
 }
@@ -13,6 +13,7 @@ function createInstance(instanceConfig: Aria2InstanceConfig): Aria2Instance {
   const instance: Aria2Instance = (...arr) => context.call(...arr);
 
   instance.eventSubscribeMap = context.eventSubscribeMap;
+  instance.offlineSubscribeMap = context.offlineSubscribeMap;
   instance.socketPendingMap = context.socketPendingMap;
   instance.fetcher = context.fetcher;
   instance.webSocketIns = context.webSocketIns;
@@ -47,5 +48,7 @@ export { Aria2 };
 export type {
   Aria2InstanceConfig,
   EventSubscribeMap,
+  OfflineSubscribeMap,
   SocketPendingMap,
 } from "./aria2";
+export { ensurePrefix } from "./util";

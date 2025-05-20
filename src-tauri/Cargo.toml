@@ -1,6 +1,6 @@
 [package]
 name = "tauri-motrix"
-version = "0.1.0"
+version = "0.1.2"
 description = "A Tauri App"
 authors = ["Taoister39"]
 repository = "https://github.com/Taoister39/tauri-motrix"
@@ -46,3 +46,6 @@ uuid = "1.16.0"
 tauri-plugin-autostart = "2"
 tauri-plugin-updater = "2"
 
+[dependencies.tauri-plugin-sql]
+features = ["sqlite"] # or "postgres", or "mysql"
+version = "2.0.0"

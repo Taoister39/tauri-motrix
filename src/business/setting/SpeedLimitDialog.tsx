@@ -38,6 +38,7 @@ function SpeedLimitDialog(props: { ref: Ref<DialogRef> }) {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IFormInput>({
     values: {
       uploadSpeed,
@@ -49,8 +50,13 @@ function SpeedLimitDialog(props: { ref: Ref<DialogRef> }) {
 
   useImperativeHandle(props.ref, () => ({
     open: setTrue,
-    close: setFalse,
+    close: onClose,
   }));
+
+  const onClose = () => {
+    setFalse();
+    reset();
+  };
 
   const onSave: SubmitHandler<IFormInput> = useLockFn(
     async ({ downloadSpeed, uploadSpeed, uploadUnit, downloadUnit }) => {
@@ -62,15 +68,15 @@ function SpeedLimitDialog(props: { ref: Ref<DialogRef> }) {
         "max-download-limit": download,
       });
       Notice.success(t("common.SaveSuccess"));
-      setFalse();
+      onClose();
     },
   );
 
   return (
     <BaseDialog
       open={open}
-      onCancel={setFalse}
-      onClose={setFalse}
+      onCancel={onClose}
+      onClose={onClose}
       title={t("setting.SpeedLimit")}
       okBtn={t("common.Save")}
       cancelBtn={t("common.Cancel")}

@@ -38,10 +38,6 @@ function AppearanceSetting() {
         <ThemeModeSwitch />
       </SettingItem>
 
-      <SettingItem label={t("setting.AutoHideWindow")}>
-        <Switch checked={!!motrix?.app_hide_window} />
-      </SettingItem>
-
       <SettingItem label={t("setting.AutoLaunch")}>
         <Switch
           checked={!!motrix?.enable_auto_launch}

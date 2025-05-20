@@ -12,8 +12,6 @@ pub struct IMotrix {
     /// aria2c run name for sidecar
     pub aria2_engine: Option<String>,
 
-    pub app_hide_window: Option<bool>,
-
     // i18n
     pub language: Option<String>,
 
@@ -67,7 +65,6 @@ impl IMotrix {
     pub fn template() -> Self {
         IMotrix {
             aria2_engine: Some("aria2c".into()),
-            app_hide_window: Some(false),
             language: i18n::get_system_language().into(),
             theme_mode: Some("system".into()),
             app_log_level: Some("info".into()),
@@ -97,8 +94,26 @@ impl IMotrix {
         patch!(theme_mode);
         patch!(app_log_level);
         patch!(aria2_engine);
-        patch!(app_hide_window);
         patch!(language);
         patch!(enable_auto_launch);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::IMotrix;
+
+    #[test]
+    fn test_patch_config() {
+        let mut motrix = IMotrix {
+            ..Default::default()
+        };
+
+        motrix.patch_config(IMotrix {
+            theme_mode: Some("light".into()),
+            ..Default::default()
+        });
+
+        assert_eq!(motrix.theme_mode.unwrap(), "light")
     }
 }
