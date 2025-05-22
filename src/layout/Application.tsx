@@ -1,13 +1,18 @@
+import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   boxClasses,
+  Drawer,
+  drawerClasses,
+  IconButton,
   List,
   Paper,
   styled,
   SvgIcon,
   ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 import { emit, listen } from "@tauri-apps/api/event";
-import { useMount } from "ahooks";
+import { useBoolean, useMount } from "ahooks";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useRoutes } from "react-router-dom";
@@ -46,13 +51,6 @@ const TheTraffic = styled("section")(() => ({
 
 const Main = styled("main")(() => ({
   overflow: "hidden",
-}));
-
-const Aside = styled("aside")(({ theme }) => ({
-  width: "200px",
-  display: "flex",
-  flexDirection: "column",
-  backgroundColor: theme.palette.background.paper,
 }));
 
 function Application() {
@@ -94,6 +92,13 @@ function Application() {
     emit("motrix://web-ready");
   });
 
+  const [
+    isOpenAside,
+    { toggle: toggleOpenAside, setFalse: setFalseOpenAside },
+  ] = useBoolean(false);
+
+  const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   if (!routerElements) {
     return null;
   }
@@ -116,7 +121,7 @@ function Application() {
               gridColumn: "1 / 3",
               gridRow: "1",
             },
-            [`& > aside`]: {
+            [`& > .${drawerClasses.root}`]: {
               gridColumn: "1",
               gridRow: "2",
             },
@@ -126,9 +131,40 @@ function Application() {
             },
           })}
         >
-          <TitleBar />
+          <TitleBar toggleOpenAside={toggleOpenAside} />
 
-          <Aside>
+          <Drawer
+            sx={{
+              [`.${drawerClasses.paper}`]: {
+                position: "unset",
+                width: "200px",
+                display: "flex",
+                flexDirection: "column",
+                backgroundColor: theme.palette.background.paper,
+                border: "none",
+              },
+            }}
+            open={!isDownSm ? true : isOpenAside}
+            onClose={setFalseOpenAside}
+            variant={isDownSm ? "temporary" : "permanent"}
+          >
+            <IconButton
+              onClick={toggleOpenAside}
+              color="inherit"
+              aria-label="open aside menu"
+              edge="end"
+              sx={[
+                {
+                  marginLeft: 1,
+                  cursor: "pointer",
+                  alignSelf: "start",
+                },
+                !isDownSm && { display: "none" },
+              ]}
+            >
+              <MenuIcon />
+            </IconButton>
+
             <TheLogo data-tauri-drag-region>
               <SvgIcon sx={{ width: 62 }} component={logoIcon} inheritViewBox />
             </TheLogo>
@@ -152,7 +188,7 @@ function Application() {
             <TheTraffic>
               <LayoutTraffic />
             </TheTraffic>
-          </Aside>
+          </Drawer>
 
           <Main>{routerElements}</Main>
         </Paper>

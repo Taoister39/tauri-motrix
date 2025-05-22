@@ -1,7 +1,6 @@
 {
-  "Label-Task-Active": "下载中",
+  "Label-Task-Downloading": "下载任务",
   "Label-Task-History": "历史",
-  "Label-Task-Done": "已完成",
   "Label-Task-Recycle": "回收",
   "Label-Settings": "设置",
   "Task-Start": "下载列表",
@@ -13,6 +12,11 @@
     "light": "明亮",
     "dark": "深色",
     "system": "系统"
+  },
+  "Button-Fetch-Type": {
+    "active": "下载中",
+    "waiting": "等待中",
+    "complete": "已完成"
   },
   "setting": {
     "ThemeMode": "主题模式",

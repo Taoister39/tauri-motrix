@@ -1,12 +1,12 @@
+import { Box, Button, ButtonGroup } from "@mui/material";
 import { emit } from "@tauri-apps/api/event";
-import { useMount } from "ahooks";
 import { useTranslation } from "react-i18next";
 
 import TaskAllAction from "@/business/task/TaskAllAction";
 import TaskItem from "@/business/task/TaskItem";
 import { TaskFab, TaskList } from "@/client/task_compose";
 import BasePage from "@/components/BasePage";
-import { TASK_STATUS_ENUM } from "@/constant/task";
+import { NORMAL_STATUS } from "@/constant/task";
 import { ADD_DIALOG } from "@/constant/url";
 import { useTaskStore } from "@/store/task";
 
@@ -26,21 +26,31 @@ function DownloadingPage() {
     setFetchType,
   } = useTaskStore();
 
-  useMount(() => {
-    setFetchType(TASK_STATUS_ENUM.Active);
-  });
-
   return (
     <BasePage
       title={t("Task-Start")}
       header={
-        <TaskAllAction
-          onPause={handleTaskPause}
-          onResume={handleTaskResume}
-          onStop={handleTaskStop}
-          selectedTaskIds={selectedTaskIds}
-          fetchType={fetchType}
-        />
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <TaskAllAction
+            onPause={handleTaskPause}
+            onResume={handleTaskResume}
+            onStop={handleTaskStop}
+            selectedTaskIds={selectedTaskIds}
+            fetchType={fetchType}
+          />
+          <ButtonGroup size="small">
+            {NORMAL_STATUS.map((value) => (
+              <Button
+                key={value}
+                variant={value === fetchType ? "contained" : "outlined"}
+                onClick={() => setFetchType(value)}
+                sx={{ textTransform: "capitalize" }}
+              >
+                {t(`Button-Fetch-Type.${value}`)}
+              </Button>
+            ))}
+          </ButtonGroup>
+        </Box>
       }
       fab={<TaskFab onClick={() => emit(ADD_DIALOG)} />}
     >

@@ -3,18 +3,36 @@ import {
   CropSquareRounded,
   FilterNoneRounded,
   HorizontalRuleRounded,
+  Menu as MenuIcon,
   PushPinOutlined,
   PushPinRounded,
 } from "@mui/icons-material";
-import { Box, Button, ButtonGroup, buttonGroupClasses } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  buttonGroupClasses,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useEffect, useState } from "react";
 
+import { useCustomTheme } from "@/hooks/theme";
+
 const appWindow = getCurrentWindow();
 
-function TitleBar() {
+export interface TitleBarProps {
+  toggleOpenAside: () => void;
+}
+
+function TitleBar({ toggleOpenAside }: TitleBarProps) {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isPined, setIsPined] = useState(false);
+
+  const { theme } = useCustomTheme();
+
+  const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const unlisten = appWindow.onResized(() => {
@@ -33,12 +51,27 @@ function TitleBar() {
       sx={({ palette }) => ({
         background: palette.background.paper,
         display: "flex",
-        justifyContent: "end",
         alignItems: "center",
         appRegion: "drag",
       })}
       data-tauri-drag-region
     >
+      <IconButton
+        onClick={toggleOpenAside}
+        color="inherit"
+        aria-label="open aside menu"
+        edge="end"
+        sx={[
+          {
+            marginLeft: 1,
+            cursor: "pointer",
+          },
+          !isDownSm && { display: "none" },
+        ]}
+      >
+        <MenuIcon />
+      </IconButton>
+
       <ButtonGroup
         variant="text"
         sx={{
@@ -46,6 +79,7 @@ function TitleBar() {
             borderRight: "0px",
             borderRadius: "0px",
           },
+          marginLeft: "auto",
         }}
       >
         <Button

@@ -1,5 +1,4 @@
 import {
-  DoneRounded,
   HistoryRounded,
   PlayArrowRounded,
   SettingsRounded,
@@ -7,7 +6,6 @@ import {
 import { ReactNode } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
 
-import DonePage from "@/pages/Done";
 import DownloadingPage from "@/pages/Downloading";
 import HistoryPage from "@/pages/History";
 import SettingsPage from "@/pages/Settings";
@@ -20,17 +18,12 @@ export const routers: IRoute[] = [
     element: <Navigate to="/task-start" />,
   },
   {
-    label: "Label-Task-Active",
+    label: "Label-Task-Downloading",
     path: "/task-start",
     icon: <PlayArrowRounded />,
     element: <DownloadingPage />,
   },
-  {
-    label: "Label-Task-Done",
-    path: "/task-done",
-    icon: <DoneRounded />,
-    element: <DonePage />,
-  },
+
   {
     label: "Label-Task-History",
     path: "/history",

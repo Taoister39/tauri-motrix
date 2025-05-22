@@ -39,6 +39,7 @@
     "@tauri-motrix/aria2": "workspace:*",
     "ahooks": "^3.8.4",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "i18next": "^24.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

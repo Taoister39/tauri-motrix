@@ -53,6 +53,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       i18next:
         specifier: ^24.2.1
         version: 24.2.2(typescript@5.6.3)

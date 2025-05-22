@@ -1,7 +1,6 @@
 {
-    "Label-Task-Active": "Downloading",
+    "Label-Task-Downloading": "Download",
     "Label-Task-History": "History",
-    "Label-Task-Done": "Done",
     "Label-Task-Recycle": "Recycle",
     "Label-Settings": "Setting",
     "Task-Start": "Downloading",
@@ -13,6 +12,11 @@
         "light": "Light",
         "dark": "Dark",
         "system": "System"
+    },
+    "Button-Fetch-Type": {
+        "active": "Pending",
+        "waiting": "Paused",
+        "complete": "Stopped"
     },
     "setting": {
         "ThemeMode": "Theme Mode",

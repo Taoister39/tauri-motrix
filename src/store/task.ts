@@ -28,7 +28,11 @@ import {
   waitingTasksApi,
 } from "@/services/aria2c_api";
 import { DownloadOption } from "@/services/aria2c_api";
-import { createHistory } from "@/services/download_history";
+import {
+  createHistory,
+  findOneHistoryByPlatId,
+  updateHistoryByPlatId,
+} from "@/services/download_history";
 import { usePollingStore } from "@/store/polling";
 import { arrayAddOrRemove } from "@/utils/array_add_or_remove";
 import { compactUndefined } from "@/utils/compact_undefined";
@@ -51,6 +55,7 @@ interface TaskStore {
   copyTaskLink: (taskId: string) => void;
   addTask: (url: string, option: DownloadOption) => void;
   getTaskByGid: (gid: string) => Aria2Task;
+  syncToDownloadHistory: (task: Aria2Task) => void;
   registerEvent: () => void;
   onDownloadStart: (wrap: WrapGid) => void;
   onDownloadStop: (wrap: WrapGid) => void;
@@ -68,7 +73,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   async fetchTasks() {
     const { fetchType } = get();
 
-    let tasks;
+    let tasks: Array<Aria2Task> = [];
     switch (fetchType) {
       case TASK_STATUS_ENUM.Active:
         tasks = await downloadingTasksApi().then((res) => res?.flat(2));
@@ -198,7 +203,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
     Notice.success(t("task.StartMessage", { taskName }));
 
-    mutate("getDownloadHistory");
+    get().syncToDownloadHistory(task);
   },
   async onDownloadStop([{ gid }]) {
     const task = await taskItemApi({ gid });
@@ -212,15 +217,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
     sendNotification({ title, body: t("common.Complete") });
 
-    const link = await getTaskUri(task);
-    const path = await getTaskFullPath(task);
-
-    await createHistory({
-      engine: DOWNLOAD_ENGINE.Aria2,
-      link,
-      name: title,
-      path,
-    });
+    get().syncToDownloadHistory(task);
   },
   async registerEvent() {
     const { onDownloadComplete, onDownloadStart, onDownloadStop } = get();
@@ -229,5 +226,31 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     addListener("onDownloadStart", onDownloadStart);
     addListener("onDownloadStop", onDownloadStop);
     addListener("onDownloadComplete", onDownloadComplete);
+  },
+  async syncToDownloadHistory(task) {
+    const taskName = getTaskName(task, "unknown_history", 64);
+    const link = getTaskUri(task);
+    const path = await getTaskFullPath(task);
+
+    const historyRecord = await findOneHistoryByPlatId(task.gid);
+
+    const historyDto = {
+      engine: DOWNLOAD_ENGINE.Aria2,
+      link,
+      name: taskName,
+      path,
+      total_length: Number(task.totalLength),
+      plat_id: task.gid,
+    };
+
+    if (historyRecord) {
+      await updateHistoryByPlatId(task.gid, historyDto);
+    } else {
+      await createHistory(historyDto, {
+        plat_gid: task.gid,
+      });
+    }
+
+    mutate("getDownloadHistory");
   },
 }));
