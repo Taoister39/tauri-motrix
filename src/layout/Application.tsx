@@ -47,6 +47,7 @@ const TheTraffic = styled("section")(() => ({
   "& > *": {
     paddingInline: "20px",
   },
+  paddingBottom: "8px",
 }));
 
 const Main = styled("main")(() => ({
@@ -134,7 +135,7 @@ function Application() {
           <TitleBar toggleOpenAside={toggleOpenAside} />
 
           <Drawer
-            sx={{
+            sx={(theme) => ({
               [`.${drawerClasses.paper}`]: {
                 position: "unset",
                 width: "200px",
@@ -143,7 +144,7 @@ function Application() {
                 backgroundColor: theme.palette.background.paper,
                 border: "none",
               },
-            }}
+            })}
             open={!isDownSm ? true : isOpenAside}
             onClose={setFalseOpenAside}
             variant={isDownSm ? "temporary" : "permanent"}
@@ -153,6 +154,7 @@ function Application() {
               color="inherit"
               aria-label="open aside menu"
               edge="end"
+              size="large"
               sx={[
                 {
                   marginLeft: 1,

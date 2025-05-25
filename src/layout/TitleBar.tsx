@@ -61,6 +61,7 @@ function TitleBar({ toggleOpenAside }: TitleBarProps) {
         color="inherit"
         aria-label="open aside menu"
         edge="end"
+        size="small"
         sx={[
           {
             marginLeft: 1,

@@ -1,5 +1,5 @@
 import { Grid3x3Outlined, InfoOutline } from "@mui/icons-material";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, listItemClasses, Tab, Tabs } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -67,6 +67,9 @@ function TaskItemDrawer({
       }
       contentSx={{
         width: "400px",
+        [`.${listItemClasses.root}`]: {
+          padding: "8px 0",
+        },
       }}
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: "16px" }}>

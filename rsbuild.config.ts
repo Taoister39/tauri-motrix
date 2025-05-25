@@ -1,4 +1,5 @@
 import { defineConfig } from "@rsbuild/core";
+import { pluginNodePolyfill } from "@rsbuild/plugin-node-polyfill";
 import { pluginReact } from "@rsbuild/plugin-react";
 import { pluginSvgr } from "@rsbuild/plugin-svgr";
 import path from "path";
@@ -7,7 +8,7 @@ import process from "process";
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
-  plugins: [pluginReact(), pluginSvgr()],
+  plugins: [pluginNodePolyfill(), pluginReact(), pluginSvgr()],
   source: {
     entry: {
       index: "./src/main.tsx",

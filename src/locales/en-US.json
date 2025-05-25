@@ -62,7 +62,10 @@
         "StopMessage": "Task \"{{taskName}}\" stopped",
         "Details": "Task Details",
         "InfoDetails": "Task Info",
-        "SpeedDetails": "Task Speed"
+        "SpeedDetails": "Task Speed",
+        "FileName": "Name",
+        "FileExtension": "Extension",
+        "FileSize": "Size"
     },
     "common": {
         "DownloadFile": "Download File",
@@ -79,7 +82,13 @@
         "Update": "Update",
         "Ok": "OK",
         "Exit": "Exit",
-        "SaveSuccess": "Save Success"
+        "SaveSuccess": "Save Success",
+        "UploadSpeed": "Upload Speed",
+        "DownloadSpeed": "Download Speed",
+        "FromClipboard": "From Clipboard",
+        "FromTorrentFile": "From Torrent File",
+        "FromUrl": "From URL",
+        "UploadFile": "Upload file"
     },
     "update": {
         "GotoReleasePage": "Go to release page",

@@ -35,7 +35,8 @@
     "OpenCoreDir": "打开核心模块目录",
     "OpenLogsDir": "打开日志目录",
     "SpeedLimit": "速度限制",
-    "UploadSpeedLimit": "上传速度限制"
+    "UploadSpeedLimit": "上传速度限制",
+    "TaskManagement": "任务管理"
   },
   "task": {
     "CloseAll": "关闭所有任务",
@@ -78,7 +79,9 @@
     "Exit": "退出",
     "Save": "保存",
     "SaveSuccess": "保存成功",
-    "Update": "更新"
+    "Update": "更新",
+    "DownloadSpeed": "下载速度",
+    "UploadSpeed": "上传速度"
   },
   "about": {
     "Title": "关于应用程序",

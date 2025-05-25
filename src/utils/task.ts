@@ -6,7 +6,7 @@ import { Aria2Task } from "@/services/aria2c_api";
 // code from Motrix repo
 
 export const getTaskName = (
-  task: Aria2Task,
+  task: Aria2Task | undefined | null,
   defaultName = "",
   maxLen?: number,
 ) => {
@@ -56,7 +56,7 @@ export const getFileNameFromFile = (file: Aria2Task["files"][number]) => {
     path = decodeURI(file.uris[0].uri);
   }
 
-  const index = path.lastIndexOf("/");
+  const index = typeof path === "undefined" ? -1 : path.lastIndexOf("/");
 
   if (index <= 0 || index === path.length) {
     return path;
@@ -152,7 +152,7 @@ export const getTaskFullPath = async (task: Aria2Task) => {
 
 export const isMagnetTask = (task: Aria2Task) => {
   const { bittorrent } = task;
-  return bittorrent && !bittorrent.info;
+  return !!bittorrent && !bittorrent.info;
 };
 
 export const getTaskUri = (task: Aria2Task, withTracker = false) => {
