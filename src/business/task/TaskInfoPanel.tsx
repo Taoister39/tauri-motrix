@@ -17,11 +17,11 @@ function TaskInfoPanel({ task }: TaskInfoPanelProps) {
     <TaskDrawerList title={t("task.InfoDetails")}>
       <TaskDrawerItem label="GID" value={task.gid} />
       <Divider />
-      <TaskDrawerItem label={t("task.TaskName")} value={taskName} />
+      <TaskDrawerItem label="Task Name" value={taskName} />
       <Divider />
-      <TaskDrawerItem label={t("task.SaveTo")} value={task.dir} />
+      <TaskDrawerItem label="Save to" value={task.dir} />
       <Divider />
-      <TaskDrawerItem label={t("task.Status")} value={task.status} />
+      <TaskDrawerItem label="Status" value={task.status} />
     </TaskDrawerList>
   );
 }

@@ -35,9 +35,9 @@ function TaskSpeedPanel({ task }: TaskSpeedPanelProps) {
     <TaskDrawerList title={t("task.SpeedDetails")}>
       <LinearProgressWithLabel value={progress} color={progressColor} />
 
-      <TaskDrawerItem label={t("task.Progress")} value={progressText} />
-      <TaskDrawerItem label={t("task.Connections")} value={task.connections} />
-      <TaskDrawerItem label={t("task.DownloadSpeed")} value={speedVo} />
+      <TaskDrawerItem label="Progress" value={progressText} />
+      <TaskDrawerItem label="Connections" value={task.connections} />
+      <TaskDrawerItem label="Download Speed" value={speedVo} />
 
       {bitfield && <TaskGraphic bitfield={bitfield} outerWidth={400} />}
     </TaskDrawerList>

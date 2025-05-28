@@ -62,13 +62,7 @@
     "StopMessage": "下载任务 \"{{taskName}}\" 结束",
     "Details": "任务详情",
     "InfoDetails": "任务信息",
-    "TaskName": "任务名称",
-    "SaveTo": "保存到",
-    "Status": "状态",
     "SpeedDetails": "下载速度",
-    "Progress": "进度",
-    "Connections": "连接数",
-    "DownloadSpeed": "下载速度",
     "FileExtension": "拓展名",
     "FileName": "文件名",
     "FileSize": "文件大小"
