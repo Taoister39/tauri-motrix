@@ -1,4 +1,5 @@
 import {
+  addSecret,
   CallParam,
   createFetcherFactory,
   ensurePrefix,
@@ -35,6 +36,7 @@ export interface Aria2InstanceConfig {
   socketPendingMap?: SocketPendingMap;
   isHttps?: boolean;
   isWss?: boolean;
+  secret?: string;
 }
 
 export class Aria2 {
@@ -129,14 +131,14 @@ export class Aria2 {
   }
 
   call<T>(method: string, ...params: CallParam[]): Promise<T> {
+    const { socketPendingMap, webSocketIns, fetcher, instanceConfig } = this;
+
     const message = {
       jsonrpc: "2.0",
       id: crypto.randomUUID(),
       method: ensurePrefix(method),
-      params,
+      params: addSecret(params, instanceConfig.secret),
     };
-
-    const { socketPendingMap, webSocketIns, fetcher, instanceConfig } = this;
 
     if (webSocketIns?.readyState === WebSocket.OPEN) {
       return new Promise<T>((resolve, reject) => {

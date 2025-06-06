@@ -63,6 +63,16 @@ export function ensurePrefix(str: string) {
   return str;
 }
 
+export function addSecret(data: CallParam, secret?: string) {
+  let params: CallParam[] = secret ? ["token:" + secret] : [];
+  if (Array.isArray(data)) {
+    params = params.concat(data);
+  } else {
+    params.push(data);
+  }
+  return params;
+}
+
 export const defaultOption = {
   server: "127.0.0.1:6800",
   timeout: 15000,
