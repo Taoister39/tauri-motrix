@@ -1,4 +1,11 @@
-import { parseByte, parseByteVo, toByte } from "@/utils/download";
+import {
+  bitfieldToPercent,
+  calcProgress,
+  parseByte,
+  parseByteVo,
+  peerIdParser,
+  toByte,
+} from "@/utils/download";
 
 describe("parseByteVo", () => {
   it("should return ['NaN', ''] for invalid input", () => {
@@ -58,5 +65,46 @@ describe("parseByte", () => {
 
   it("should handle string input", () => {
     expect(parseByte("2048", "KB")).toBe(2);
+  });
+});
+
+describe("calcProgress", () => {
+  it("should return 100", () => {
+    const percentage = calcProgress(1, 1, 1);
+    expect(percentage).toBe(100);
+  });
+});
+
+describe("peerIdParser", () => {
+  it("should return UNKNOWN_PEER_ID_NAME if input is empty or UNKNOWN_PEER_ID", () => {
+    expect(peerIdParser("")).toBe("unknown");
+    expect(peerIdParser("UNKNOWN_PEER_ID")).toBe("unknown");
+  });
+
+  it("should parse peerId correctly", () => {
+    const testPeerId = "%2DUT360W%2D%92%B6%EBh%1F%A1%DBfo%F6%D5I"; // Example peer ID
+    const expected = "µTorrent v3.6.0 "; // Replace this with the expected parsed output
+    expect(peerIdParser(testPeerId)).toBe(expected);
+  });
+});
+
+describe("bitfieldToPercent", () => {
+  test("should return 100 for a fully set bitfield", () => {
+    const fullBitfield = "f".repeat(512); // Example full bitfield
+    expect(bitfieldToPercent(fullBitfield)).toBe("100");
+  });
+
+  test("should return 0 for an empty bitfield", () => {
+    expect(bitfieldToPercent("0".repeat(512))).toBe("0");
+  });
+
+  test("should handle small bitfields correctly", () => {
+    expect(bitfieldToPercent("F")).toBe("100");
+    expect(bitfieldToPercent("0")).toBe("0");
+    expect(bitfieldToPercent("A")).toBe("50"); // Example mixed bitfield
+  });
+
+  test("should handle an empty string gracefully", () => {
+    expect(bitfieldToPercent("")).toBe("NaN"); // Adjust based on function behavior
   });
 });

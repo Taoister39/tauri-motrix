@@ -20,6 +20,7 @@ import { SWRConfig } from "swr";
 
 import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog from "@/business/task/AddTaskDialog";
+import UpdateButton from "@/business/update/UpdateButton";
 import { DialogRef } from "@/components/BaseDialog";
 import { ADD_DIALOG } from "@/constant/url";
 import { useMotrix } from "@/hooks/motrix";
@@ -36,6 +37,15 @@ const TheLogo = styled("section")(() => ({
   flex: "0 0 58px",
   justifyContent: "center",
   alignItems: "center",
+  position: "relative",
+  ".the-newbtn": {
+    position: "absolute",
+    right: "10px",
+    top: "7px",
+    borderRadius: "8px",
+    padding: "2px 4px",
+    transform: "scale(0.8)",
+  },
 }));
 
 const TheMenu = styled(List)(() => ({
@@ -169,6 +179,7 @@ function Application() {
 
             <TheLogo data-tauri-drag-region>
               <SvgIcon sx={{ width: 62 }} component={logoIcon} inheritViewBox />
+              <UpdateButton className="the-newbtn" />
             </TheLogo>
 
             <TheMenu>

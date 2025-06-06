@@ -11,11 +11,11 @@ import {
   ListItemText,
   typographyClasses,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import TaskDetailsDrawer from "@/business/task/TaskDetailsDrawer";
 import TaskItemAction from "@/business/task/TaskItemAction";
-import TaskItemDrawer from "@/business/task/TaskItemDrawer";
 import { TaskDownloadDes } from "@/client/task_compose";
 import { TASK_STATUS_ENUM } from "@/constant/task";
 import { Aria2Task } from "@/services/aria2c_api";
@@ -75,6 +75,10 @@ function TaskItem({
 
     return `${completed} / ${total}`;
   }, [completedLength, totalLength]);
+
+  const onClose = useCallback(() => {
+    setOpenInfo(false);
+  }, []);
 
   return (
     <ListItem disablePadding>
@@ -154,10 +158,10 @@ function TaskItem({
         value={progress}
       />
 
-      <TaskItemDrawer
+      <TaskDetailsDrawer
         open={openInfo}
         task={task}
-        onClose={() => setOpenInfo(false)}
+        onClose={onClose}
         onCopyLink={onCopyLink}
         onOpenFile={onOpenFile}
         onPause={onPause}

@@ -35,7 +35,7 @@ const SpeedUnit = styled(Typography)(() => ({
 function LayoutTraffic() {
   const { t } = useTranslation();
 
-  const { globalStat: stat } = useAria2StateStore();
+  const stat = useAria2StateStore((state) => state.globalStat);
 
   const trafficRef = useRef<TrafficRef>(null);
 

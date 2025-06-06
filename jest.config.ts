@@ -29,6 +29,11 @@ const config: Config = {
     "\\.(css|less|scss|sass)$": "<rootDir>/tests/__mocks__/style_mock.js",
     "^@root/(.*)$": "<rootDir>/$1",
     "^@/(.*)$": "<rootDir>/src/$1",
+    // TODO: I don't know why it's not found.
+    "^@tauri-motrix/aria2/mocks$":
+      "<rootDir>/node_modules/@tauri-motrix/aria2/dist/mocks.js",
+    "^@tauri-motrix/aria2$":
+      "<rootDir>/node_modules/@tauri-motrix/aria2/dist/index.js",
   },
   watchPathIgnorePatterns: ["<rootDir>/src-tauri/"],
 };

@@ -1,12 +1,14 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, LinearProgress } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { check as checkUpdate } from "@tauri-apps/plugin-updater";
 import { useBoolean } from "ahooks";
-import { Ref, useImperativeHandle } from "react";
+import { Ref, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 
 import { BaseDialog, DialogRef } from "@/components/BaseDialog";
+import { Notice } from "@/components/Notice";
 import { APP_REPO } from "@/constant/url";
 
 function UpdateViewer(props: { ref: Ref<DialogRef> }) {
@@ -22,14 +24,61 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
     focusThrottleInterval: 36e5, // 1 hour
   });
 
-  const onUpdate = async () => {
-    // TODO
+  const [downloaded, setDownloaded] = useState(0);
+  const [contentLength, setContentLength] = useState(0);
+  const [updateState, setUpdateState] = useState(false);
+  const [buffer, setBuffer] = useState(0);
 
+  const markdownContent = useMemo(() => {
+    if (!updateInfo?.body) {
+      return "New Version is available";
+    }
+    return updateInfo?.body;
+  }, [updateInfo]);
+
+  // ! this cannot be updated
+  const breakChangeFlag = useMemo(
+    () => markdownContent.toLowerCase().includes("break change"),
+    [markdownContent],
+  );
+
+  const onUpdate = async () => {
     if (!updateInfo) {
       return;
     }
 
-    await updateInfo.downloadAndInstall();
+    if (breakChangeFlag) {
+      Notice.error(t("update.BreakChangeUpdateError"));
+      return;
+    }
+
+    setUpdateState(true);
+
+    try {
+      await updateInfo.downloadAndInstall((event) => {
+        switch (event.event) {
+          case "Started":
+            setContentLength(event.data.contentLength || 0);
+            console.log(
+              `started downloading ${event.data.contentLength} bytes`,
+            );
+            break;
+          case "Progress":
+            setDownloaded((prev) => prev + event.data.chunkLength);
+            setBuffer(event.data.chunkLength);
+            console.log(`downloaded ${downloaded} from ${contentLength}`);
+            break;
+          case "Finished":
+            console.log("download finished");
+            break;
+        }
+      });
+    } catch (err) {
+      // @ts-expect-error show message
+      Notice.error(err?.message || err.toString());
+    } finally {
+      setUpdateState(false);
+    }
   };
 
   return (
@@ -58,7 +107,30 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
       onCancel={setFalse}
       onOk={onUpdate}
     >
-      {/* TODO */}
+      <Box sx={{ height: "calc(100% - 10px)", overflow: "auto" }}>
+        <ReactMarkdown
+          components={{
+            a: (props) => {
+              const { children } = props;
+              return (
+                <a {...props} target="_blank">
+                  {children}
+                </a>
+              );
+            },
+          }}
+        >
+          {markdownContent}
+        </ReactMarkdown>
+      </Box>
+      {updateState && (
+        <LinearProgress
+          variant="buffer"
+          value={(downloaded / contentLength) * 100}
+          valueBuffer={buffer}
+          sx={{ marginTop: "5px" }}
+        />
+      )}
     </BaseDialog>
   );
 }

@@ -2,10 +2,17 @@ import { CallParam, JsonRpcRequest } from "./util";
 
 let originalFetch: typeof globalThis.fetch | null;
 
-export function mockRPC(cb: (method: string, payload: unknown) => unknown) {
+export function mockRPC(
+  cb: (method: string, payload: unknown) => unknown,
+  jsonRpcUrl?: string,
+) {
   originalFetch = globalThis.fetch;
   // @ts-expect-error only mock on unit test
-  globalThis.fetch = (_, option: { body: string }) => {
+  globalThis.fetch = (url, option: { body: string }) => {
+    if (jsonRpcUrl && url.toString() !== jsonRpcUrl) {
+      return originalFetch?.(url, option);
+    }
+
     const data: JsonRpcRequest = JSON.parse(option.body);
 
     let result;

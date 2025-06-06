@@ -6,8 +6,10 @@ export interface DownloadHistory {
   link: string;
   path: string;
   engine: DOWNLOAD_ENGINE;
+  status?: string;
   name: string;
-  downloaded_at: number;
+  created_at: number;
+  updated_at: number;
   total_length: number; // File size in bytes
   /**
    * aria2c -> gid
@@ -68,7 +70,7 @@ export async function findManyHistory(): Promise<DownloadHistoryVO[]> {
   const db = await getMotrixDB();
 
   const result = await db.select<DownloadHistory[]>(
-    "SELECT id, link, path, engine, name, downloaded_at, total_length, plat_id, json_ext FROM download_history ORDER BY downloaded_at DESC",
+    "SELECT id, link, path, engine, name, created_at, total_length, plat_id, json_ext FROM download_history ORDER BY created_at DESC",
   );
 
   return result.map(
@@ -86,7 +88,7 @@ export async function findOneHistoryByPlatId(
   const db = await getMotrixDB();
 
   const result = await db.select<DownloadHistory[]>(
-    "SELECT id, link, path, engine, name, downloaded_at, total_length, plat_id, json_ext FROM download_history WHERE plat_id = $1 ORDER BY downloaded_at DESC LIMIT 1",
+    "SELECT id, link, path, engine, name, created_at, total_length, plat_id, json_ext FROM download_history WHERE plat_id = $1 ORDER BY created_at DESC LIMIT 1",
     [id],
   );
 

@@ -1,16 +1,30 @@
 {
   "name": "@tauri-motrix/aria2",
-  "version": "0.2.1",
-  "main": "src/index.ts",
+  "version": "0.2.3",
+  "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./mocks": "./src/mocks.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mocks": {
+      "types": "./dist/mocks.d.ts",
+      "import": "./dist/mocks.js"
+    }
   },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "prepare": "pnpm build"
   },
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
+    "@rslib/core": "^0.8.0",
+    "@types/node": "^22.8.1",
     "typescript": "~5.6.3"
   }
 }

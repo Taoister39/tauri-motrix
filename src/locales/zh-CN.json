@@ -62,7 +62,16 @@
     "StopMessage": "下载任务 \"{{taskName}}\" 结束",
     "Details": "任务详情",
     "InfoDetails": "任务信息",
-    "SpeedDetails": "下载速度"
+    "TaskName": "任务名称",
+    "SaveTo": "保存到",
+    "Status": "状态",
+    "SpeedDetails": "下载速度",
+    "Progress": "进度",
+    "Connections": "连接数",
+    "DownloadSpeed": "下载速度",
+    "FileExtension": "拓展名",
+    "FileName": "文件名",
+    "FileSize": "文件大小"
   },
   "common": {
     "DownloadFile": "下载文件",
@@ -81,7 +90,11 @@
     "SaveSuccess": "保存成功",
     "Update": "更新",
     "DownloadSpeed": "下载速度",
-    "UploadSpeed": "上传速度"
+    "UploadSpeed": "上传速度",
+    "FromClipboard": "从剪贴板",
+    "FromTorrentFile": "从磁力文件",
+    "FromUrl": "从URL",
+    "UploadFile": "上传文件"
   },
   "about": {
     "Title": "关于应用程序",
@@ -89,7 +102,8 @@
   },
   "update": {
     "CurrentlyOnLatest": "当前已是最新版本",
-    "GotoReleasePage": "点击到发布页面"
+    "GotoReleasePage": "点击到发布页面",
+    "BreakChangeUpdateError": "破坏性更新，需要彻底卸载后手动下载安装。"
   },
   "history": {
     "Empty": "没有下载记录"

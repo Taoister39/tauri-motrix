@@ -1,5 +1,14 @@
 # Update Log
 
+## v0.2.0
+
+- Auto update modal show release info.
+- Support download by torrent file and choose files.
+- Support small window size UI.
+- Add download history.
+- Add download by clipboard.
+- Add auto check update
+
 ## v0.1.2
 
 - Fixed crash when the app init log. (#1)

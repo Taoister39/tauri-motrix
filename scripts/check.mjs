@@ -36,7 +36,7 @@ async function resolveSidecar(binInfo) {
     }
 
     if (zipFile.endsWith(".zip")) {
-      const zip = new AdmZip(tempZip);
+      const zip = AdmZip(tempZip);
       zip.getEntries().forEach((entry) => {
         log_debug(`"${name}" entry name`, entry.entryName);
       });

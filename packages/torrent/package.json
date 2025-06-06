@@ -1,0 +1,25 @@
+{
+  "name": "@tauri-motrix/torrent",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "prepare": "pnpm build"
+  },
+  "devDependencies": {
+    "@rslib/core": "^0.8.0",
+    "@types/node": "^22.8.1",
+    "typescript": "^5.8.3"
+  }
+}

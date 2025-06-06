@@ -41,13 +41,16 @@ export interface Aria2BitTorrent {
   info: {
     name: string;
   };
-  announceList: string[];
+  announceList: Array<[string]>;
+  comment?: string;
+  creationDate?: string;
 }
 
 export interface Aria2Task {
-  infoHash?: unknown;
+  infoHash?: string;
   bittorrent?: Aria2BitTorrent;
   bitfield?: string;
+  numSeeders?: string;
   completedLength: string;
   connections: string;
   dir: string;
@@ -107,9 +110,29 @@ export const stoppedTasksApi = async (param?: {
   return call<Aria2Task[]>("tellStopped", param?.offset ?? 0, param?.num ?? 20);
 };
 
-export const taskItemApi = async (param: { gid: string }) => {
+export const taskItemApi = async (gid: string) => {
   const { call } = await getAria2();
-  return call<Aria2Task>("tellStatus", param.gid);
+  return call<Aria2Task>("tellStatus", gid);
+};
+
+interface Peer {
+  amChoking: string;
+  bitfield: string;
+  downloadSpeed: string;
+  ip: string;
+  peerChoking: string;
+  peerId: string;
+  port: string;
+  seeder: string;
+  uploadSpeed: string;
+}
+
+export const taskItemWithPeers = async (gid: string) => {
+  const { multiCall } = await getAria2();
+  return multiCall<[[Aria2Task | undefined], [Peer[] | undefined]]>([
+    { method: "tellStatus", params: [gid] },
+    { method: "getPeers", params: [gid] },
+  ]);
 };
 
 export interface DownloadOption {
@@ -120,6 +143,7 @@ export interface DownloadOption {
   maxConnection?: number;
   maxSplit?: number;
   split?: number;
+  "select-file"?: string;
 }
 
 export const addTaskApi = async (
@@ -134,6 +158,14 @@ export const addTaskApi = async (
   );
 };
 
+export const addTorrentApi = async (
+  torrent: string,
+  option: DownloadOption,
+) => {
+  const { call } = await getAria2();
+  return call("addTorrent", torrent, [], option);
+};
+
 export interface Aria2GlobalStat {
   downloadSpeed: string;
   numActive: string;
@@ -145,6 +177,17 @@ export interface Aria2GlobalStat {
 export const getGlobalStatApi = async () => {
   const { call } = await getAria2();
   return call<Aria2GlobalStat>("getGlobalStat");
+};
+
+export const changeOptionApi = async (
+  gid: string,
+  option: {
+    // TODO: only use task file change now
+    "select-file": string;
+  },
+) => {
+  const { call } = await getAria2();
+  return call("changeOption", gid, option);
 };
 
 export const pauseTaskApi = async (gid: string) => {

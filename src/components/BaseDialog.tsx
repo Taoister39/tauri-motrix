@@ -3,15 +3,16 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogProps,
   DialogTitle,
   type SxProps,
   type Theme,
 } from "@mui/material";
-import { ReactNode } from "react";
+import { FormEvent, ReactNode, useMemo } from "react";
 
-// code from clash verge
+// original code from clash verge
 
-interface Props {
+export interface BaseDialogProps {
   title: ReactNode;
   open: boolean;
   okBtn?: ReactNode;
@@ -25,6 +26,8 @@ interface Props {
   onOk?: () => void;
   onCancel?: () => void;
   onClose?: () => void;
+  onSubmit?: (e: FormEvent) => void;
+  enableForm?: boolean;
 }
 
 export interface DialogRef {
@@ -32,7 +35,7 @@ export interface DialogRef {
   close: () => void;
 }
 
-export const BaseDialog: React.FC<Props> = (props) => {
+export function BaseDialog(props: BaseDialogProps) {
   const {
     open,
     title,
@@ -44,10 +47,33 @@ export const BaseDialog: React.FC<Props> = (props) => {
     disableOk,
     disableFooter,
     loading,
+    onClose,
+    onCancel,
+    onOk,
+    onSubmit,
+    enableForm,
   } = props;
 
+  const rootSlotProps = useMemo<DialogProps["slotProps"]>(
+    () =>
+      enableForm
+        ? {
+            paper: {
+              component: "form",
+              onSubmit,
+            },
+          }
+        : undefined,
+    [onSubmit, enableForm],
+  );
+
+  const handleOkBtnSubmit = useMemo(
+    () => (enableForm ? undefined : onOk),
+    [onOk, enableForm],
+  );
+
   return (
-    <Dialog open={open} onClose={props.onClose}>
+    <Dialog open={open} onClose={onClose} slotProps={rootSlotProps}>
       <DialogTitle>{title}</DialogTitle>
 
       <DialogContent sx={contentSx}>{children}</DialogContent>
@@ -55,12 +81,17 @@ export const BaseDialog: React.FC<Props> = (props) => {
       {!disableFooter && (
         <DialogActions>
           {!disableCancel && (
-            <Button variant="outlined" onClick={props.onCancel}>
+            <Button variant="outlined" onClick={onCancel}>
               {cancelBtn}
             </Button>
           )}
           {!disableOk && (
-            <Button loading={loading} variant="contained" onClick={props.onOk}>
+            <Button
+              loading={loading}
+              variant="contained"
+              onClick={handleOkBtnSubmit}
+              type={enableForm ? "submit" : "button"}
+            >
               {okBtn}
             </Button>
           )}
@@ -68,4 +99,6 @@ export const BaseDialog: React.FC<Props> = (props) => {
       )}
     </Dialog>
   );
-};
+}
+
+export default BaseDialog;

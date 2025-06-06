@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -5,8 +6,8 @@ import TaskGraphic from "@/business/task/TaskGraphic";
 import { TaskDrawerItem, TaskDrawerList } from "@/client/task_compose";
 import LinearProgressWithLabel from "@/components/LinearProgressWithLabel";
 import { Aria2Task } from "@/services/aria2c_api";
-import { parseByteVo } from "@/utils/download";
-import { getTaskProgressColor } from "@/utils/task";
+import { calcProgress, parseByteVo } from "@/utils/download";
+import { checkTaskIsBT, getTaskProgressColor } from "@/utils/task";
 
 export interface TaskSpeedPanelProps {
   task: Aria2Task;
@@ -31,15 +32,54 @@ function TaskSpeedPanel({ task }: TaskSpeedPanelProps) {
     [progress, status],
   );
 
+  const isBt = checkTaskIsBT(task);
+
   return (
-    <TaskDrawerList title={t("task.SpeedDetails")}>
+    <TaskDrawerList>
+      <TaskDrawerItem label={t("task.Progress")} value={progressText} />
+      {isBt && (
+        <TaskDrawerItem label={t("task.NumSeeders")} value={task.numSeeders} />
+      )}
+      <TaskDrawerItem label={t("task.Connections")} value={task.connections} />
+      <TaskDrawerItem label={t("task.DownloadSpeed")} value={speedVo} />
+
+      {isBt && (
+        <>
+          <TaskDrawerItem
+            label={t("common.UploadSpeed")}
+            value={parseByteVo(task.uploadSpeed).join("")}
+          />
+          <TaskDrawerItem
+            label={t("task.UploadLength")}
+            value={parseByteVo(task.uploadLength).join("")}
+          />
+          <TaskDrawerItem
+            label={t("common.Ratio")}
+            value={calcProgress(totalLength, task.uploadLength, 4)}
+          />
+        </>
+      )}
+
       <LinearProgressWithLabel value={progress} color={progressColor} />
 
-      <TaskDrawerItem label="Progress" value={progressText} />
-      <TaskDrawerItem label="Connections" value={task.connections} />
-      <TaskDrawerItem label="Download Speed" value={speedVo} />
-
-      {bitfield && <TaskGraphic bitfield={bitfield} outerWidth={400} />}
+      {bitfield && (
+        <Box
+          sx={(theme) => ({
+            textAlign: "center",
+            mt: 2,
+            border:
+              theme.palette.mode === "dark"
+                ? "1px solid #565656"
+                : "1px solid #ebeef5",
+            borderRadius: 0.25,
+            mb: 3,
+            py: 1,
+            px: 0.75,
+          })}
+        >
+          <TaskGraphic bitfield={bitfield} outerWidth={400} />
+        </Box>
+      )}
     </TaskDrawerList>
   );
 }

@@ -15,7 +15,7 @@ export type SocketPendingMap = Record<
   {
     resolve: (data: MessageEvent["data"]) => void;
     reject: (data: unknown) => void;
-    timer: number;
+    timer: ReturnType<typeof setTimeout>;
   }
 >;
 
@@ -59,7 +59,7 @@ export class Aria2 {
     } = instanceConfig;
 
     this.fetcher = createFetcherFactory(
-      `http${isHttps ? "s" : ""}://${server}/jsonrpc`,
+      `${isHttps ? "https" : "http"}://${server}/jsonrpc`,
       timeout,
     );
 
@@ -72,7 +72,7 @@ export class Aria2 {
   open() {
     const { server, isWss } = this.instanceConfig;
     const webSocketIns = new WebSocket(
-      `ws${isWss ? "s" : ""}://${server}/jsonrpc`,
+      `${isWss ? "wss" : "ws"}://${server}/jsonrpc`,
     );
     this.webSocketIns = webSocketIns;
 

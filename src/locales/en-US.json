@@ -62,10 +62,23 @@
         "StopMessage": "Task \"{{taskName}}\" stopped",
         "Details": "Task Details",
         "InfoDetails": "Task Info",
+        "TaskName": "Task Name",
+        "SaveTo": "Save to",
+        "Status": "Status",
         "SpeedDetails": "Task Speed",
+        "Progress": "Progress",
+        "Connections": "Connections",
+        "DownloadSpeed": "Download Speed",
         "FileName": "Name",
         "FileExtension": "Extension",
-        "FileSize": "Size"
+        "FileSize": "Size",
+        "SelectedFilesSum": "Selected: {{selectedFilesCount}} files, total size {{selectedFilesTotalSize}}",
+        "SelectFilesError": "Please select at least one download file",
+        "SelectAtLeastOne": "Please select at least one file",
+        "PeerClient": "Client",
+        "PeerHost": "Host",
+        "NumSeeders": "Seeders",
+        "UploadLength": "Uploaded"
     },
     "common": {
         "DownloadFile": "Download File",
@@ -88,11 +101,18 @@
         "FromClipboard": "From Clipboard",
         "FromTorrentFile": "From Torrent File",
         "FromUrl": "From URL",
-        "UploadFile": "Upload file"
+        "UploadFile": "Upload file",
+        "Optional": "Optional",
+        "DirPick": "Please select path",
+        "Ratio": "Ratio",
+        "CreationDate": "Creation Date",
+        "Pieces": "Pieces",
+        "PieceSize": "Piece Size"
     },
     "update": {
         "GotoReleasePage": "Go to release page",
-        "CurrentlyOnLatest": "Currently on the Latest Version"
+        "CurrentlyOnLatest": "Currently on the Latest Version",
+        "BreakChangeUpdateError": "The portable version does not support in-app updates. Please manually download and replace it."
     },
     "about": {
         "Title": "App About",

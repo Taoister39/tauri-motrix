@@ -76,6 +76,13 @@ impl IAria2Temp {
 
         map.insert("dir".into(), download_dir.into());
 
+        // bt task
+        map.insert("bt-remove-unselected-file".into(), "true".into());
+        map.insert("bt-enable-lpd".into(), "true".into());
+        map.insert("bt-max-peers".into(), "128".into());
+        map.insert("bt-save-metadata".into(), "true".into());
+        map.insert("bt-load-saved-metadata".into(), "true".into());
+
         Self(map)
     }
 

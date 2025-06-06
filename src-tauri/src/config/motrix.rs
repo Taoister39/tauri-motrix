@@ -28,6 +28,8 @@ pub struct IMotrix {
     pub auto_log_clean: Option<i32>,
 
     pub enable_auto_launch: Option<bool>,
+
+    pub auto_check_update: Option<bool>,
 }
 
 impl IMotrix {
@@ -70,6 +72,7 @@ impl IMotrix {
             app_log_level: Some("info".into()),
             enable_auto_launch: Some(false),
             auto_log_clean: Some(3),
+            auto_check_update: Some(true),
             ..Self::default()
         }
     }
@@ -96,6 +99,7 @@ impl IMotrix {
         patch!(aria2_engine);
         patch!(language);
         patch!(enable_auto_launch);
+        patch!(auto_log_clean);
     }
 }
 

@@ -46,6 +46,7 @@ interface TaskStore {
   selectedTaskIds: Array<string>;
   selectedTasks: Array<Aria2Task>;
   fetchTasks: () => void;
+  fetchItem: (plat_id: string) => void;
   setFetchType: (type: TASK_STATUS_ENUM) => void;
   handleTaskSelect: (taskId: string) => void;
   handleTaskPause: (taskId?: string) => void;
@@ -89,6 +90,11 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }
 
     set({ tasks });
+  },
+  async fetchItem(plat_id) {
+    // only aria2c
+    const newTask = await taskItemApi(plat_id);
+    set({ tasks: get().tasks.map((t) => (t.gid === plat_id ? newTask : t)) });
   },
   async addTask(url, option) {
     await addTaskApi(url, compactUndefined(option));
@@ -198,7 +204,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     get().fetchTasks();
     usePollingStore.getState().resetInterval();
 
-    const task = await taskItemApi({ gid });
+    const task = await taskItemApi(gid);
     const taskName = getTaskName(task, "unknown_start", 64);
 
     Notice.success(t("task.StartMessage", { taskName }));
@@ -206,13 +212,13 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     get().syncToDownloadHistory(task);
   },
   async onDownloadStop([{ gid }]) {
-    const task = await taskItemApi({ gid });
+    const task = await taskItemApi(gid);
     const taskName = getTaskName(task, "unknown_stop", 64);
     Notice.success(t("task.StopMessage", { taskName }));
   },
   async onDownloadComplete([{ gid }]) {
     get().fetchTasks();
-    const task = await taskItemApi({ gid });
+    const task = await taskItemApi(gid);
     const title = getTaskName(task, "unknown_complete", 64);
 
     sendNotification({ title, body: t("common.Complete") });

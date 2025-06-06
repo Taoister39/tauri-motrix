@@ -5,7 +5,7 @@ import { useAria2StateStore } from "@/store/aria2_state";
 import { useTaskStore } from "@/store/task";
 
 export interface PollingStore {
-  timer?: number;
+  timer?: ReturnType<typeof setTimeout>;
   interval: number;
   polling: () => void;
   updateInterval: (stat?: Aria2GlobalStat) => void;

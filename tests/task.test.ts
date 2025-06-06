@@ -1,5 +1,5 @@
-import { mockRPC } from "@root/packages/aria2/src/mocks";
 import { clearMocks, mockIPC } from "@tauri-apps/api/mocks";
+import { mockRPC } from "@tauri-motrix/aria2/mocks";
 
 import { TASK_STATUS_ENUM } from "@/constant/task";
 import { Aria2File, Aria2Task } from "@/services/aria2c_api";

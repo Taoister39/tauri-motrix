@@ -11,6 +11,7 @@ import {
   ListItem,
   styled,
   Typography,
+  typographyClasses,
   Zoom,
 } from "@mui/material";
 import { CSSProperties, MouseEventHandler, ReactNode } from "react";
@@ -119,10 +120,15 @@ export function TaskFab(props: {
   );
 }
 
-export function TaskDrawerList(props: { title: string; children: ReactNode }) {
+export function TaskDrawerList(props: { title?: string; children: ReactNode }) {
+  const { title } = props;
   return (
     <List
-      subheader={<Typography variant="subtitle1">{props.title}</Typography>}
+      subheader={
+        !title ? undefined : (
+          <Typography variant="subtitle1">{title}</Typography>
+        )
+      }
     >
       {props.children}
     </List>
@@ -145,7 +151,19 @@ export function TaskDrawerItem(props: {
   action?: ReactNode;
 }) {
   return (
-    <ListItem secondaryAction={props.action}>
+    <ListItem
+      secondaryAction={props.action}
+      sx={{
+        gap: "12px",
+        [`.${typographyClasses.body1}`]: {
+          flex: "1 1 25%",
+          textAlign: "end",
+        },
+        [`.${typographyClasses.body2}`]: {
+          flex: "1 1 75%",
+        },
+      }}
+    >
       <TaskDrawerLabel variant="body1">{props.label}:</TaskDrawerLabel>
       <TaskDrawerValue variant="body2">{props.value}</TaskDrawerValue>
     </ListItem>

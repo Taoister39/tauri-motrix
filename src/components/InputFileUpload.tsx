@@ -3,7 +3,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Box, IconButton, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { styled, SxProps, Theme } from "@mui/material/styles";
-import { Ref, useActionState } from "react";
+import { useMergedState } from "rc-util";
+import { Ref, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
 const VisuallyHiddenInput = styled("input")({
@@ -18,6 +19,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+// TODO: wrap the File type
 export interface InputFileUploadProps {
   text?: string;
   multiple?: boolean;
@@ -26,6 +28,8 @@ export interface InputFileUploadProps {
   ref?: Ref<HTMLInputElement>;
   onChange?: (files: File[]) => void;
   hideList?: boolean;
+  fileList?: File[];
+  defaultFileList?: File[];
 }
 
 export default function InputFileUpload({
@@ -36,23 +40,32 @@ export default function InputFileUpload({
   ref,
   onChange,
   hideList,
+  fileList,
+  defaultFileList,
 }: InputFileUploadProps) {
   const { t } = useTranslation();
 
-  // TODO: async function outside of useActionState
-  const [files, onFileInput, isPending] = useActionState<
-    File[],
-    FileList | null | File[]
-  >((nameList, files) => {
-    if (!files) {
-      return nameList;
-    }
+  const [mergedFileList, setMergedFileList] = useMergedState(
+    defaultFileList || [],
+    {
+      value: fileList,
+      postState: (list) => list ?? [],
+    },
+  );
 
-    const filesArray = Array.from(files);
-    onChange?.(filesArray);
+  const [isPending, startTransition] = useTransition();
 
-    return filesArray;
-  }, []);
+  const onFileInput = (files: FileList | File[] | null) => {
+    startTransition(async () => {
+      if (!files) {
+        return;
+      }
+
+      const filesArray = Array.from(files);
+      await onChange?.(filesArray);
+      setMergedFileList(filesArray);
+    });
+  };
 
   return (
     <Box sx={{ mt: 2, mb: 1 }}>
@@ -81,7 +94,7 @@ export default function InputFileUpload({
       </Button>
 
       {!hideList &&
-        files.map((item, index) => (
+        mergedFileList.map((item, index) => (
           <Box
             key={index}
             sx={{
@@ -94,7 +107,9 @@ export default function InputFileUpload({
               {item.name}
             </Typography>
             <IconButton
-              onClick={() => onFileInput(files.filter((x) => x !== item))}
+              onClick={() =>
+                onFileInput(mergedFileList.filter((x) => x !== item))
+              }
             >
               <DeleteOutline />
             </IconButton>

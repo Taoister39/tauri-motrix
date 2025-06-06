@@ -43,9 +43,9 @@ Thanks to the following projects for giving me inspiration and reference:
 
 - [Clash Verge](https://github.com/clash-verge-rev)
 - [Motrix](https://github.com/agalwood/Motrix)
-- [Aria2](https://github.com/aria2/aria2)
-- [Aria2.js](https://github.com/sonnyp/aria2.js)
-- [Axios](https://github.com/axios/axios)
+- [aria2](https://github.com/aria2/aria2)
+- [antd](https://github.com/ant-design/ant-design)
+- [rc-util](https://github.com/react-component/util)
 
 ## License
 
