@@ -1,0 +1,43 @@
+# Copyright 2019-2024 Tauri Programme within The Commons Conservancy
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: MIT
+
+name: Check Formatting and Unit Test
+
+on:
+  pull_request:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install Rust stable and rustfmt
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: run cargo fmt
+        run: cargo fmt --manifest-path ./src-tauri/Cargo.toml --all -- --check
+
+      - name: run cargo test
+        run: cargo test --manifest-path ./src-tauri/Cargo.toml
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm i -g --force corepack
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+      - run: pnpm i --frozen-lockfile
+
+      - name: Prettier
+        run: pnpm format:check
+
+      - name: Unit Test
+        run: pnpm test

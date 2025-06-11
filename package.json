@@ -21,7 +21,9 @@
     "preview": "rsbuild preview",
     "tauri": "tauri",
     "prepare": "husky",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -81,8 +83,8 @@
     "globals": "^16.0.0",
     "https-proxy-agent": "^7.0.6",
     "husky": "^9.1.7",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "tar": "^7.4.3",

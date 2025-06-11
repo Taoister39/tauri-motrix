@@ -57,6 +57,11 @@ jobs:
           pnpm i
           pnpm check ${{ matrix.target }}
 
+      - name: Unit Test
+        run: |
+          pnpm test
+          cargo test --manifest-path ./src-tauri/Cargo.toml
+
       - name: Tauri build
         uses: tauri-apps/tauri-action@v0
         env:

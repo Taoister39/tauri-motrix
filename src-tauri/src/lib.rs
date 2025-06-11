@@ -6,6 +6,8 @@ use utils::resolve;
 
 use crate::{process::AsyncHandler, utils::logging::Type};
 
+use crate::utils::window::create_window;
+
 mod cmd;
 mod config;
 mod core;
@@ -17,6 +19,9 @@ mod utils;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {
+            create_window(true);
+        }))
         .plugin(tauri_plugin_sql::Builder::default().build())
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
