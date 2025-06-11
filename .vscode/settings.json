@@ -1,15 +1,8 @@
 {
-  "i18n-ally.localesPaths": [
-    "src/locales"
-  ],
+  "i18n-ally.localesPaths": ["src/locales"],
   "i18n-ally.keystyle": "nested",
-  "cSpell.words": [
-    "Motrix",
-    "rsbuild",
-    "Taoister",
-    "tauri"
-  ],
+  "cSpell.words": ["Motrix", "rsbuild", "Taoister", "tauri"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  },
+  }
 }

@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
-import { render,screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
-import BasePage  from "@/components/BasePage";
+import BasePage from "@/components/BasePage";
 
 describe("BasePage Component", () => {
   it("should renders the title correctly", () => {
@@ -15,7 +15,11 @@ describe("BasePage Component", () => {
   });
 
   it("should renders children correctly", () => {
-    render(<BasePage><p>Test Child</p></BasePage>);
+    render(
+      <BasePage>
+        <p>Test Child</p>
+      </BasePage>,
+    );
     expect(screen.getByText("Test Child")).toBeInTheDocument();
   });
 

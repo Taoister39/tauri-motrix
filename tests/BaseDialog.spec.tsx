@@ -22,5 +22,4 @@ describe("BaseDialog", () => {
     expect(getByText("Test Title")).toBeInTheDocument();
     expect(getByText("Test Content")).toBeInTheDocument();
   });
-
 });

@@ -6,8 +6,5 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "rsbuild.config.ts",
-    "jest-setup.ts"
-  ]
+  "include": ["rsbuild.config.ts", "jest-setup.ts"]
 }

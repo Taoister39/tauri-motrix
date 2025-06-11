@@ -1,11 +1,11 @@
 {
-    "$schema": "http://json.schemastore.org/prettierrc",
-    "singleQuote": false,
-    "useTabs": false,
-    "jsxSingleQuote": false,
-    "semi": true,
-    "bracketSpacing": true,
-    "jsxBracketSameLine": false,
-    "bracketSameLine": false,
-    "arrowParens": "always"
+  "$schema": "http://json.schemastore.org/prettierrc",
+  "singleQuote": false,
+  "useTabs": false,
+  "jsxSingleQuote": false,
+  "semi": true,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "bracketSameLine": false,
+  "arrowParens": "always"
 }
