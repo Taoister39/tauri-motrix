@@ -1,4 +1,4 @@
-import { styled, Tab, TabProps, Tabs } from "@mui/material";
+import { Box, styled, Tab, TabProps, Tabs } from "@mui/material";
 
 export const AntTab = styled((props: TabProps) => (
   <Tab disableRipple {...props} />
@@ -41,4 +41,15 @@ export const AntTabs = styled(Tabs)({
   "& .MuiTabs-indicator": {
     backgroundColor: "#1890ff",
   },
+});
+
+export const BasePageColumn = styled(Box)({
+  height: "100%",
+  display: "flex",
+  flexFlow: "column",
+});
+
+export const Column = styled(Box)({
+  display: "flex",
+  flexFlow: "column",
 });

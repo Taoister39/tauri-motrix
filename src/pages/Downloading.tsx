@@ -5,9 +5,11 @@ import {
   Box,
   Button,
   ButtonGroup,
+  inputBaseClasses,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
+  TextField,
 } from "@mui/material";
 import { emit } from "@tauri-apps/api/event";
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
@@ -16,8 +18,9 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import AddTorrentDialog from "@/business/task/AddTorrentDialog";
-import TaskAllAction from "@/business/task/TaskAllAction";
+import TaskBanner from "@/business/task/TaskBanner";
 import TaskItem from "@/business/task/TaskItem";
+import { BasePageColumn, Column } from "@/client/styled_compose";
 import { TaskList } from "@/client/task_compose";
 import { DialogRef } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
@@ -41,9 +44,11 @@ function DownloadingPage() {
     openTaskFile,
     copyTaskLink,
     setFetchType,
+    setKeyword,
   } = useTaskStore();
 
   const torrentRef = useRef<DialogRef>(null);
+  const searchRef = useRef<string>("");
 
   const addTaskByClipboard = useLockFn(async () => {
     try {
@@ -57,29 +62,21 @@ function DownloadingPage() {
 
   return (
     <BasePage
+      full
       title={t("Task-Start")}
       header={
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <TaskAllAction
-            onPause={handleTaskPause}
-            onResume={handleTaskResume}
-            onStop={handleTaskStop}
-            selectedTaskIds={selectedTaskIds}
-            fetchType={fetchType}
-          />
-          <ButtonGroup size="small">
-            {NORMAL_STATUS.map((value) => (
-              <Button
-                key={value}
-                variant={value === fetchType ? "contained" : "outlined"}
-                onClick={() => setFetchType(value)}
-                sx={{ textTransform: "capitalize" }}
-              >
-                {t(`Button-Fetch-Type.${value}`)}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </Box>
+        <ButtonGroup size="small">
+          {NORMAL_STATUS.map((value) => (
+            <Button
+              key={value}
+              variant={value === fetchType ? "contained" : "outlined"}
+              onClick={() => setFetchType(value)}
+              sx={{ textTransform: "capitalize" }}
+            >
+              {t(`Button-Fetch-Type.${value}`)}
+            </Button>
+          ))}
+        </ButtonGroup>
       }
       fab={
         <SpeedDial
@@ -105,22 +102,92 @@ function DownloadingPage() {
         </SpeedDial>
       }
     >
-      <TaskList
-        dataSource={tasks}
-        renderItem={(task) => (
-          <TaskItem
-            onCopyLink={copyTaskLink}
-            onStop={handleTaskStop}
-            onResume={handleTaskResume}
-            onPause={handleTaskPause}
-            onOpenFile={openTaskFile}
-            key={task.gid}
-            task={task}
-            onSelect={handleTaskSelect}
-            selected={selectedTaskIds.includes(task.gid)}
+      <BasePageColumn>
+        <Column
+          sx={(theme) => ({
+            bgcolor: theme.palette.background.paper,
+            px: 2,
+            py: 1,
+            gap: 1,
+          })}
+        >
+          <TextField
+            fullWidth
+            size="small"
+            sx={{
+              [`.${inputBaseClasses.root}`]: {
+                border: "1px solid #e0e0e0",
+                borderRadius: "24px",
+                fontSize: "16px",
+                background: "#f8f9fa",
+                transition: "all 0.2s",
+              },
+            }}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              if (value.length === 0) {
+                setKeyword(value);
+              }
+              searchRef.current = value;
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setKeyword(searchRef.current);
+              }
+            }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <span
+                    onClick={() => setKeyword(searchRef.current)}
+                    style={{
+                      cursor: "pointer",
+                      // color: "#757575",
+                      fontSize: "20px",
+                    }}
+                  >
+                    🔍
+                  </span>
+                ),
+              },
+            }}
+            placeholder={t("task.SearchPlaceholder")}
           />
-        )}
-      />
+          <TaskBanner
+            onSelectAll={handleTaskSelect}
+            onPause={handleTaskPause}
+            onResume={handleTaskResume}
+            onStop={handleTaskStop}
+            selectedTaskIds={selectedTaskIds}
+            fetchType={fetchType}
+          />
+        </Column>
+        <Box
+          sx={{
+            padding: "10px",
+            overflow: "auto",
+            flex: "1 1 1px",
+          }}
+        >
+          <TaskList
+            dataSource={tasks}
+            renderItem={(task) => (
+              <TaskItem
+                onCopyLink={copyTaskLink}
+                onStop={handleTaskStop}
+                onResume={handleTaskResume}
+                onPause={handleTaskPause}
+                onOpenFile={openTaskFile}
+                key={task.gid}
+                task={task}
+                onSelect={handleTaskSelect}
+                selected={selectedTaskIds.includes(task.gid)}
+              />
+            )}
+          />
+        </Box>
+      </BasePageColumn>
       <AddTorrentDialog ref={torrentRef} />
     </BasePage>
   );

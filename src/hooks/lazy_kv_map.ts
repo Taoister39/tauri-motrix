@@ -35,14 +35,6 @@ const useLazyKVMap = <RecordType extends AnyObject = AnyObject>(
     ) {
       const kvMap = mapCacheRef.current.kvMap;
 
-      /*************  ✨ Windsurf Command ⭐  *************/
-      /**
-       * Recursively traverse the nested array of records, and populate the kvMap
-       * with the key-value pair of each record.
-       *
-       * @param records - The array of records to traverse.
-       */
-      /*******  286f5441-7f03-4c7f-9f7a-0c13c676fc8b  *******/
       function dig(records: readonly RecordType[]) {
         records.forEach((record, index) => {
           const rowKey = getRowKey(record, index);

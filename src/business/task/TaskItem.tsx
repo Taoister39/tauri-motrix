@@ -9,9 +9,12 @@ import {
   ListItemIcon,
   listItemIconClasses,
   ListItemText,
+  Typography,
   typographyClasses,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import TaskDetailsDrawer from "@/business/task/TaskDetailsDrawer";
@@ -50,6 +53,10 @@ function TaskItem({
 }: TaskItemProps) {
   const { t } = useTranslation("task");
 
+  const theme = useTheme();
+
+  const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const { connections, gid, status } = task;
 
   const totalLength = Number(task.totalLength);
@@ -58,11 +65,19 @@ function TaskItem({
   const progress = (completedLength / totalLength) * 100 || 0;
 
   const speedVo = parseByteVo(downloadSpeed, "/s").join("");
-  const remainingVo = `${t("Remaining", { ns: "common" })} ${timeFormat(
-    timeRemaining(totalLength, completedLength, downloadSpeed),
-  )}`;
 
   const [openInfo, setOpenInfo] = useState(false);
+
+  const remainingVo = useMemo(() => {
+    let result = `${timeFormat(
+      timeRemaining(totalLength, completedLength, downloadSpeed),
+    )}`;
+
+    if (!isDownSm) {
+      result = `${t("Remaining", { ns: "common" })} ${result}`;
+    }
+    return result;
+  }, [completedLength, downloadSpeed, isDownSm, t, totalLength]);
 
   const progressColor = useMemo(
     () => getTaskProgressColor(progress, status),
@@ -108,8 +123,25 @@ function TaskItem({
               overflow: "hidden",
             },
           }}
+          slots={{ secondary: "div" }}
           primary={getTaskName(task)}
-          secondary={progressText}
+          secondary={
+            <Fragment>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.primary", display: "inline" }}
+              >
+                {progressText}
+              </Typography>
+              {TASK_STATUS_ENUM.Active === status && (
+                <TaskDownloadDes
+                  speed={speedVo}
+                  connections={connections}
+                  remaining={remainingVo}
+                />
+              )}
+            </Fragment>
+          }
         />
 
         <Box
@@ -134,13 +166,6 @@ function TaskItem({
             onPause={onPause}
             onShowInfo={() => setOpenInfo(true)}
           />
-          {TASK_STATUS_ENUM.Active === status && (
-            <TaskDownloadDes
-              speed={speedVo}
-              connections={connections}
-              remaining={remainingVo}
-            />
-          )}
         </Box>
       </ListItemButton>
 

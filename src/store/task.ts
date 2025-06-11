@@ -43,12 +43,14 @@ export type WrapGid = [{ gid: string }];
 interface TaskStore {
   tasks: Array<Aria2Task>;
   fetchType: TASK_STATUS_ENUM;
+  keyword: string;
   selectedTaskIds: Array<string>;
   selectedTasks: Array<Aria2Task>;
   fetchTasks: () => void;
   fetchItem: (plat_id: string) => void;
   setFetchType: (type: TASK_STATUS_ENUM) => void;
-  handleTaskSelect: (taskId: string) => void;
+  setKeyword: (keyword?: string) => void;
+  handleTaskSelect: (taskId?: string) => void;
   handleTaskPause: (taskId?: string) => void;
   handleTaskResume: (taskId?: string) => void;
   handleTaskDelete: (taskId?: string) => void;
@@ -67,12 +69,13 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   tasks: [],
   selectedTaskIds: [],
   fetchType: TASK_STATUS_ENUM.Active,
+  keyword: "",
   get selectedTasks() {
     const { tasks, selectedTaskIds } = get();
     return tasks.filter((task) => selectedTaskIds.includes(task.gid));
   },
   async fetchTasks() {
-    const { fetchType } = get();
+    const { fetchType, keyword } = get();
 
     let tasks: Array<Aria2Task> = [];
     switch (fetchType) {
@@ -89,6 +92,15 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         break;
     }
 
+    // Filter tasks by keyword if provided (case insensitive search)
+    if (keyword && keyword.trim() !== "") {
+      const normalizedKeyword = keyword.toLowerCase();
+      tasks = tasks.filter((task) => {
+        const taskName = getTaskName(task).toLowerCase();
+        return taskName.includes(normalizedKeyword);
+      });
+    }
+
     set({ tasks });
   },
   async fetchItem(plat_id) {
@@ -100,13 +112,24 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     await addTaskApi(url, compactUndefined(option));
     await get().fetchTasks();
   },
-  handleTaskSelect(taskId: string) {
-    const { selectedTaskIds } = get();
-    set({ selectedTaskIds: arrayAddOrRemove(selectedTaskIds, taskId) });
+  handleTaskSelect(taskId) {
+    const { tasks, selectedTaskIds } = get();
+    if (taskId) {
+      set({ selectedTaskIds: arrayAddOrRemove(selectedTaskIds, taskId) });
+    } else if (tasks.length > 0) {
+      const isAllAlready = tasks.length === selectedTaskIds.length;
+      set({
+        selectedTaskIds: isAllAlready ? [] : tasks.map((item) => item.gid),
+      });
+    }
   },
   async setFetchType(type: TASK_STATUS_ENUM) {
     set({ fetchType: type, selectedTaskIds: [] });
     await get().fetchTasks();
+  },
+  setKeyword(keyword) {
+    set({ keyword: keyword?.trim() ?? "" });
+    get().fetchTasks();
   },
   async handleTaskPause(taskId) {
     if (taskId) {

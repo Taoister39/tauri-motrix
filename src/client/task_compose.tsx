@@ -5,6 +5,8 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
+  ButtonProps,
   Fab,
   IconButton,
   List,
@@ -76,6 +78,30 @@ export function TaskActionButton(props: {
     >
       {props.icon}
     </IconButton>
+  );
+}
+
+export function TaskBannerAction(props: {
+  title?: string;
+  onClick?: () => void;
+  icon?: ReactNode;
+  disabled?: boolean;
+  color?: ButtonProps["color"];
+  text?: string;
+}) {
+  return (
+    <Button
+      startIcon={props.icon}
+      sx={{ borderRadius: "20px" }}
+      onClick={props.onClick}
+      disabled={props.disabled}
+      title={props.title}
+      variant="contained"
+      size="small"
+      color={props.color}
+    >
+      {props.text ?? props.title}
+    </Button>
   );
 }
 

@@ -71,7 +71,8 @@
     "DownloadSpeed": "下载速度",
     "FileExtension": "拓展名",
     "FileName": "文件名",
-    "FileSize": "文件大小"
+    "FileSize": "文件大小",
+    "SearchPlaceholder": "搜索下载任务..."
   },
   "common": {
     "DownloadFile": "下载文件",

@@ -2,16 +2,16 @@ use anyhow::Result;
 use tauri::{
     menu::{Menu, MenuEvent, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent},
-    App, AppHandle, Emitter, Listener, Wry,
+    AppHandle, Emitter, Listener, Wry,
 };
 
 use crate::{core::handle, feat, utils::window::create_window};
 
 use super::i18n::t;
 
-pub fn create_tray(app: &App) -> Result<()> {
+pub fn create_tray(app_handle: &AppHandle) -> Result<()> {
     let mut builder = TrayIconBuilder::with_id("main")
-        .icon(app.default_window_icon().unwrap().clone())
+        .icon(app_handle.default_window_icon().unwrap().clone())
         .icon_as_template(false);
 
     #[cfg(target_os = "windows")]
@@ -19,7 +19,7 @@ pub fn create_tray(app: &App) -> Result<()> {
         builder = builder.show_menu_on_left_click(false);
     }
 
-    let tray = builder.build(app)?;
+    let tray = builder.build(app_handle)?;
 
     tray.on_menu_event(on_menu_event);
 

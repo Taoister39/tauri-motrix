@@ -1,5 +1,10 @@
 # Update Log
 
+## v0.2.1
+
+- Supplement BT task drawer info
+- The aria2 package v1.0
+
 ## v0.2.0
 
 - Auto update modal show release info.

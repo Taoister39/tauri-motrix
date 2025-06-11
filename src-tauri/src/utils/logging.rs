@@ -5,6 +5,7 @@ pub enum Type {
     Window,
     Core,
     Engine,
+    Setup,
 }
 
 impl fmt::Display for Type {
@@ -13,6 +14,7 @@ impl fmt::Display for Type {
             Type::Window => write!(f, "[Window]"),
             Type::Core => write!(f, "[Core]"),
             Type::Engine => write!(f, "[Engine]"),
+            Type::Setup => write!(f, "[Setup]"),
         }
     }
 }

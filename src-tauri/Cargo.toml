@@ -1,6 +1,6 @@
 [package]
 name = "tauri-motrix"
-version = "0.2.0"
+version = "0.2.1"
 description = "A Tauri App"
 authors = ["Taoister39"]
 repository = "https://github.com/Taoister39/tauri-motrix"
