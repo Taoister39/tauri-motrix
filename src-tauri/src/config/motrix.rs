@@ -30,6 +30,14 @@ pub struct IMotrix {
     pub enable_auto_launch: Option<bool>,
 
     pub auto_check_update: Option<bool>,
+
+    pub auto_resume_all: Option<bool>,
+
+    pub new_task_show_downloading: Option<bool>,
+
+    pub task_completed_notify: Option<bool>,
+
+    pub no_confirm_before_delete_task: Option<bool>,
 }
 
 impl IMotrix {
@@ -73,6 +81,10 @@ impl IMotrix {
             enable_auto_launch: Some(false),
             auto_log_clean: Some(3),
             auto_check_update: Some(true),
+            auto_resume_all: Some(false),
+            new_task_show_downloading: Some(false),
+            no_confirm_before_delete_task: Some(false),
+            task_completed_notify: Some(true),
             ..Self::default()
         }
     }
@@ -100,6 +112,11 @@ impl IMotrix {
         patch!(language);
         patch!(enable_auto_launch);
         patch!(auto_log_clean);
+        patch!(auto_check_update);
+        patch!(auto_resume_all);
+        patch!(new_task_show_downloading);
+        patch!(no_confirm_before_delete_task);
+        patch!(task_completed_notify);
     }
 }
 

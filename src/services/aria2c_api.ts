@@ -1,7 +1,8 @@
 import { Aria2Instance, create, EventSubscribeMap } from "@tauri-motrix/aria2";
 
 import { isTest } from "@/constant/environment";
-import { getAria2Info } from "@/services/cmd";
+import { APP_LOG_LEVEL } from "@/constant/log";
+import { appLog, getAria2Info } from "@/services/cmd";
 
 let instancePromise: Promise<Aria2Instance> = null!;
 
@@ -23,6 +24,16 @@ async function getInstancePromise() {
     server,
     eventSubscribeMap,
   });
+
+  instance.setListener("error", (data) =>
+    appLog(APP_LOG_LEVEL.Error, `[Motrix] aria2 error ${data}`),
+  );
+  instance.setListener("open", (data) =>
+    appLog(APP_LOG_LEVEL.Info, `[Motrix] aria2 open ${data}`),
+  );
+  instance.setListener("close", (data) =>
+    appLog(APP_LOG_LEVEL.Debug, `[Motrix] aria2 close ${data}`),
+  );
 
   instance.open();
 
@@ -63,6 +74,8 @@ export interface Aria2Task {
   totalLength: string;
   uploadLength: string;
   uploadSpeed: string;
+  errorCode?: string;
+  errorMessage?: string;
 }
 
 export interface Aria2File {
@@ -115,7 +128,7 @@ export const taskItemApi = async (gid: string) => {
   return call<Aria2Task>("tellStatus", gid);
 };
 
-interface Peer {
+export interface Peer {
   amChoking: string;
   bitfield: string;
   downloadSpeed: string;

@@ -2,7 +2,8 @@ use std::fs::{self, DirEntry};
 
 use anyhow::Result;
 use chrono::{Local, TimeZone};
-use log::LevelFilter;
+use log::{logger, Level, LevelFilter, RecordBuilder};
+use serde::{Deserialize, Serialize};
 
 use crate::{config::Config, utils::dirs};
 
@@ -94,4 +95,27 @@ pub fn get_log_level() -> LevelFilter {
     } else {
         LevelFilter::Info
     }
+}
+
+pub const WEBVIEW_TARGET: &str = "webview";
+
+pub fn expose_log_wrap(level: String, message: String, location: Option<&str>) {
+    let level_map = match level.to_lowercase().as_str() {
+        "trace" => Level::Trace,
+        "debug" => Level::Debug,
+        "info" => Level::Info,
+        "warn" => Level::Warn,
+        "error" => Level::Error,
+        _ => Level::Info, // Default to Info for unknown levels
+    };
+
+    let target = match location {
+        Some(loc) => format!("{WEBVIEW_TARGET}:{loc}"),
+        None => WEBVIEW_TARGET.to_string(),
+    };
+
+    let mut builder = RecordBuilder::new();
+    builder.level(level_map).target(&target);
+
+    logger().log(&builder.args(format_args!("{}", message)).build());
 }

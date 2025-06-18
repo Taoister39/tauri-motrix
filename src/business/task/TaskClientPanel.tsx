@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import useSWR from "swr";
 
-import { taskItemWithPeers } from "@/services/aria2c_api";
+import { Peer, taskItemWithPeers } from "@/services/aria2c_api";
 import { bitfieldToPercent, parseByteVo, peerIdParser } from "@/utils/download";
 
 function TaskClientPanel(props: { gid: string }) {
@@ -22,7 +22,7 @@ function TaskClientPanel(props: { gid: string }) {
     return originPeers ?? [];
   }, [data]);
 
-  const columns = useMemo<GridColDef[]>(
+  const columns = useMemo<GridColDef<Peer>[]>(
     () => [
       {
         field: "peerOrigin",

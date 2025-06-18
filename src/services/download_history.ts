@@ -29,40 +29,41 @@ export type DownloadHistoryVO = Omit<DownloadHistory, "ext"> & {
 
 export type DownloadHistoryDTO = Pick<
   DownloadHistory,
-  "link" | "path" | "engine" | "name" | "total_length" | "plat_id"
+  "link" | "path" | "engine" | "name" | "total_length" | "plat_id" | "status"
 >;
 
 export async function createHistory(
-  history: DownloadHistoryDTO,
+  dto: DownloadHistoryDTO,
   json_ext?: DownloadHistoryExt,
 ) {
   const db = await getMotrixDB();
 
+  const values = [
+    dto.link,
+    dto.path,
+    dto.engine,
+    dto.name,
+    dto.total_length,
+    dto.plat_id,
+  ];
+
+  const columns = ["link", "path", "engine", "name", "total_length", "plat_id"];
+
   if (json_ext) {
-    return db.execute(
-      "INSERT INTO download_history (link, path, engine, name, total_length, plat_id, json_ext) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [
-        history.link,
-        history.path,
-        history.engine,
-        history.name,
-        history.total_length,
-        history.plat_id,
-        JSON.stringify(json_ext),
-      ],
-    );
+    values.push(JSON.stringify(json_ext));
+    columns.push("json_ext");
   }
 
+  if (dto.status) {
+    values.push(dto.status);
+    columns.push("status");
+  }
+
+  const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
+
   return db.execute(
-    "INSERT INTO download_history (link, path, engine, name, total_length, plat_id) VALUES (?, ?, ?, ?, ?, ?)",
-    [
-      history.link,
-      history.path,
-      history.engine,
-      history.name,
-      history.total_length,
-      history.plat_id,
-    ],
+    `INSERT INTO download_history (${columns.join(", ")}) VALUES (${placeholders})`,
+    values,
   );
 }
 
@@ -104,13 +105,51 @@ export async function findOneHistoryByPlatId(
 
 export async function updateHistoryByPlatId(
   id: string,
-  history: DownloadHistoryDTO,
+  dto: Partial<DownloadHistoryDTO>,
 ) {
   const db = await getMotrixDB();
 
+  const updates: string[] = [];
+  const values: Array<string | number> = [];
+  let paramIndex = 1;
+
+  if (dto.link !== undefined) {
+    updates.push(`link = $${paramIndex++}`);
+    values.push(dto.link);
+  }
+  if (dto.path !== undefined) {
+    updates.push(`path = $${paramIndex++}`);
+    values.push(dto.path);
+  }
+  if (dto.engine !== undefined) {
+    updates.push(`engine = $${paramIndex++}`);
+    values.push(dto.engine);
+  }
+  if (dto.name !== undefined) {
+    updates.push(`name = $${paramIndex++}`);
+    values.push(dto.name);
+  }
+  if (dto.total_length !== undefined) {
+    updates.push(`total_length = $${paramIndex++}`);
+    values.push(dto.total_length);
+  }
+  if (dto.status !== undefined) {
+    updates.push(`status = $${paramIndex++}`);
+    values.push(dto.status);
+  }
+
+  if (updates.length === 0) {
+    // No fields to update
+    return;
+  }
+
+  values.push(id); // Add id for the WHERE clause
+
+  const setClause = updates.join(", ");
+
   return db.execute(
-    "UPDATE download_history SET total_length = $1 WHERE plat_id = $2",
-    [history.total_length, id],
+    `UPDATE download_history SET ${setClause} WHERE plat_id = $${paramIndex}`,
+    values,
   );
 }
 

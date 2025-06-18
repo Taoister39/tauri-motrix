@@ -2,7 +2,9 @@ import Database from "@tauri-apps/plugin-sql";
 
 import { isProd } from "@/constant/environment";
 
-export async function getMotrixDB() {
+let motrixPromise: Promise<Database> = null!;
+
+async function getMotrixPromise() {
   const db = await Database.load(
     isProd ? "sqlite:motrix.db" : "sqlite:motrix_test.db",
   );
@@ -33,4 +35,12 @@ export async function getMotrixDB() {
       )`);
 
   return db;
+}
+
+export async function getMotrixDB(force = false) {
+  if (!motrixPromise || force) {
+    motrixPromise?.then((db) => db.close());
+    motrixPromise = getMotrixPromise();
+  }
+  return motrixPromise;
 }

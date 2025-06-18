@@ -1,5 +1,13 @@
 # Update Log
 
+## v0.2.2
+
+- Fixed existing filename not updating in history list
+- Supplement basic setting
+- Upgrade top of downloading page UI
+- Refactor task list filtering by name
+- Fixed Motrix app does not single instance
+
 ## v0.2.1
 
 - Supplement BT task drawer info

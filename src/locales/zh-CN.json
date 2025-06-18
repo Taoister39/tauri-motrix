@@ -36,7 +36,21 @@
     "OpenLogsDir": "打开日志目录",
     "SpeedLimit": "速度限制",
     "UploadSpeedLimit": "上传速度限制",
-    "TaskManagement": "任务管理"
+    "TaskManagement": "任务管理",
+    "DefaultPath": "默认路径",
+    "AutoResumeAll": "自动恢复所有未完成的任务",
+    "BtAutoDownloadContent": "自动下载磁力链接和种子内容",
+    "BtSaveMetadata": "将磁力链接保存为种子文件",
+    "BtForceEncryption": "BT 强制加密",
+    "KeepSeeding": "下载完成后保持做种",
+    "Continue": "任务继续",
+    "MaxConcurrentTasks": "最大同时任务数",
+    "MaxConnectionPerServer": "每个服务器的最大连接数",
+    "SeedRatio": "Bt 做种比例",
+    "SeedTime": "BT 做种时间 (分钟)",
+    "TaskCompletedNotify": "下载完成后通知",
+    "NewTaskShowDownloading": "新增任务后自动显示下载中",
+    "NoConfirmBeforeDeleteTask": "删除任务前无需确认"
   },
   "task": {
     "CloseAll": "关闭所有任务",
@@ -69,10 +83,19 @@
     "Progress": "进度",
     "Connections": "连接数",
     "DownloadSpeed": "下载速度",
-    "FileExtension": "拓展名",
     "FileName": "文件名",
+    "FileExtension": "拓展名",
     "FileSize": "文件大小",
-    "SearchPlaceholder": "搜索下载任务..."
+    "SelectedFilesSum": "已选：{{selectedFilesCount}} 个文件，总大小 {{selectedFilesTotalSize}}",
+    "SelectFilesError": "请至少选择一个下载文件",
+    "SelectAtLeastOne": "请至少选择一个文件",
+    "PeerClient": "客户端",
+    "PeerHost": "主机",
+    "NumSeeders": "做种者",
+    "UploadLength": "已上传",
+    "SearchPlaceholder": "搜索下载任务...",
+    "Selected": "已选 {{count}} 个任务",
+    "DownloadErrorMessage": "下载 {{taskName}} 时发生错误"
   },
   "common": {
     "DownloadFile": "下载文件",
@@ -93,18 +116,29 @@
     "DownloadSpeed": "下载速度",
     "UploadSpeed": "上传速度",
     "FromClipboard": "从剪贴板",
-    "FromTorrentFile": "从磁力文件",
+    "FromTorrentFile": "从种子文件",
     "FromUrl": "从URL",
-    "UploadFile": "上传文件"
-  },
-  "about": {
-    "Title": "关于应用程序",
-    "License": "开源证书"
+    "UploadFile": "上传文件",
+    "Optional": "可选",
+    "DirPick": "请选择路径",
+    "Ratio": "比例",
+    "CreationDate": "创建日期",
+    "Pieces": "分块",
+    "PieceSize": "分块大小",
+    "Start": "开始",
+    "Pause": "暂停",
+    "Delete": "删除",
+    "All": "全部",
+    "More": "更多"
   },
   "update": {
     "CurrentlyOnLatest": "当前已是最新版本",
     "GotoReleasePage": "点击到发布页面",
-    "BreakChangeUpdateError": "破坏性更新，需要彻底卸载后手动下载安装。"
+    "BreakChangeUpdateError": "可携式版本不支持应用程式内更新。请手动下载并替换。"
+  },
+  "about": {
+    "Title": "关于应用程序",
+    "License": "开源许可证"
   },
   "history": {
     "Empty": "没有下载记录"

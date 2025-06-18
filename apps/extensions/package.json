@@ -1,0 +1,16 @@
+{
+  "name": "@tm/extensions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:edge": "cross-env NODE_ENV=production node ./edge/build"
+  },
+  "devDependencies": {
+    "chalk": "^5.4.1",
+    "cross-env": "^7.0.3",
+    "crx": "^5.0.1",
+    "yargs": "^18.0.0"
+  },
+  "packageManager": "pnpm@10.11.0"
+}

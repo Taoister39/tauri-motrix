@@ -14,9 +14,11 @@ import { useBoolean } from "ahooks";
 import { Ref, useImperativeHandle } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { DialogRef } from "@/components/BaseDialog";
 import { useAria2 } from "@/hooks/aria2";
+import { useMotrix } from "@/hooks/motrix";
 import { useTaskStore } from "@/store/task";
 
 interface IFormInput {
@@ -31,9 +33,12 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
 
   const { addTask } = useTaskStore();
 
+  const { motrix } = useMotrix();
   const { aria2 } = useAria2();
 
   const [open, { setFalse, setTrue }] = useBoolean();
+
+  const navigate = useNavigate();
 
   useImperativeHandle(props.ref, () => ({
     open: setTrue,
@@ -62,6 +67,10 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
       split,
       out,
     });
+
+    if (motrix?.new_task_show_downloading) {
+      navigate("/task-start");
+    }
 
     setFalse();
   };

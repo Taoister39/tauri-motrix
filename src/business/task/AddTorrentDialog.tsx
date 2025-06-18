@@ -6,11 +6,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { mutate } from "swr";
 
-import DirPopover from "@/business/history/DirPopover";
+import HistoryPathInput from "@/business/history/HistoryPathInput";
 import TaskFiles, { TaskFile } from "@/business/task/TaskFiles";
 import { BaseDialog, DialogRef } from "@/components/BaseDialog";
 import InputFileUpload from "@/components/InputFileUpload";
-import PathComboBox from "@/components/PathComboBox";
 import { DOWNLOAD_ENGINE } from "@/constant/task";
 import { useAria2 } from "@/hooks/aria2";
 import { addTorrentApi } from "@/services/aria2c_api";
@@ -32,7 +31,6 @@ function AddTorrentDialog(props: { ref: Ref<DialogRef> }) {
 
   const [torrentFiles, setTorrentFiles] = useState<TaskFile[]>([]);
   const [fileList, setFileList] = useState<File[]>([]);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
 
   const fetchTasks = useTaskStore((state) => state.fetchTasks);
 
@@ -200,11 +198,10 @@ function AddTorrentDialog(props: { ref: Ref<DialogRef> }) {
                 name="dir"
                 control={control}
                 render={({ field }) => (
-                  <PathComboBox
+                  <HistoryPathInput
                     setValue={setDirValue}
                     error={!!errors.dir}
                     openTitle="task.DirPick"
-                    onHistory={(e) => setAnchorEl(e.currentTarget)}
                     placeholder={t("common.Optional")}
                     {...field}
                   />
@@ -212,11 +209,6 @@ function AddTorrentDialog(props: { ref: Ref<DialogRef> }) {
               />
             </Grid>
           </Grid>
-          <DirPopover
-            setDirValue={setDirValue}
-            anchorEl={anchorEl}
-            onClose={() => setAnchorEl(undefined)}
-          />
         </>
       )}
     </BaseDialog>

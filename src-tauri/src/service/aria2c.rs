@@ -85,3 +85,7 @@ pub async fn call(name: &str, data: &[Value]) -> Result<Value> {
 pub async fn change_global_option(data: &[Value]) -> Result<Value> {
     call("changeGlobalOption", data).await
 }
+
+pub async fn unpause_all() -> Result<Value> {
+    call("unpauseAll", [].clone().as_ref()).await
+}

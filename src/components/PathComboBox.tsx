@@ -16,6 +16,7 @@ export type PathComboBoxProps = {
   onHistory?: IconButtonProps["onClick"];
 } & TextFieldProps;
 
+// TODO: To be renovated
 function PathComboBox(props: PathComboBoxProps) {
   const { setValue, openTitle, onHistory, ...innerProps } = props;
   const value = innerProps.value;
@@ -23,6 +24,7 @@ function PathComboBox(props: PathComboBoxProps) {
   const { t } = useTranslation();
 
   const pathRef = useRef("");
+  const textFieldRef = useRef<HTMLInputElement>(null);
 
   if (value) {
     pathRef.current = value;
@@ -36,13 +38,14 @@ function PathComboBox(props: PathComboBoxProps) {
     });
 
     if (folder) {
-      pathRef.current = folder;
       setValue?.(folder);
+      pathRef.current = folder;
     }
   }, [openTitle, setValue, t]);
 
   return (
     <TextField
+      ref={textFieldRef}
       fullWidth
       label={t("common.DownloadPath")}
       variant="outlined"
@@ -65,7 +68,21 @@ function PathComboBox(props: PathComboBoxProps) {
           ) : undefined,
         },
       }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          setValue?.(pathRef.current);
+          textFieldRef.current?.blur();
+        }
+
+        if (e.key === "Escape") {
+          textFieldRef.current?.blur();
+        }
+      }}
       {...innerProps}
+      onChange={(e) => {
+        pathRef.current = e.target.value;
+        innerProps.onChange?.(e);
+      }}
     />
   );
 }

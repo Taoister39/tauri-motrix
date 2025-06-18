@@ -40,7 +40,7 @@ function DownloadingPage() {
     handleTaskSelect,
     handleTaskPause,
     handleTaskResume,
-    handleTaskDelete: handleTaskStop,
+    handleTaskDelete,
     openTaskFile,
     copyTaskLink,
     setFetchType,
@@ -114,15 +114,19 @@ function DownloadingPage() {
           <TextField
             fullWidth
             size="small"
-            sx={{
+            sx={(theme) => ({
               [`.${inputBaseClasses.root}`]: {
-                border: "1px solid #e0e0e0",
+                border:
+                  theme.palette.mode === "dark"
+                    ? "1px solid #424242"
+                    : "1px solid #e0e0e0",
                 borderRadius: "24px",
                 fontSize: "16px",
-                background: "#f8f9fa",
+                background:
+                  theme.palette.mode === "light" ? "#f8f9fa" : "#2d2d2d",
                 transition: "all 0.2s",
               },
-            }}
+            })}
             onChange={(e) => {
               const value = e.target.value;
 
@@ -158,7 +162,7 @@ function DownloadingPage() {
             onSelectAll={handleTaskSelect}
             onPause={handleTaskPause}
             onResume={handleTaskResume}
-            onStop={handleTaskStop}
+            onStop={handleTaskDelete}
             selectedTaskIds={selectedTaskIds}
             fetchType={fetchType}
           />
@@ -175,7 +179,7 @@ function DownloadingPage() {
             renderItem={(task) => (
               <TaskItem
                 onCopyLink={copyTaskLink}
-                onStop={handleTaskStop}
+                onStop={handleTaskDelete}
                 onResume={handleTaskResume}
                 onPause={handleTaskPause}
                 onOpenFile={openTaskFile}

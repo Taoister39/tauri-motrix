@@ -10,7 +10,8 @@ use log4rs::{
 
 use crate::{
     config::{IAria2Temp, IMotrix},
-    log_err, service,
+    log_err,
+    service::{self, log::WEBVIEW_TARGET},
     utils::{
         dirs,
         help::{self, simple_save_file},
@@ -35,15 +36,22 @@ pub fn init_log() -> Result<()> {
     let stdout = ConsoleAppender::builder().encoder(encode.clone()).build();
     let to_file = FileAppender::builder().encoder(encode).build(log_file)?;
 
-    let mut logger_builder = Logger::builder();
+    let mut app_logger_builder = Logger::builder();
+    let mut webview_logger_builder = Logger::builder();
     let root_builder = Root::builder();
 
-    logger_builder = logger_builder.appender("stdout").appender("file");
+    app_logger_builder = app_logger_builder.appender("stdout").appender("file");
+    webview_logger_builder = webview_logger_builder.appender("file"); // Only log webview to file
 
     let (config, _) = log4rs::config::Config::builder()
         .appender(Appender::builder().build("stdout", Box::new(stdout)))
         .appender(Appender::builder().build("file", Box::new(to_file)))
-        .logger(logger_builder.additive(false).build("app", log_level))
+        .logger(app_logger_builder.additive(false).build("app", log_level))
+        .logger(
+            webview_logger_builder
+                .additive(false)
+                .build(WEBVIEW_TARGET, log_level),
+        ) // Add webview logger
         .build_lossy(root_builder.build(log_level));
 
     log4rs::init_config(config)?;

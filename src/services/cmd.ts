@@ -1,5 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 
+import { APP_LOG_LEVEL } from "@/constant/log";
+
 export function getAria2Info() {
   return invoke<Aria2Info>("get_aria2_info");
 }
@@ -26,3 +28,9 @@ export const patchAria2Config = (data: Partial<Aria2Config>) =>
 
 export const getAutoLaunchStatus = () =>
   invoke<boolean>("get_auto_launch_status");
+
+export const appLog = (
+  level: APP_LOG_LEVEL,
+  message: string,
+  location?: string,
+) => invoke<null>("app_log", { level, message, location });

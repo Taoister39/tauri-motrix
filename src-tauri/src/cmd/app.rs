@@ -1,6 +1,11 @@
 // Nothing to do with motrix conf
 
-use crate::{feat, utils::dirs, wrap_err};
+use crate::{
+    feat,
+    service::{self},
+    utils::dirs,
+    wrap_err,
+};
 
 use super::CmdResult;
 
@@ -32,4 +37,10 @@ pub fn exit_app() {
 pub fn get_auto_launch_status() -> CmdResult<bool> {
     use crate::core::sys_opt::SysOpt;
     wrap_err!(SysOpt::global().get_auto_launch())
+}
+
+#[tauri::command]
+pub fn app_log(level: String, message: String, location: Option<&str>) -> CmdResult<()> {
+    service::log::expose_log_wrap(level, message, location);
+    Ok(())
 }

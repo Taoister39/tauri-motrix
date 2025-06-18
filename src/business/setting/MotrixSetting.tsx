@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import UpdateViewer from "@/business/update/UpdateViewer";
 import { SettingItem, SettingList } from "@/client/setting_compose";
+import { Android12Switch } from "@/client/styled_compose";
 import { DialogRef } from "@/components/BaseDialog";
 import { Notice } from "@/components/Notice";
 import { LOG_LEVELS } from "@/constant/log";
@@ -44,6 +45,7 @@ function MotrixSetting() {
             await patchMotrix({
               app_log_level: e.target.value as MotrixConfig["app_log_level"],
             });
+
             Notice.success(t("common.SaveSuccess"));
           }}
         >
@@ -51,6 +53,39 @@ function MotrixSetting() {
             <MenuItem value={value}>{label}</MenuItem>
           ))}
         </Select>
+      </SettingItem>
+
+      <SettingItem label={t("setting.NewTaskShowDownloading")}>
+        <Android12Switch
+          checked={!!motrix?.new_task_show_downloading}
+          onChange={(e) => {
+            patchMotrix({
+              new_task_show_downloading: e.target.checked,
+            });
+          }}
+        />
+      </SettingItem>
+
+      <SettingItem label={t("setting.TaskCompletedNotify")}>
+        <Android12Switch
+          checked={!!motrix?.task_completed_notify}
+          onChange={(e) => {
+            patchMotrix({
+              task_completed_notify: e.target.checked,
+            });
+          }}
+        />
+      </SettingItem>
+
+      <SettingItem label={t("setting.NoConfirmBeforeDeleteTask")}>
+        <Android12Switch
+          checked={!!motrix?.no_confirm_before_delete_task}
+          onChange={(e) => {
+            patchMotrix({
+              no_confirm_before_delete_task: e.target.checked,
+            });
+          }}
+        />
       </SettingItem>
 
       <SettingItem label={t("setting.OpenConfDir")} onClick={openAppDir} />

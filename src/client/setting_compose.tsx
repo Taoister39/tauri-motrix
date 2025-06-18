@@ -25,8 +25,8 @@ export function SettingItem(props: {
 
   const primary = (
     <Box sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}>
-      <span>{label}</span>
-      {extra ? extra : null}
+      <span style={{ textWrap: "nowrap" }}>{label}</span>
+      {extra}
     </Box>
   );
 

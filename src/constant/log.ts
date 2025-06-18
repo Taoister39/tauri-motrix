@@ -24,3 +24,11 @@ export const LOG_LEVELS = [
     value: "trace",
   },
 ] as const;
+
+export const enum APP_LOG_LEVEL {
+  Trace = "trace",
+  Debug = "debug",
+  Info = "info",
+  Warn = "warn",
+  Error = "error",
+}

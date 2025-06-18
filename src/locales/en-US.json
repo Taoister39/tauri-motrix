@@ -36,7 +36,21 @@
     "UploadSpeedLimit": "Upload Speed Limit",
     "DownloadSpeedLimit": "Download Speed Limit",
     "AutoLaunch": "Auto Launch",
-    "TaskManagement": "Task Management"
+    "TaskManagement": "Task Management",
+    "DefaultPath": "Default Path",
+    "AutoResumeAll": "Automatically resume all unfinished tasks",
+    "BtAutoDownloadContent": "Automatically download magnet and torrent content",
+    "BtSaveMetadata": "Save magnet link as torrent file",
+    "BtForceEncryption": "BT force encryption",
+    "KeepSeeding": "Keep seeding when download is complete",
+    "Continue": "Task Continue",
+    "MaxConcurrentTasks": "Maximum active tasks",
+    "MaxConnectionPerServer": "Maximum connections per server",
+    "SeedRatio": "Bt Seed Ratio",
+    "SeedTime": "BT Seed Time (minutes)",
+    "TaskCompletedNotify": "Notify after download is complete",
+    "NewTaskShowDownloading": "Automatically show downloading after adding task",
+    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task"
   },
   "task": {
     "CloseAll": "Close All Tasks",
@@ -80,7 +94,8 @@
     "NumSeeders": "Seeders",
     "UploadLength": "Uploaded",
     "SearchPlaceholder": "Search download tasks...",
-    "Selected": "Selected {{count}} tasks"
+    "Selected": "Selected {{count}} tasks",
+    "DownloadErrorMessage": "Error occurred when downloading {{taskName}}"
   },
   "common": {
     "DownloadFile": "Download File",
@@ -113,7 +128,8 @@
     "Start": "Start",
     "Pause": "Pause",
     "Delete": "Delete",
-    "All": "All"
+    "All": "All",
+    "More": "More"
   },
   "update": {
     "GotoReleasePage": "Go to release page",

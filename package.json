@@ -1,6 +1,6 @@
 {
   "name": "tauri-motrix",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "description": "A full-featured download manager",
   "repository": {
@@ -14,6 +14,7 @@
     "email": "Qiacrkeng@gmail.com"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "check": "node ./scripts/check.mjs",
     "updater": "node scripts/updater.mjs",
     "dev": "rsbuild dev",
@@ -47,8 +48,8 @@
     "i18next": "^24.2.1",
     "parse-torrent": "^11.0.18",
     "rc-util": "^5.44.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "react-hook-form": "^7.55.0",
     "react-i18next": "^15.4.0",
     "react-markdown": "^10.1.0",
@@ -72,8 +73,8 @@
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^29.5.14",
     "@types/parse-torrent": "^5.8.7",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.1",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "adm-zip": "^0.5.16",
     "cli-color": "^2.0.4",
     "eslint": "^9.22.0",

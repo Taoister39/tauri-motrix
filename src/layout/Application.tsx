@@ -68,7 +68,7 @@ function Application() {
   const { t, i18n } = useTranslation();
   const { theme } = useCustomTheme();
   const { motrix } = useMotrix();
-  const { registerEvent } = useTaskStore();
+  const { registerEvent, syncByMotrix } = useTaskStore();
   const { polling, stop } = usePollingStore();
   const addRef = useRef<DialogRef>(null);
 
@@ -83,6 +83,12 @@ function Application() {
       unlisten.then((unlisten) => unlisten());
     };
   }, []);
+
+  useEffect(() => {
+    if (motrix) {
+      syncByMotrix(motrix);
+    }
+  }, [motrix, syncByMotrix]);
 
   useEffect(() => {
     if (motrix?.language) {
