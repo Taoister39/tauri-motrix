@@ -6,6 +6,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Copyright from "@/components/Copyright";
 import Logo from "@/components/Logo";
 import MenuButton from "@/components/MenuButton";
+import NavItem from "@/components/NavItem";
+import { NAV_LIST } from "@/constants/nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,15 +34,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="h-20 flex items-center justify-between sticky px-12">
-          <Logo />
-          <MenuButton />
-        </header>
-        <nav>TODO</nav>
-        <main>{children}</main>
-        <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-          <Copyright />
-        </footer>
+        <div className="h-screen flex flex-col px-12">
+          <header className="h-20 flex items-center justify-between sticky">
+            <Logo />
+            <MenuButton />
+          </header>
+          <nav className="flex flex-wrap *:flex-[1_1_33.3%]">
+            {NAV_LIST.map((item) => (
+              <NavItem key={item.href} href={item.href}>
+                {item.title}
+              </NavItem>
+            ))}
+          </nav>
+          <main className="flex-[1_1_1px]">{children}</main>
+          <footer className="h-15 flex gap-[24px] flex-wrap items-center ">
+            <Copyright />
+          </footer>
+        </div>
       </body>
     </html>
   );
