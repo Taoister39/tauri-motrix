@@ -70,7 +70,7 @@
     "@tauri-apps/cli": "^2.5.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/parse-torrent": "^5.8.7",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
