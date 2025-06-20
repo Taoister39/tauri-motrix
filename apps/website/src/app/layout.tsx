@@ -3,6 +3,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import Copyright from "@/components/Copyright";
+import Logo from "@/components/Logo";
+import MenuButton from "@/components/MenuButton";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,7 +32,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <header className="h-20 flex items-center justify-between sticky px-12">
+          <Logo />
+          <MenuButton />
+        </header>
+        <nav>TODO</nav>
+        <main>{children}</main>
+        <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+          <Copyright />
+        </footer>
       </body>
     </html>
   );
