@@ -8,7 +8,13 @@ export interface NavItemProps {
 
 function NavItem({ children, href }: NavItemProps) {
   return (
-    <Link className="py-2" href={href}>
+    <Link
+      className={
+        "py-2 text-[#646466] text-center font-bold relative uppercase tracking-[1px] text-sm" +
+        " after:contents-[''] "
+      }
+      href={href}
+    >
       {children}
     </Link>
   );

@@ -2,9 +2,9 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Image from "next/image";
 
 import Copyright from "@/components/Copyright";
-import Logo from "@/components/Logo";
 import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
 import { NAV_LIST } from "@/constants/nav";
@@ -36,7 +36,14 @@ export default function RootLayout({
       >
         <div className="h-screen flex flex-col px-12">
           <header className="h-20 flex items-center justify-between sticky">
-            <Logo />
+            <Image
+              className="dark:invert"
+              width={62}
+              height={14}
+              alt="Tauri Motrix logo"
+              src="/logo.svg"
+              priority
+            />
             <MenuButton />
           </header>
           <nav className="flex flex-wrap *:flex-[1_1_33.3%]">
