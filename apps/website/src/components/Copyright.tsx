@@ -1,7 +1,5 @@
 function Copyright() {
-  const year = new Date().getFullYear();
-
-  return <span>&copy;{year} Motrix</span>;
+  return <span>&copy;2025 Tauri Motrix</span>;
 }
 
 export default Copyright;

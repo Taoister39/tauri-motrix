@@ -11,4 +11,8 @@ export const NAV_LIST = [
     title: "License",
     href: "/license",
   },
+  {
+    title: "Lab",
+    href: "/lab",
+  },
 ];
