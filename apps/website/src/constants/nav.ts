@@ -7,4 +7,8 @@ export const NAV_LIST = [
     title: "Download",
     href: "/download",
   },
+  {
+    title: "License",
+    href: "/license",
+  },
 ];
