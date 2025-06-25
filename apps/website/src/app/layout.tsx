@@ -34,8 +34,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="h-screen flex flex-col px-12">
-          <header className="h-20 flex items-center justify-between sticky">
+        <div className="h-screen flex flex-col">
+          <header className="px-12 h-20 flex items-center justify-between sticky">
             <Image
               className="dark:invert"
               width={62}
@@ -54,7 +54,7 @@ export default function RootLayout({
             ))}
           </nav>
           <main className="flex-[1_1_1px]">{children}</main>
-          <footer className="h-15 flex gap-[24px] flex-wrap items-center ">
+          <footer className="px-12 h-15 flex gap-[24px] flex-wrap items-center ">
             <Copyright />
           </footer>
         </div>

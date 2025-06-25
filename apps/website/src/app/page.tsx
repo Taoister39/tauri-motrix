@@ -4,13 +4,21 @@ import Button from "@/components/Button";
 
 export default function Home() {
   return (
-    <div className="px">
-      <article>
-        <Image width={234} height={234} src="/app-icon.png" alt="App Icon" />
-        <h1 className="mb-2 tracking-[-.01em]">
+    <div className="relative h-full flex items-center">
+      <article className="px-[8vw]">
+        <div className="p-3.5">
+          <Image
+            width={220}
+            height={220}
+            src="/app-icon.png"
+            alt="App Icon"
+            className="rounded-4xl"
+          />
+        </div>
+        <h1 className="text-3xl font-bold mb-2">
           A full-featured download manager
         </h1>
-        <p className="tracking-[-.01em]">
+        <p className="mb-4 text-sm">
           Support downloading HTTP, FTP, BitTorrent, Magnet, etc.
         </p>
 
@@ -18,7 +26,16 @@ export default function Home() {
           <Button>Download</Button>
         </div>
       </article>
-      <aside></aside>
+      <figure className="absolute left-[60vw] bottom-[6vh]">
+        <Image
+          src="/screenshot-task-list-downloading-en.png"
+          width={898}
+          height={752}
+          alt="Screenshot"
+          priority
+          unoptimized
+        />
+      </figure>
     </div>
   );
 }
