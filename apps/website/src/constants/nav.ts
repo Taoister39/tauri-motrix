@@ -4,15 +4,23 @@ export const NAV_LIST = [
     href: "/",
   },
   {
+    title: "Features",
+    href: "/features",
+  },
+  {
     title: "Download",
     href: "/download",
   },
   {
-    title: "License",
-    href: "/license",
+    title: "Support",
+    href: "/support",
   },
   {
     title: "Lab",
     href: "/lab",
+  },
+  {
+    title: "License",
+    href: "/license",
   },
 ];

@@ -2,7 +2,7 @@ import LabCard from "@/components/LabCard";
 
 function LabContent() {
   return (
-    <div className="px-9 py-4">
+    <div className="sm:px-9 px-5 sm:py-4 py-3">
       <h1 className="text-3xl font-bold mb-2">Featured Extensions</h1>
       <section className="flex gap-12 flex-wrap">
         <LabCard
