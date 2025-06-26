@@ -17,7 +17,10 @@ function LabCard({
   description,
 }: LabCardProps) {
   return (
-    <a className="rounded cursor-pointer shadow-xl" href={repository}>
+    <a
+      className="rounded cursor-pointer shadow-xl w-full sm:w-[288px]"
+      href={repository}
+    >
       <Image
         alt="lab cover"
         className="object-cover w-full h-40"

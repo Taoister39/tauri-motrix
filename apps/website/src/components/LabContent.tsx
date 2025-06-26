@@ -1,10 +1,10 @@
 import LabCard from "@/components/LabCard";
 
-function LabPage() {
+function LabContent() {
   return (
     <div className="px-9 py-4">
       <h1 className="text-3xl font-bold mb-2">Featured Extensions</h1>
-      <section className="flex gap-12">
+      <section className="flex gap-12 flex-wrap">
         <LabCard
           title="YAAW for Chrome"
           repository="https://github.com/acgotaku/YAAW-for-Chrome"
@@ -31,4 +31,4 @@ function LabPage() {
   );
 }
 
-export default LabPage;
+export default LabContent;
