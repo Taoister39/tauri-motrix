@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 
 import LabContent from "@/components/LabContent";
@@ -11,33 +12,37 @@ interface BaseData {
 function LabPage() {
   useEffect(() => {
     const onMessage = (e: MessageEvent<BaseData>) => {
-      const { data } = e;
-      if (data.type === "update_theme") {
-        console.log("sync_theme");
+      const { data: payload } = e;
 
-        const newTheme = data.data as {
-          background?: string;
-          foreground?: string;
-        };
+      if (payload.type === "update_theme") {
+        console.log("iframe sync_theme", payload);
 
+        const newTheme = payload.data as Record<string, string> | undefined;
         const rootEle = document.documentElement;
 
-        if (newTheme?.background) {
-          rootEle.style.setProperty("--background", newTheme.background);
-        }
-
-        if (newTheme?.foreground) {
-          rootEle.style.setProperty("--foreground", newTheme.foreground);
+        for (const key in newTheme) {
+          rootEle.style.setProperty(`--${key}`, newTheme[key]);
         }
       }
     };
+
     window.addEventListener("message", onMessage);
+
+    window.parent.postMessage({ type: "iframe_loaded" }, "*");
+
     return () => {
       window.removeEventListener("message", onMessage);
     };
-  }, []);
+  });
 
-  return <LabContent />;
+  return (
+    <LabContent
+      className="px-5 py-4"
+      onOpen={(url) => {
+        window.parent.postMessage({ type: "open_url", data: url }, "*");
+      }}
+    />
+  );
 }
 
 export default LabPage;

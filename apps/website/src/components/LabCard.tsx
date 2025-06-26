@@ -7,6 +7,7 @@ export interface LabCardProps {
   title: string;
   author: string;
   description: ReactNode;
+  onOpen?: (url: string) => void;
 }
 
 function LabCard({
@@ -15,13 +16,21 @@ function LabCard({
   title,
   author,
   description,
+  onOpen,
 }: LabCardProps) {
   return (
     <a
-      className="rounded cursor-pointer shadow-xl w-full sm:w-[288px]"
+      className="rounded overflow-hidden cursor-pointer shadow-xl w-full sm:w-[288px] dark:bg-[#2d2d2d]"
       href={repository}
+      onClick={(e) => {
+        if (onOpen) {
+          e.preventDefault();
+          onOpen(repository);
+        }
+      }}
     >
       <Image
+        priority
         alt="lab cover"
         className="object-cover w-full h-40"
         src={cover}
@@ -34,7 +43,7 @@ function LabCard({
             <h3 className="font-bold">{title}</h3>
             <small>by {author}</small>
           </div>
-          <button className="bg-[#5b5bfa] rounded-full text-white py-2 px-4">
+          <button className="bg-[#5b5bfa] hover:bg-[#7c7cfb] cursor-pointer rounded-full text-white py-2 px-4">
             GET
           </button>
         </section>

@@ -1,9 +1,9 @@
-import { styled } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { styled, useTheme } from "@mui/material";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import BasePage from "@/components/BasePage";
-import { useCustomTheme } from "@/hooks/theme";
 
 const TheIframe = styled("iframe")`
   width: 100%;
@@ -14,34 +14,58 @@ const TheIframe = styled("iframe")`
 
 const ORIGIN = "http://localhost:3000";
 
+export interface BaseMessage {
+  type: string;
+  data: unknown;
+}
+
 function LabPage() {
   const { t } = useTranslation();
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const { theme } = useCustomTheme();
+  const [isReady, setIsReady] = useState(false);
+
+  const theme = useTheme();
 
   useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
+    const onMessage = (event: MessageEvent<BaseMessage>) => {
       if (event.origin !== ORIGIN) return;
 
-      console.log("onMessage ", event.data);
+      const { data: payload } = event;
+
+      console.log("lab page receive iframe message ", payload);
+
+      if (payload.type === "open_url") {
+        const url = payload.data as string;
+        openUrl(url);
+      }
+
+      if (payload.type === "iframe_loaded") {
+        setIsReady(true);
+      }
     };
 
     window.addEventListener("message", onMessage);
 
-    iframeRef.current?.contentWindow?.postMessage({
-      type: "update_theme",
-      data: {
-        background:
-          theme.palette.mode === "dark" ? "#1e1f27" : "var(--background-color)",
-      },
-    });
-
     return () => {
       window.removeEventListener("message", onMessage);
     };
-  }, [theme.palette.mode]);
+  }, []);
+
+  useEffect(() => {
+    if (isReady) {
+      iframeRef.current?.contentWindow?.postMessage(
+        {
+          type: "update_theme",
+          data: {
+            background: theme.palette.background.paper,
+          },
+        },
+        ORIGIN,
+      );
+    }
+  }, [isReady, theme.palette.background.paper]);
 
   return (
     <BasePage title={t("Lab")} full>
