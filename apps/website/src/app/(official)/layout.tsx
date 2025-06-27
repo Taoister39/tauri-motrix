@@ -5,7 +5,7 @@ import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
 import { NAV_LIST } from "@/constants/nav";
 
-export default function RootLayout({
+export default function OfficialLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

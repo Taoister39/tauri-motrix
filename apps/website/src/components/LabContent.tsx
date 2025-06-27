@@ -1,3 +1,4 @@
+"use client";
 import LabCard, { LabCardProps } from "@/components/LabCard";
 
 const LAB_LIST: LabCardProps[] = [

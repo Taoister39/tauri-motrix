@@ -1,6 +1,6 @@
 import { styled, useTheme } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useEffect, useRef, useState } from "react";
+import { ReactEventHandler, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import BasePage from "@/components/BasePage";
@@ -24,8 +24,6 @@ function LabPage() {
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const [isReady, setIsReady] = useState(false);
-
   const theme = useTheme();
 
   useEffect(() => {
@@ -40,10 +38,6 @@ function LabPage() {
         const url = payload.data as string;
         openUrl(url);
       }
-
-      if (payload.type === "iframe_loaded") {
-        setIsReady(true);
-      }
     };
 
     window.addEventListener("message", onMessage);
@@ -53,23 +47,25 @@ function LabPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isReady) {
-      iframeRef.current?.contentWindow?.postMessage(
-        {
-          type: "update_theme",
-          data: {
-            background: theme.palette.background.paper,
-          },
+  const onLoad: ReactEventHandler<HTMLIFrameElement> = (e) => {
+    e.currentTarget.contentWindow?.postMessage(
+      {
+        type: "update_theme",
+        data: {
+          background: theme.palette.background.paper,
         },
-        ORIGIN,
-      );
-    }
-  }, [isReady, theme.palette.background.paper]);
+      },
+      ORIGIN,
+    );
+  };
 
   return (
     <BasePage title={t("Lab")} full>
-      <TheIframe src={`${ORIGIN}/lab-content`} ref={iframeRef} />
+      <TheIframe
+        src={`${ORIGIN}/lab-content`}
+        ref={iframeRef}
+        onLoad={onLoad}
+      />
     </BasePage>
   );
 }
