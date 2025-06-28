@@ -1,11 +1,12 @@
 "use client";
 import LabCard, { LabCardProps } from "@/components/LabCard";
 
+// TODO: migrate to database
 const LAB_LIST: LabCardProps[] = [
   {
     title: "YAAW for Chrome",
     repository: "https://github.com/acgotaku/YAAW-for-Chrome",
-    cover: "/yaaw-for-chrome.png",
+    cover: "/extensions/yaaw-for-chrome.png",
     author: "acgotaku",
     description:
       "Chrome version of YAAW, support right click to add to Motrix to download",
@@ -13,11 +14,27 @@ const LAB_LIST: LabCardProps[] = [
   {
     repository:
       "https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn",
-    cover: "/aria2-for-chrome.png",
+    cover: "/extensions/aria2-for-chrome.png",
     title: "Aria2 for Chrome",
     author: "alexhua",
     description:
       "Aria2 for chrome is a download task management extension customized for Chrome, which can automatically block or manually add download tasks",
+  },
+  {
+    repository: "https://github.com/jae-jae/Camtd",
+    cover: "/extensions/camtd.png",
+    title: "Camtd",
+    author: "jae-jae",
+    description:
+      "Camtd is a Chrome multi-threaded download manager extension that can take over Chrome's default download behavior",
+  },
+  {
+    title: "Aria2 DMI",
+    repository:
+      "https://addons.mozilla.org/en-US/firefox/addon/aria2-integration",
+    cover: "/extensions/aria2-integration.png",
+    author: "Ross Wang",
+    description: "Replace Firefox built-in download manager",
   },
 ];
 

@@ -1,4 +1,4 @@
-import Script from "next/script";
+import "./base.css";
 
 // interface BaseData {
 //   type: string;
@@ -10,12 +10,7 @@ function IframeEmbedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      {children}
-      <Script src="/iframe-message.js" strategy="beforeInteractive"></Script>
-    </>
-  );
+  return <>{children}</>;
 }
 
 export default IframeEmbedLayout;

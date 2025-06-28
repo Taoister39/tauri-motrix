@@ -12,10 +12,6 @@ export const NAV_LIST = [
     href: "/download",
   },
   {
-    title: "Support",
-    href: "/support",
-  },
-  {
     title: "Lab",
     href: "/lab",
   },
