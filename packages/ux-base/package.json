@@ -1,0 +1,31 @@
+{
+  "name": "@tauri-motrix/ux-base",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "prepare": "pnpm build"
+  },
+  "devDependencies": {
+    "@rsbuild/plugin-react": "^1.3.2",
+    "@rslib/core": "^0.10.4",
+    "@types/react": "catalog:",
+    "react": "catalog:",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  }
+}

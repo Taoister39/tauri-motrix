@@ -1,6 +1,6 @@
+import { Copyright } from "@tauri-motrix/ux-base";
 import Image from "next/image";
 
-import Copyright from "@/components/Copyright";
 import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
 import { NAV_LIST } from "@/constants/nav";

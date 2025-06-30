@@ -11,7 +11,8 @@
   "dependencies": {
     "react": "catalog:",
     "react-dom": "catalog:",
-    "next": "15.3.3"
+    "next": "15.3.3",
+    "@tauri-motrix/ux-base": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5",
