@@ -21,10 +21,10 @@
     "dev": "rslib build --watch",
     "prepare": "pnpm build"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.12.4",
   "devDependencies": {
-    "@rslib/core": "^0.8.0",
+    "@rslib/core": "catalog:",
     "@types/node": "^22.8.1",
-    "typescript": "~5.6.3"
+    "typescript": "catalog:"
   }
 }

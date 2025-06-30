@@ -12,5 +12,5 @@
     "crx": "^5.0.1",
     "yargs": "^18.0.0"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.12.4"
 }
