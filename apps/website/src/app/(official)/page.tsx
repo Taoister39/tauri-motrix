@@ -4,8 +4,8 @@ import ElegantDarkButton from "@/components/ElegantDarkButton";
 
 export default function Home() {
   return (
-    <div className="relative h-full flex items-center">
-      <article className="px-[8vw]">
+    <div className="h-full flex items-center flex-wrap px-[8vw] gap-4 py-10">
+      <article>
         <div className="p-3.5">
           <Image
             width={220}
@@ -22,11 +22,13 @@ export default function Home() {
           Support downloading HTTP, FTP, BitTorrent, Magnet, etc.
         </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+        <section className="flex gap-4 items-center flex-col sm:flex-row">
           <ElegantDarkButton>Download</ElegantDarkButton>
-        </div>
+        </section>
+
+        <section className="mt-4 text-[#5c5edc]">View Motrix features</section>
       </article>
-      <figure className="absolute left-[60vw] bottom-[6vh]">
+      <figure className="lg:absolute lg:left-[60vw] max-h-[80vh]">
         <Image
           src="/screenshot-task-list-downloading-en.png"
           width={898}

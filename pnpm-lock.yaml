@@ -240,6 +240,9 @@ importers:
       '@tauri-motrix/ux-base':
         specifier: workspace:*
         version: link:../../packages/ux-base
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       next:
         specifier: 15.3.3
         version: 15.3.3(@babel/core@7.27.4)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
