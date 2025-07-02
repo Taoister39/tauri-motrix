@@ -18,8 +18,31 @@ export default function OfficialLayoutClient({
 }>) {
   const [open, setOpen] = useState(false);
 
+  const createPaper = (index: number) => {
+    return (
+      <div
+        className={clsx(
+          "h-full w-full bg-white absolute top-0 shadow-inner transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
+          open ? "block" : "hidden",
+          { "overflow-hidden": open },
+        )}
+        style={{
+          transform: open
+            ? `translate3d(0, 60vh, -${200 + 50 * index}px)`
+            : "translateY(-100%)",
+          zIndex: 130 - index * 10,
+          opacity: 100 - index * 10,
+        }}
+      />
+    );
+  };
+
   return (
-    <div className="h-screen flex flex-col">
+    <div
+      className={clsx("h-screen flex flex-col", {
+        "bg-[#ebecf0] overflow-hidden": open,
+      })}
+    >
       <header
         className={clsx(
           "px-12 h-20 flex items-center justify-between sticky",
@@ -63,33 +86,16 @@ export default function OfficialLayoutClient({
             "h-full z-130 overflow-x-hidden",
             !open
               ? "[transform:translate3d(0px,0px,0px)]"
-              : "translate-y-[60vh] translate-z-[-200px]",
+              : "translate-y-[60vh] translate-z-[-200px] ",
+            {
+              "overflow-hidden bg-white relative": open,
+            },
           )}
         >
           {children}
         </main>
-        <div
-          className={clsx(
-            "h-full w-full bg-white absolute top-0 shadow-inner transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
-            open ? "block" : "hidden",
-            open
-              ? "translate-y-[60vh] translate-z-[-250px]"
-              : "translate-y-[100%]",
-            { "overflow-hidden": open },
-            "z-120 opacity-90",
-          )}
-        />
-        <div
-          className={clsx(
-            "h-full w-full bg-white absolute",
-            open ? "block" : "hidden",
-            open
-              ? "translate-y-[60vh] translate-z-[-300px]"
-              : "translate-y-[100%]",
-            { "overflow-hidden": open },
-            "z-110 opacity-80",
-          )}
-        />
+        {createPaper(1)}
+        {createPaper(2)}
       </div>
       <footer className="px-12 h-15 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
         <Copyright />
