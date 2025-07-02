@@ -1,7 +1,10 @@
 "use client";
+import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Copyright } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 import MenuButton from "@/components/MenuButton";
@@ -33,22 +36,31 @@ export default function OfficialLayoutClient({
         />
         <MenuButton open={open} onClick={() => setOpen(!open)} />
       </header>
-      <nav
-        className={clsx(
-          open ? "flex" : "hidden",
-          "flex-wrap md:*:flex-[1_1_33.3%] sm:*:flex-[1_1_50%] sm:flex-row flex-col",
-        )}
-      >
-        {NAV_LIST.map((item) => (
-          <NavItem key={item.href} href={item.href}>
-            {item.title}
-          </NavItem>
-        ))}
+      <nav className={clsx({ hidden: !open })}>
+        <section
+          className={
+            "flex flex-wrap md:*:flex-[1_1_33.3%] sm:*:flex-[1_1_50%] sm:flex-row flex-col"
+          }
+        >
+          {NAV_LIST.map((item) => (
+            <NavItem key={item.href} href={item.href}>
+              {item.title}
+            </NavItem>
+          ))}
+        </section>
+        <section className="flex justify-center items-center gap-4">
+          <Link href="https://x.com/Taoister39">
+            <FontAwesomeIcon icon={faTwitter} size="2x" />
+          </Link>
+          <Link href="https://github.com/Taoister39/tauri-motrix">
+            <FontAwesomeIcon icon={faGithub} size="2x" />
+          </Link>
+        </section>
       </nav>
-      <div className="flex-[1_1_1px] relative">
+      <div className="flex-1 relative perspective-[1200px] perspective-origin-[50%_-50%]">
         <main
           className={clsx(
-            "h-full z-130",
+            "h-full z-130 overflow-x-hidden",
             !open
               ? "[transform:translate3d(0px,0px,0px)]"
               : "translate-y-[60vh] translate-z-[-200px]",

@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import BasePage from "@/components/BasePage";
@@ -29,7 +29,10 @@ function LabPage() {
 
   const { motrix } = useMotrix();
 
-  const language = getLanguage(motrix?.language ?? i18n.language);
+  const language = useMemo(
+    () => getLanguage(motrix?.language ?? i18n.language),
+    [i18n.language, motrix?.language],
+  );
 
   useEffect(() => {
     const onMessage = (event: MessageEvent<BaseMessage>) => {

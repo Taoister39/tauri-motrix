@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Image from "next/image";
 
 import ElegantDarkButton from "@/components/ElegantDarkButton";
@@ -28,7 +29,14 @@ export default function Home() {
 
         <section className="mt-4 text-[#5c5edc]">View Motrix features</section>
       </article>
-      <figure className="lg:absolute lg:left-[60vw] max-h-[80vh]">
+      <figure
+        className={clsx(
+          "lg:absolute lg:left-[60vw] lg:h-full w-full max-h-[80vh]",
+          "lg:hover:translate-x-[-18vw] transition-all duration-800 delay-100 ease-[cubic-bezier(.08,.82,.17,1)]",
+          // "lg:after:shadow-[0_0_20px_0_rgba(0,0,0,0.075),0_25px_30px_0_rgba(0,0,0,0.175)] after:content-['']",
+          // "after:h-full after:w-full after:left-0 after:top-0 after:absolute",
+        )}
+      >
         <Image
           src="/screenshot-task-list-downloading-en.png"
           width={898}
