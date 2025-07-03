@@ -4,9 +4,10 @@ import { ReactNode } from "react";
 export interface NavItemProps {
   children: ReactNode;
   href: string;
+  onClick: () => void;
 }
 
-function NavItem({ children, href }: NavItemProps) {
+function NavItem({ children, href, onClick }: NavItemProps) {
   return (
     <Link
       className={
@@ -14,6 +15,7 @@ function NavItem({ children, href }: NavItemProps) {
         " after:contents-[''] "
       }
       href={href}
+      onClick={onClick}
     >
       {children}
     </Link>

@@ -1,5 +1,4 @@
 "use client";
-import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Copyright } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
@@ -9,7 +8,7 @@ import { useState } from "react";
 
 import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
-import { NAV_LIST } from "@/constants/nav";
+import { NAV_LINK, NAV_LIST } from "@/constants/nav";
 
 export default function OfficialLayoutClient({
   children,
@@ -20,9 +19,9 @@ export default function OfficialLayoutClient({
 
   const createPaper = (index: number) => {
     return (
-      <div
+      <section
         className={clsx(
-          "h-full w-full bg-white absolute top-0 shadow-inner transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
+          "min-h-screen w-full bg-white absolute top-0 shadow-inner transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
           open ? "block" : "hidden",
           { "overflow-hidden": open },
         )}
@@ -39,51 +38,62 @@ export default function OfficialLayoutClient({
 
   return (
     <div
-      className={clsx("h-screen flex flex-col", {
+      className={clsx("min-h-screen", {
         "bg-[#ebecf0] overflow-hidden": open,
       })}
     >
       <header
         className={clsx(
-          "px-12 h-20 flex items-center justify-between sticky",
+          "px-12 h-15 md:h-20 flex items-center justify-between fixed top-0 left-0 right-0",
           !open ? "bg-[hsla(0,0%,100%,.75)]" : "bg-transparent",
         )}
       >
-        <Image
-          className="dark:invert"
-          width={62}
-          height={14}
-          alt="Tauri Motrix logo"
-          src="/logo.svg"
-          priority
-        />
+        <Link href="/" className="cursor-pointer">
+          <Image
+            className="dark:invert"
+            width={62}
+            height={14}
+            alt="Tauri Motrix logo"
+            src="/logo.svg"
+            priority
+          />
+        </Link>
         <MenuButton open={open} onClick={() => setOpen(!open)} />
       </header>
-      <nav className={clsx({ hidden: !open })}>
+      <nav className={clsx({ hidden: !open }, "absolute")}>
         <section
           className={
-            "flex flex-wrap md:*:flex-[1_1_33.3%] sm:*:flex-[1_1_50%] sm:flex-row flex-col"
+            "grid gap-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-10 my-4"
           }
         >
           {NAV_LIST.map((item) => (
-            <NavItem key={item.href} href={item.href}>
+            <NavItem
+              key={item.href}
+              href={item.href}
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
               {item.title}
             </NavItem>
           ))}
         </section>
-        <section className="flex justify-center items-center gap-4">
-          <Link href="https://x.com/Taoister39">
-            <FontAwesomeIcon icon={faTwitter} size="2x" />
-          </Link>
-          <Link href="https://github.com/Taoister39/tauri-motrix">
-            <FontAwesomeIcon icon={faGithub} size="2x" />
-          </Link>
+        <section className="flex justify-center items-center gap-16 mt-10">
+          {NAV_LINK.map((item) => (
+            <Link href={item.href} key={item.href}>
+              <FontAwesomeIcon
+                icon={item.icon}
+                className="text-2xl"
+                color="#969799"
+              />
+            </Link>
+          ))}
         </section>
       </nav>
-      <div className="flex-1 relative perspective-[1200px] perspective-origin-[50%_-50%]">
-        <main
+      <div className="relative perspective-[1200px] perspective-origin-[50%_-50%]">
+        <section
           className={clsx(
-            "h-full z-130 overflow-x-hidden",
+            "min-h-screen z-130 overflow-x-hidden flex flex-col transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
             !open
               ? "[transform:translate3d(0px,0px,0px)]"
               : "translate-y-[60vh] translate-z-[-200px] ",
@@ -92,14 +102,14 @@ export default function OfficialLayoutClient({
             },
           )}
         >
-          {children}
-        </main>
+          <main className="flex-1">{children}</main>
+          <footer className="px-12 h-15 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
+            <Copyright />
+          </footer>
+        </section>
         {createPaper(1)}
         {createPaper(2)}
       </div>
-      <footer className="px-12 h-15 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
-        <Copyright />
-      </footer>
     </div>
   );
 }
