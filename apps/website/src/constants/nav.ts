@@ -1,5 +1,7 @@
 import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
+import { APP_REPO } from "@/constants/base_link";
+
 export const NAV_LIST = [
   {
     title: "Home",
@@ -30,6 +32,6 @@ export const NAV_LINK = [
   },
   {
     icon: faGithub,
-    href: "https://github.com/Taoister39/tauri-motrix",
+    href: APP_REPO,
   },
 ];

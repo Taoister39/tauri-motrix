@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
+import InteractiveLink from "@/components/InteractiveLink";
+
 export interface LabCardProps {
   repository: string;
   cover: string;
@@ -11,23 +13,18 @@ export interface LabCardProps {
 }
 
 function LabCard({
-  repository,
   cover,
   title,
   author,
   description,
+  repository,
   onOpen,
 }: LabCardProps) {
   return (
-    <a
+    <InteractiveLink
       className="rounded overflow-hidden cursor-pointer shadow-xl w-full sm:w-[288px] dark:bg-[#2d2d2d]"
       href={repository}
-      onClick={(e) => {
-        if (onOpen) {
-          e.preventDefault();
-          onOpen(repository);
-        }
-      }}
+      onOpen={onOpen}
     >
       <Image
         priority
@@ -49,7 +46,7 @@ function LabCard({
         </section>
         <section>{description}</section>
       </div>
-    </a>
+    </InteractiveLink>
   );
 }
 

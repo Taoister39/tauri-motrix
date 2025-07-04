@@ -4,6 +4,7 @@
     "rust-lang.rust-analyzer",
     "aaron-bond.better-comments",
     "styled-components.vscode-styled-components",
-    "humao.rest-client"
+    "humao.rest-client",
+    "ShinyaSuzuki.rest-formatter"
   ]
 }

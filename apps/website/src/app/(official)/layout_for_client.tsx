@@ -4,10 +4,10 @@ import { Copyright } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
+import { useStackPageOpen } from "@/components/StackPageProviderWrapper";
 import { NAV_LINK, NAV_LIST } from "@/constants/nav";
 
 export default function OfficialLayoutClient({
@@ -15,7 +15,7 @@ export default function OfficialLayoutClient({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useStackPageOpen();
 
   const createPaper = (index: number) => {
     return (
@@ -44,7 +44,7 @@ export default function OfficialLayoutClient({
     >
       <header
         className={clsx(
-          "px-12 h-15 md:h-20 flex items-center justify-between fixed top-0 left-0 right-0",
+          "px-12 h-15 md:h-20 flex items-center justify-between fixed top-0 left-0 right-0 z-1000",
           !open ? "bg-[hsla(0,0%,100%,.75)]" : "bg-transparent",
         )}
       >
@@ -60,7 +60,12 @@ export default function OfficialLayoutClient({
         </Link>
         <MenuButton open={open} onClick={() => setOpen(!open)} />
       </header>
-      <nav className={clsx({ hidden: !open }, "absolute")}>
+      <nav
+        className={clsx(
+          { hidden: !open },
+          "absolute top-20 left-0 right-0 z-1000",
+        )}
+      >
         <section
           className={
             "grid gap-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-10 my-4"
@@ -70,9 +75,7 @@ export default function OfficialLayoutClient({
             <NavItem
               key={item.href}
               href={item.href}
-              onClick={() => {
-                setOpen(false);
-              }}
+              setFalse={() => setOpen(false)}
             >
               {item.title}
             </NavItem>
@@ -93,17 +96,18 @@ export default function OfficialLayoutClient({
       <div className="relative perspective-[1200px] perspective-origin-[50%_-50%]">
         <section
           className={clsx(
-            "min-h-screen z-130 overflow-x-hidden flex flex-col transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
+            "min-h-screen z-130 overflow-x-hidden transition-transform duration-400 ease-[cubic-bezier(.6,0,.4,1)]",
             !open
               ? "[transform:translate3d(0px,0px,0px)]"
               : "translate-y-[60vh] translate-z-[-200px] ",
             {
               "overflow-hidden bg-white relative": open,
             },
+            "flex flex-col",
           )}
         >
-          <main className="flex-1">{children}</main>
-          <footer className="px-12 h-15 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
+          <main className="pt-20 flex-1">{children}</main>
+          <footer className="px-12 pb-6 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
             <Copyright />
           </footer>
         </section>

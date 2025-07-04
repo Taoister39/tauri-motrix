@@ -1,4 +1,3 @@
-"use client";
 import LabCard, { LabCardProps } from "@/components/LabCard";
 
 // TODO: migrate to database
@@ -45,7 +44,7 @@ export interface LabContentProps {
 
 function LabContent({ onOpen, className }: LabContentProps) {
   return (
-    <div className={className ?? "sm:px-9 px-5 sm:py-4 py-3"}>
+    <div className={className ?? "sm:px-9 px-5 sm:pb-4 pt-24 pb-3"}>
       <h1 className="text-3xl font-bold mb-2">Featured Extensions</h1>
       <section className="flex gap-12 flex-wrap">
         {LAB_LIST.map((item) => (

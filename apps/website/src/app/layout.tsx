@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -17,6 +18,10 @@ export const metadata: Metadata = {
   title: "Tauri Motrix",
   description: "A full-featured download manager.",
 };
+
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+config.autoAddCss = false;
 
 export default function RootLayout({
   children,
