@@ -15,7 +15,7 @@ export default function OfficialLayoutClient({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { open, setOpen } = useStackPageOpen();
+  const { open, setOpen, setFalse } = useStackPageOpen();
 
   const createPaper = (index: number) => {
     return (
@@ -105,6 +105,7 @@ export default function OfficialLayoutClient({
             },
             "flex flex-col",
           )}
+          onClick={setFalse}
         >
           <main className="pt-20 flex-1">{children}</main>
           <footer className="px-12 pb-6 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
