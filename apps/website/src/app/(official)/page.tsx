@@ -71,6 +71,7 @@ export default async function Home() {
           alt="Screenshot"
           priority
           unoptimized
+          className="w-auto h-auto max-w-full max-h-full"
         />
       </figure>
     </div>
