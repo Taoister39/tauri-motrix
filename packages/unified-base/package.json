@@ -1,0 +1,25 @@
+{
+  "name": "@tauri-motrix/unified-base",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "pnpm build",
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "devDependencies": {
+    "@rslib/core": "catalog:",
+    "@types/node": "^22.15.33",
+    "typescript": "catalog:"
+  }
+}

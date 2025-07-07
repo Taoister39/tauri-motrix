@@ -1,15 +1,18 @@
 packages:
   - packages/*
   - apps/*
+
 catalog:
   react: ^19.1.0
   react-dom: ^19.1.0
-  "@types/react": ^19.1.0
-  "@types/react-dom": ^19.1.1
-  "@rslib/core": ^0.10.4
+  '@types/react': ^19.1.0
+  '@types/react-dom': ^19.1.1
+  '@rslib/core': ^0.10.4
   typescript: ^5.8.3
+
 onlyBuiltDependencies:
-  - "@swc/core"
+  - '@swc/core'
+  - '@vercel/speed-insights'
   - core-js
   - es5-ext
   - unrs-resolver

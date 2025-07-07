@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react";
 
-import Copyright from "../src/components/Copyright";
+import BaseCopyright from "../src/base/Copyright";
 
 describe("Copyright", () => {
   it("renders the correct text", () => {
-    const { getByText } = render(<Copyright />);
+    const { getByText } = render(<BaseCopyright />);
     expect(getByText("©2025 Tauri Motrix")).toBeInTheDocument();
   });
 });
