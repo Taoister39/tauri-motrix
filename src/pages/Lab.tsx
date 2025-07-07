@@ -15,7 +15,7 @@ const TheIframe = styled("iframe")`
   background: ${({ theme }) => theme.palette.background.paper};
 `;
 
-const ORIGIN = "http://localhost:3000";
+const ORIGIN = "https://tauri-motrix-website.vercel.app";
 
 export interface BaseMessage {
   type: string;
