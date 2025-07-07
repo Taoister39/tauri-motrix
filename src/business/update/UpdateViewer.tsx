@@ -10,6 +10,7 @@ import useSWR from "swr";
 import { BaseDialog, DialogRef } from "@/components/BaseDialog";
 import { Notice } from "@/components/Notice";
 import { APP_REPO } from "@/constant/url";
+import { stopEngine } from "@/services/cmd";
 
 function UpdateViewer(props: { ref: Ref<DialogRef> }) {
   const { t } = useTranslation();
@@ -55,6 +56,10 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
     setUpdateState(true);
 
     try {
+      // Stop aria2 engine before updating
+      // TODO: graceful to kill sidecar before app exit
+      await stopEngine();
+
       await updateInfo.downloadAndInstall((event) => {
         switch (event.event) {
           case "Started":

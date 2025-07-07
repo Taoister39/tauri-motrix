@@ -34,3 +34,5 @@ export const appLog = (
   message: string,
   location?: string,
 ) => invoke<null>("app_log", { level, message, location });
+
+export const stopEngine = () => invoke("stop_engine");

@@ -1,6 +1,6 @@
 {
   "name": "tauri-motrix",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "type": "module",
   "description": "A full-featured download manager",
   "repository": {
@@ -30,7 +30,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
-    "@mui/material": "^7.1.1",
+    "@mui/material": "^7.1.2",
     "@mui/x-data-grid": "^8.5.1",
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-autostart": "~2",
@@ -41,8 +41,8 @@
     "@tauri-apps/plugin-sql": "^2.2.0",
     "@tauri-apps/plugin-updater": "~2",
     "@tauri-motrix/aria2": "workspace:*",
+    "@tauri-motrix/ux-base": "workspace:*",
     "ahooks": "^3.8.4",
-    "axios": "^1.7.9",
     "bittorrent-peerid": "^1.3.6",
     "dayjs": "^1.11.13",
     "i18next": "^24.2.1",
@@ -62,7 +62,7 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.22.0",
-    "@rsbuild/core": "^1.3.15",
+    "@rsbuild/core": "^1.4.2",
     "@rsbuild/plugin-node-polyfill": "^1.3.0",
     "@rsbuild/plugin-react": "^1.3.0",
     "@rsbuild/plugin-svgr": "^1.2.0",
@@ -71,7 +71,7 @@
     "@tauri-apps/cli": "^2.5.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/parse-torrent": "^5.8.7",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -102,5 +102,5 @@
       "react-dom": "$react-dom"
     }
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.12.4"
 }

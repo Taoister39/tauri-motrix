@@ -1,0 +1,6 @@
+### latest
+GET https://api.github.com/repos/Taoister39/tauri-motrix/releases/latest
+
+
+### aria2 tag
+GET https://api.github.com/repos/Taoister39/aria2-windows-arm64/tags

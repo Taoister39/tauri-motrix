@@ -35,7 +35,7 @@ pub fn create_window(is_showup: bool) -> bool {
         "main".to_string(),
         tauri::WebviewUrl::App("index.html".into()),
     )
-    .title("tauri-motrix")
+    .title("Tauri Motrix")
     .inner_size(800.0, 600.0)
     .min_inner_size(500.0, 550.0)
     .decorations(false)

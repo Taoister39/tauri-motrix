@@ -1,6 +1,7 @@
 import {
   HistoryRounded,
   PlayArrowRounded,
+  ScienceRounded,
   SettingsRounded,
 } from "@mui/icons-material";
 import { ReactNode } from "react";
@@ -8,6 +9,7 @@ import { Navigate, RouteObject } from "react-router-dom";
 
 import DownloadingPage from "@/pages/Downloading";
 import HistoryPage from "@/pages/History";
+import LabPage from "@/pages/Lab";
 import SettingsPage from "@/pages/Settings";
 
 type IRoute = RouteObject & { label?: string; icon?: ReactNode };
@@ -35,5 +37,11 @@ export const routers: IRoute[] = [
     path: "/settings",
     icon: <SettingsRounded />,
     element: <SettingsPage />,
+  },
+  {
+    label: "Label-Lab",
+    path: "/lab",
+    icon: <ScienceRounded />,
+    element: <LabPage />,
   },
 ];

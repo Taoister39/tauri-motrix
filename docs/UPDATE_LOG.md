@@ -1,5 +1,24 @@
 # Update Log
 
+## v0.2.3
+
+### Fix Bugs
+
+- Fixed the aria2 websocket connection failing when starting the app.
+- Fixed the aria2c process being occupied when auto-updating.
+
+### New Features
+
+- Added support for Traditional Chinese and Japanese.
+
+### Last version
+
+- Fixed existing filename not updating in history list
+- Supplement basic setting
+- Upgrade top of downloading page UI
+- Refactor task list filtering by name
+- Fixed Motrix app does not single instance
+
 ## v0.2.2
 
 - Fixed existing filename not updating in history list

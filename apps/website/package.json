@@ -1,5 +1,5 @@
 {
-  "name": "@tm/website",
+  "name": "@tauri-motrix/website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,17 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tauri-motrix/ux-base": "workspace:*",
+    "@vercel/speed-insights": "^1.2.0",
+    "clsx": "^2.1.1",
+    "next": "15.3.3",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "next": "15.3.3"
+    "react-dom": "catalog:"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.12.4"
 }
