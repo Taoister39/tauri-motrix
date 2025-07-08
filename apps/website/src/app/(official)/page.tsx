@@ -35,7 +35,9 @@ export default async function Home() {
       </p>
 
       <section className="flex gap-4 items-center flex-col sm:flex-row">
-        <ElegantDarkButton>Download</ElegantDarkButton>
+        <Link href="/download">
+          <ElegantDarkButton>Download</ElegantDarkButton>
+        </Link>
         <NewVersion
           className="ml-2 hover:text-[#5c5edc]"
           href={latest.html_url}
