@@ -39,6 +39,7 @@
     "TaskManagement": "タスク管理",
     "DefaultPath": "デフォルトパス",
     "AutoResumeAll": "未完了のタスクをすべて自動的に再開する",
+    "AutoResumeAllDescription": "アプリが起動するたびに",
     "BtAutoDownloadContent": "マグネットとトレントコンテンツを自動的にダウンロードする",
     "BtSaveMetadata": "マグネットリンクをトレントファイルとして保存する",
     "BtForceEncryption": "BT 強制暗号化",
