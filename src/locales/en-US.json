@@ -39,6 +39,7 @@
     "TaskManagement": "Task Management",
     "DefaultPath": "Default Path",
     "AutoResumeAll": "Automatically resume all unfinished tasks",
+    "AutoResumeAllDescription": "every time the app starts",
     "BtAutoDownloadContent": "Automatically download magnet and torrent content",
     "BtSaveMetadata": "Save magnet link as torrent file",
     "BtForceEncryption": "BT force encryption",
