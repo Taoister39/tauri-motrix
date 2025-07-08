@@ -32,6 +32,7 @@ function ViewFeatures() {
 
   return (
     <Link
+      onClick={(e) => e.stopPropagation()}
       onNavigate={handleNavigate}
       className="text-[#5c5edc] cursor-pointer"
       href="/features"

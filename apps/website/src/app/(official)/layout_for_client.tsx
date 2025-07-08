@@ -15,7 +15,7 @@ export default function OfficialLayoutClient({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { open, setOpen, setFalse } = useStackPageOpen();
+  const { open, setFalse, toggle } = useStackPageOpen();
 
   const createPaper = (index: number) => {
     return (
@@ -58,7 +58,7 @@ export default function OfficialLayoutClient({
             priority
           />
         </Link>
-        <MenuButton open={open} onClick={() => setOpen(!open)} />
+        <MenuButton open={open} onClick={() => toggle()} />
       </header>
       <nav
         className={clsx(
@@ -72,11 +72,7 @@ export default function OfficialLayoutClient({
           }
         >
           {NAV_LIST.map((item) => (
-            <NavItem
-              key={item.href}
-              href={item.href}
-              setFalse={() => setOpen(false)}
-            >
+            <NavItem key={item.href} href={item.href} setFalse={setFalse}>
               {item.title}
             </NavItem>
           ))}

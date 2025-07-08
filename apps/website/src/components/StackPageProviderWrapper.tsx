@@ -1,9 +1,17 @@
 "use client";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 
 export interface StackPageContextType {
   open: boolean;
-  setOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const StackPageContext = createContext<StackPageContextType>({
@@ -16,12 +24,24 @@ export const StackPageContext = createContext<StackPageContextType>({
 export function useStackPageOpen() {
   const { open, setOpen } = useContext(StackPageContext);
 
+  const setFalse = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const setTrue = useCallback(() => {
+    setOpen(true);
+  }, [setOpen]);
+
+  const toggle = useCallback(() => {
+    setOpen((prev) => !prev);
+  }, [setOpen]);
+
   return {
     open,
     setOpen,
-    setFalse: () => setOpen(false),
-    setTrue: () => setOpen(true),
-    toggle: () => setOpen((prev) => !prev),
+    setFalse,
+    setTrue,
+    toggle,
   };
 }
 

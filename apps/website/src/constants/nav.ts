@@ -19,10 +19,6 @@ export const NAV_LIST = [
     title: "Lab",
     href: "/lab",
   },
-  {
-    title: "License",
-    href: "/license",
-  },
 ];
 
 export const NAV_LINK = [
