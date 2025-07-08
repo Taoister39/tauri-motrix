@@ -1,6 +1,6 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Copyright } from "@tauri-motrix/ux-base";
+import { BaseCopyright } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,7 +48,7 @@ export default function OfficialLayoutClient({
           !open ? "bg-[hsla(0,0%,100%,.75)]" : "bg-transparent",
         )}
       >
-        <Link href="/" className="cursor-pointer">
+        <Link href="/" className="cursor-pointer" onNavigate={() => setFalse()}>
           <Image
             className="dark:invert"
             width={62}
@@ -109,7 +109,7 @@ export default function OfficialLayoutClient({
         >
           <main className="pt-20 flex-1">{children}</main>
           <footer className="px-12 pb-6 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
-            <Copyright />
+            <BaseCopyright />
           </footer>
         </section>
         {createPaper(1)}

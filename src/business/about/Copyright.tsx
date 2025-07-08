@@ -1,6 +1,6 @@
 import { Box, Link, Typography } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { Copyright as BaseCopyright } from "@tauri-motrix/ux-base";
+import { BaseCopyright } from "@tauri-motrix/ux-base";
 import { Fragment } from "react/jsx-runtime";
 import { useTranslation } from "react-i18next";
 

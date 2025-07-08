@@ -17,7 +17,7 @@ export default async function Home() {
   }).then((res) => res.json());
 
   return (
-    <div className="h-full flex items-center flex-wrap px-[8vw] gap-4 py-10">
+    <div className="min-h-full flex items-center flex-wrap px-[8vw] gap-4 py-10">
       <article>
         <div className="p-3.5">
           <Image

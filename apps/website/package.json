@@ -13,6 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tauri-motrix/unified-base": "workspace:*",
     "@tauri-motrix/ux-base": "workspace:*",
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",

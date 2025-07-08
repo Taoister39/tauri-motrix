@@ -3,7 +3,6 @@ import stylex from "@stylexjs/stylex";
 const styles = stylex.create({
   content: {
     display: "flex",
-    minHeight: "100vh",
     lineHeight: 1.1,
     textAlign: "center",
     flexDirection: "column",
