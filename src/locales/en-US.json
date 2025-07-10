@@ -51,7 +51,11 @@
     "TaskCompletedNotify": "Notify after download is complete",
     "NewTaskShowDownloading": "Automatically show downloading after adding task",
     "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task",
-    "AutoCheckUpdate": "Auto Check Update"
+    "AutoCheckUpdate": "Auto Check Update",
+    "EnableProxy": "Enable Proxy",
+    "ProxyServer": "Proxy Server",
+    "ProxyBypassPlaceholder": "Bypass proxy settings for these Hosts and Domains",
+    "ProxyBypass": "Proxy Bypass No.{{index}}"
   },
   "task": {
     "CloseAll": "Close All Tasks",
