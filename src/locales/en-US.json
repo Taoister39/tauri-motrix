@@ -50,7 +50,8 @@
     "SeedTime": "BT Seed Time (minutes)",
     "TaskCompletedNotify": "Notify after download is complete",
     "NewTaskShowDownloading": "Automatically show downloading after adding task",
-    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task"
+    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task",
+    "AutoCheckUpdate": "Auto Check Update"
   },
   "task": {
     "CloseAll": "Close All Tasks",
