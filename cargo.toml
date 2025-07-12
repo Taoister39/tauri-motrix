@@ -1,0 +1,6 @@
+[workspace]
+resolver = "3"
+members = ["src-tauri", "crates/*"]
+
+[workspace.lints.clippy]
+dbg_macro = "deny"

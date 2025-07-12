@@ -4,7 +4,7 @@ import { useBoolean } from "ahooks";
 import { Ref, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
 
-import CopyRight from "@/business/about/CopyRight";
+import Copyright from "@/business/about/Copyright";
 import { BaseDialog, DialogRef } from "@/components/BaseDialog";
 import { useAria2 } from "@/hooks/aria2";
 
@@ -50,7 +50,7 @@ function AboutDialog(props: { ref: Ref<DialogRef> }) {
         ))}
       </Box>
 
-      <CopyRight />
+      <Copyright />
     </BaseDialog>
   );
 }

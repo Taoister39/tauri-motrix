@@ -1,13 +1,13 @@
-# @tm/extensions
+# @tauri-motrix/extensions
 
 ## Devolvement
 
 ```bash
 pnpm i
 
-pnpm dev
+pnpm build:edge
 # or using workspace
-pnpm --filter @tm/extensions build:edge
+pnpm -F extensions build:edge
 ```
 
 ## Acknowledgements

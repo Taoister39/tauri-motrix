@@ -3,11 +3,13 @@
   "Label-Task-History": "历史",
   "Label-Task-Recycle": "回收",
   "Label-Settings": "设置",
+  "Label-Lab": "实验室",
   "Task-Start": "下载列表",
   "Task-History": "历史列表",
   "Task-Done": "完成列表",
   "Settings": "设置",
   "Recycle": "回收",
+  "Lab": "实验室",
   "ThemeMode": {
     "light": "明亮",
     "dark": "深色",

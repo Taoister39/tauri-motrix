@@ -7,9 +7,7 @@ Object.assign(global, { TextEncoder, TextDecoder });
 
 Object.defineProperty(window, "crypto", {
   value: {
-    getRandomValues: (buffer) => {
-      return randomFillSync(buffer);
-    },
-    randomUUID: randomUUID,
+    getRandomValues: randomFillSync,
+    randomUUID,
   },
 });

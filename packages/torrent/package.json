@@ -18,8 +18,8 @@
     "prepare": "pnpm build"
   },
   "devDependencies": {
-    "@rslib/core": "^0.8.0",
+    "@rslib/core": "catalog:",
     "@types/node": "^22.8.1",
-    "typescript": "^5.8.3"
+    "typescript": "catalog:"
   }
 }
