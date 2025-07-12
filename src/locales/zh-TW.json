@@ -39,6 +39,7 @@
     "TaskManagement": "任務管理",
     "DefaultPath": "預設路徑",
     "AutoResumeAll": "自動恢復所有未完成的任務",
+    "AutoResumeAllDescription": "每次應用程式啟動時",
     "BtAutoDownloadContent": "自動下載磁力連結和種子內容",
     "BtSaveMetadata": "將磁力連結儲存為種子檔案",
     "BtForceEncryption": "BT 強制加密",
