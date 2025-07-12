@@ -1,4 +1,4 @@
-# @tm/website
+# @tauri-motrix/website
 
 ## Devolvement
 
@@ -7,5 +7,5 @@ pnpm i
 
 pnpm dev
 # or using workspace
-pnpm --filter @tm/website dev
+pnpm -F website dev
 ```

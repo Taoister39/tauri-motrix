@@ -1,0 +1,22 @@
+:root {
+  --scroller-color: #90939980;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2e303d;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: var(--scroller-color);
+}
+*::-webkit-scrollbar-corner {
+  background-color: transparent;
+}

@@ -1,10 +1,11 @@
 import { Box, Link, Typography } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { BaseCopyright } from "@tauri-motrix/ux-base";
+import { Fragment } from "react/jsx-runtime";
 import { useTranslation } from "react-i18next";
 
-function CopyRight() {
+function Copyright() {
   const { t } = useTranslation();
-  const year = new Date().getFullYear();
 
   return (
     <Box
@@ -15,7 +16,9 @@ function CopyRight() {
         py: 2,
       }}
     >
-      <Typography> &copy;{year} Motrix</Typography>
+      <Typography>
+        <BaseCopyright component={Fragment} />
+      </Typography>
 
       <Link
         component="button"
@@ -37,4 +40,4 @@ function CopyRight() {
   );
 }
 
-export default CopyRight;
+export default Copyright;

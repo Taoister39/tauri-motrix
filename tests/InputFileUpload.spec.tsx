@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 
 import InputFileUpload from "@/components/InputFileUpload";
 
@@ -9,7 +9,7 @@ describe("InputFileUpload", () => {
     expect(getByText("Upload Files")).toBeInTheDocument();
   });
 
-  it("should call onChange when files are selected", () => {
+  it("should call onChange when files are selected", async () => {
     const mockOnChange = jest.fn();
     const { getByLabelText } = render(
       <InputFileUpload text="Upload" onChange={mockOnChange} />,
@@ -18,7 +18,9 @@ describe("InputFileUpload", () => {
     const fileInput = getByLabelText("Upload");
     const file = new File(["content"], "testfile.txt", { type: "text/plain" });
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
 
     expect(mockOnChange).toHaveBeenCalledWith([file]);
   });
@@ -37,7 +39,7 @@ describe("InputFileUpload", () => {
     expect(getByText("file2.txt")).toBeInTheDocument();
   });
 
-  it("should remove a file when delete button is clicked", () => {
+  it("should remove a file when delete button is clicked", async () => {
     const mockOnChange = jest.fn();
     const mockFileList = [
       new File(["content"], "file1.txt"),
@@ -53,7 +55,9 @@ describe("InputFileUpload", () => {
     );
 
     const deleteButton = getAllByRole("button")[1]; // Assuming first button is upload
-    fireEvent.click(deleteButton);
+    await act(async () => {
+      fireEvent.click(deleteButton);
+    });
 
     expect(mockOnChange).toHaveBeenCalledWith([mockFileList[1]]); // file1.txt is removed
   });

@@ -3,10 +3,12 @@
   "Label-Task-History": "History",
   "Label-Task-Recycle": "Recycle",
   "Label-Settings": "Setting",
+  "Label-Lab": "Lab",
   "Task-Start": "Downloading",
   "Task-History": "History",
   "Task-Done": "Done",
   "Settings": "Settings",
+  "Lab": "Lab",
   "Recycle": "Recycle",
   "ThemeMode": {
     "light": "Light",
