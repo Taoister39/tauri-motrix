@@ -50,7 +50,7 @@ async function DownloadPage() {
   );
 
   return (
-    <div className="flex px-[8vw]">
+    <div className="md:flex px-[8vw]">
       <aside className="flex-5">
         <div className="p-3.5">
           <Image
