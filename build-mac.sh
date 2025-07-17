@@ -33,6 +33,24 @@ fi
 make -j$(sysctl -n hw.ncpu)
 pushd src
 strip aria2c
+
+# Code signing and notarization
+if [ -n "$APPLE_DEVELOPER_ID" ]; then
+  echo "Signing the binary..."
+  codesign --force --deep --sign "$APPLE_DEVELOPER_ID" --options runtime "aria2c"
+
+  echo "Creating zip for notarization..."
+  7z a -tzip "aria2-${aria2_ver}-macos-${arch}-unsigned.zip" aria2c
+
+  echo "Notarizing the application..."
+  xcrun notarytool submit "aria2-${aria2_ver}-macos-${arch}-unsigned.zip" --apple-id "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "$APPLE_TEAM_ID" --wait
+  
+  echo "Stapling the notarization ticket..."
+  xcrun stapler staple aria2c
+else
+  echo "Code signing secrets not found, skipping signing and notarization."
+fi
+
 7z a aria2-${aria2_ver}-macos-${arch}.zip aria2c
 mv aria2-${aria2_ver}-macos-${arch}.zip $work_dir
 popd
