@@ -1,11 +1,11 @@
-name: Build for Windows ARM64
+name: Build and Release
 
 on:
   push:
 
 jobs:
-  build-windows-arm64:
-    name: Build
+  build-windows:
+    name: Build for Windows
     runs-on: ubuntu-latest
     env:
       aria2_version: "1.37.0"
@@ -79,14 +79,52 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2_woa
+          name: aria2-windows
           path: aria2*.zip
 
-      - name: Batch release
+  build-macos:
+    name: Build for macOS
+    runs-on: macos-latest
+    env:
+      aria2_version: "1.37.0"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install tools and dependencies
+        run: |
+          brew install automake autoconf libtool pkg-config gettext p7zip
+          brew install gmp libssh2 c-ares sqlite3 zlib expat
+
+      - name: Build aria2
+        run: |
+          chmod +x build-mac.sh
+          ./build-mac.sh
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aria2-macos
+          path: aria2*.zip
+
+  release:
+    name: Release
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List files
+        run: ls -R artifacts
+
+      - name: Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: |
-            aria2*.zip
+          files: artifacts/**/*.zip
