@@ -22,6 +22,7 @@ import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
 import { DialogRef } from "@/components/BaseDialog";
+import { isWin } from "@/constant/environment";
 import { ADD_DIALOG } from "@/constant/url";
 import { useMotrix } from "@/hooks/motrix";
 import { useCustomTheme } from "@/hooks/theme";
@@ -148,7 +149,7 @@ function Application() {
             },
           })}
         >
-          <TitleBar toggleOpenAside={toggleOpenAside} />
+          {isWin && <TitleBar toggleOpenAside={toggleOpenAside} />}
 
           <Drawer
             sx={(theme) => ({
