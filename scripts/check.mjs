@@ -65,7 +65,7 @@ async function resolveSidecar(binInfo) {
     } else if (zipFile.endsWith(".dmg")) {
       // dmg - macOS executable file
       await fsp.rename(tempZip, sidecarPath);
-      log_success(`"${zipFile}" file mv to "${sidecarPath}"`);
+      log_success(`"${zipFile}" file move to "${sidecarPath}"`);
     } else {
       // gz
       const readStream = fs.createReadStream(tempZip);
