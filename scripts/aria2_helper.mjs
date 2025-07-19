@@ -14,10 +14,9 @@ const ARIA2_REPO_TAG_API_URL =
   "https://api.github.com/repos/Taoister39/aria2-windows-arm64/tags";
 
 const ARIA2_MAP = {
-  "win32-x64": "winx64",
-  // "win32-ia32": "winx86",
-  "win32-arm64": "winarm64",
-  // "win32-arm": "winarm",
+  "win32-x64": "win-64bit-build1",
+  "win32-arm64": "win-arm64bit-build1",
+  "darwin-arm64":"osx-darwin",
   // TODO
   // "aarch64-unknown-linux-gnu": "aarch64-linux-android-build1",
 };
