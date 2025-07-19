@@ -1,6 +1,6 @@
 import process from "process";
 
-import { isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
+import { isMac, isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
 import { createFetchOptionsFactory, log_error, log_info } from "./utils.mjs";
 
 // There is no arm64 version in official repository at latest.
@@ -16,7 +16,7 @@ const ARIA2_REPO_TAG_API_URL =
 const ARIA2_MAP = {
   "win32-x64": "win-64bit-build1",
   "win32-arm64": "win-arm64bit-build1",
-  "darwin-arm64":"osx-darwin",
+  "darwin-arm64": "osx-darwin",
   // TODO
   // "aarch64-unknown-linux-gnu": "aarch64-linux-android-build1",
 };
@@ -66,7 +66,7 @@ export async function getLatestAria2Tag() {
 export function createAria2BinInfo(latestTag) {
   const name = ARIA2_MAP[TARGET_KEY];
 
-  const urlExt = "zip";
+  const urlExt = isMac ? "dmg" : "zip";
   const [, version] = latestTag.split("-");
 
   const downloadName = `aria2-${version}-${name}`;

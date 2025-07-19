@@ -36,7 +36,7 @@ async function resolveSidecar(binInfo) {
     }
 
     if (zipFile.endsWith(".zip")) {
-      const zip = new AdmZip(tempZip);
+      const zip = AdmZip(tempZip);
       zip.getEntries().forEach((entry) => {
         log_debug(`"${name}" entry name`, entry.entryName);
       });
@@ -62,6 +62,10 @@ async function resolveSidecar(binInfo) {
       // log_success(`"${name}" file renamed to "${sidecarPath}"`);
       // execSync(`chmod 755 ${sidecarPath}`);
       // log_success(`chmod binary finished: "${name}"`);
+    } else if (zipFile.endsWith(".dmg")) {
+      // dmg - macOS executable file
+      await fsp.rename(tempZip, sidecarPath);
+      log_success(`"${zipFile}" file mv to "${sidecarPath}"`);
     } else {
       // gz
       const readStream = fs.createReadStream(tempZip);
