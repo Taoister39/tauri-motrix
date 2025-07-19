@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import clc from "cli-color";
 import fsp from "fs/promises";
 import { HttpsProxyAgent } from "https-proxy-agent";
@@ -88,4 +89,24 @@ export async function getSignature(url) {
   });
 
   return response.text();
+}
+
+/**
+ * @param {string} source
+ * @param {string} target
+ */
+export async function baseMove(source, target) {
+  await fsp.rename(source, target);
+  log_success(`"${source}" file moved to "${target}"`);
+}
+
+/**
+ *
+ * @param {string} source
+ * @param {string} target
+ */
+export async function baseExecutableMove(source, target) {
+  await baseMove(source, target);
+  execSync(`chmod 755 ${target}`);
+  log_success(`chmod binary finished: "${target}"`);
 }
