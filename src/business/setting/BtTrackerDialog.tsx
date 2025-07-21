@@ -1,14 +1,16 @@
 import {
   Autocomplete,
   Box,
-  inputBaseClasses,
+  FormControlLabel,
   styled,
+  Switch,
   TextField,
-  textFieldClasses,
+  useTheme,
 } from "@mui/material";
 import { useBoolean } from "ahooks";
 import { Ref, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
+import MonacoEditor from "react-monaco-editor";
 
 import BaseDialog, { DialogRef } from "@/components/BaseDialog";
 
@@ -20,6 +22,9 @@ const TheQuick = styled(Box)`
 
 function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
   const { t } = useTranslation();
+  const {
+    palette: { mode: themeMode },
+  } = useTheme();
 
   const [open, { setFalse, setTrue }] = useBoolean();
 
@@ -44,23 +49,19 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
         gap: "16px",
         flexDirection: "column",
         pt: "6px !important",
-        // fix TextField height not
-        [`.${textFieldClasses.root}`]: {
-          height: "100%",
-          [`.${inputBaseClasses.root}`]: {
-            height: "100%",
-            alignItems: "flex-start",
-          },
-          [`.${inputBaseClasses.input}`]: {
-            height: "100% !important",
-            boxSizing: "border-box",
-          },
-        },
       })}
     >
       <Grouped />
-      <TextField fullWidth multiline />
-      <TheQuick></TheQuick>
+      <MonacoEditor
+        language="txt"
+        theme={themeMode === "light" ? "vs" : "vs-dark"}
+      />
+      <TheQuick>
+        <FormControlLabel
+          control={<Switch defaultChecked />}
+          label={"Update tracker list every day automatically"}
+        />
+      </TheQuick>
     </BaseDialog>
   );
 }
@@ -85,7 +86,7 @@ function Grouped() {
       getOptionLabel={(option) => option.title}
       fullWidth
       renderInput={(params) => (
-        <TextField {...params} label="With categories" />
+        <TextField {...params} label="With categories" variant="standard" />
       )}
     />
   );
