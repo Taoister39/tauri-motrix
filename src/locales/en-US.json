@@ -58,7 +58,10 @@
     "EnableProxy": "Enable Proxy",
     "ProxyServer": "Proxy Server",
     "ProxyBypassPlaceholder": "Bypass proxy settings for these Hosts and Domains",
-    "ProxyBypass": "Proxy Bypass No.{{index}}"
+    "ProxyBypass": "Proxy Bypass No.{{index}}",
+    "DhtPort": "DHT Port",
+    "BtPort": "BT Port",
+    "BtTracker": "Tracker Servers"
   },
   "task": {
     "CloseAll": "Close All Tasks",
