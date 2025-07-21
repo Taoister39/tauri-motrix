@@ -14,12 +14,15 @@ import { DOWNLOAD_ENGINE } from "@/constant/task";
 import { useAria2 } from "@/hooks/aria2";
 import { addOneDir, findOneDirByPath } from "@/services/save_to_history";
 
+import BtTrackerDialog from "./BtTrackerDialog";
+
 function Aria2Setting() {
   const { t } = useTranslation();
 
   const externalRef = useRef<DialogRef>(null);
   const speedLimitRef = useRef<DialogRef>(null);
   const taskManagementRef = useRef<DialogRef>(null);
+  const btTrackerRef = useRef<DialogRef>(null);
 
   const { aria2, patchAria2 } = useAria2();
 
@@ -61,6 +64,7 @@ function Aria2Setting() {
       <ExternalControllerDialog ref={externalRef} />
       <SpeedLimitDialog ref={speedLimitRef} />
       <TaskManagementDialog ref={taskManagementRef} />
+      <BtTrackerDialog ref={btTrackerRef} />
 
       <SettingItem
         label={t("setting.External")}
@@ -129,6 +133,11 @@ function Aria2Setting() {
           }}
         />
       </SettingItem>
+
+      <SettingItem
+        label={t("setting.BtTracker")}
+        onClick={() => btTrackerRef.current?.open()}
+      />
     </SettingList>
   );
 }
