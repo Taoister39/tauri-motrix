@@ -14,7 +14,7 @@ export default defineConfig({
       index: "./src/main.tsx",
     },
     define: {
-      OS_PLATFORM: process.platform,
+      OS_PLATFORM: `"${process.platform}"`,
     },
   },
   server: {

@@ -136,8 +136,8 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       '@rsbuild/plugin-node-polyfill':
-        specifier: ^1.3.0
-        version: 1.3.0(@rsbuild/core@1.4.2)
+        specifier: ^1.3.1
+        version: 1.3.1(@rsbuild/core@1.4.2)
       '@rsbuild/plugin-react':
         specifier: ^1.3.0
         version: 1.3.2(@rsbuild/core@1.4.2)
@@ -1594,8 +1594,8 @@ packages:
     engines: {node: '>=16.10.0'}
     hasBin: true
 
-  '@rsbuild/plugin-node-polyfill@1.3.0':
-    resolution: {integrity: sha512-KvckyUg9wq3F1Iv/y4+mlcnO/E7vDklvMY7kF6CxnUYImroQVw/EDS0zDezkPvcm7aKTH5b0Jaa0iIcTNFzhVw==}
+  '@rsbuild/plugin-node-polyfill@1.3.1':
+    resolution: {integrity: sha512-FhEMjaFr5X3ojTJgSOG5XbtySLDtfkX0sgXTs0ymQj1ETzPj4pVoVCwDrYHCmKahgEz/0PoeBDX380RAkcnneQ==}
     peerDependencies:
       '@rsbuild/core': 1.x
     peerDependenciesMeta:
@@ -7149,7 +7149,7 @@ snapshots:
       core-js: 3.43.0
       jiti: 2.4.2
 
-  '@rsbuild/plugin-node-polyfill@1.3.0(@rsbuild/core@1.4.2)':
+  '@rsbuild/plugin-node-polyfill@1.3.1(@rsbuild/core@1.4.2)':
     dependencies:
       assert: 2.1.0
       browserify-zlib: 0.2.0

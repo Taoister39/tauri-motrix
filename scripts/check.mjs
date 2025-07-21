@@ -38,7 +38,8 @@ async function resolveSidecar(binInfo) {
     }
 
     if (zipFile.endsWith(".zip")) {
-      const zip = AdmZip(tempZip);
+      // sometimes occur type error in new AdmZip() or AdmZip();
+      const zip = new AdmZip(tempZip);
       zip.getEntries().forEach((entry) => {
         log_debug(`"${name}" entry name`, entry.entryName);
       });
