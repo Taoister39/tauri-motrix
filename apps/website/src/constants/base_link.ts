@@ -4,4 +4,4 @@ export const LATEST_RELEASE =
 export const APP_REPO = "https://github.com/Taoister39/tauri-motrix";
 
 export const URL_FOR_RELEASE =
-  "https://github.com/Taoister39/tauri-motrix/releases/tag";
+  "https://github.com/Taoister39/tauri-motrix/releases";

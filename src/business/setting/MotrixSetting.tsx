@@ -88,6 +88,17 @@ function MotrixSetting() {
         />
       </SettingItem>
 
+      <SettingItem label={t("setting.AutoCheckUpdate")}>
+        <Android12Switch
+          checked={!!motrix?.auto_check_update}
+          onChange={(e) => {
+            patchMotrix({
+              auto_check_update: e.target.checked,
+            });
+          }}
+        />
+      </SettingItem>
+
       <SettingItem label={t("setting.OpenConfDir")} onClick={openAppDir} />
       <SettingItem label={t("setting.OpenCoreDir")} onClick={openCoreDir} />
       <SettingItem label={t("setting.OpenLogsDir")} onClick={openLogsDir} />

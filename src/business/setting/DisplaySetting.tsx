@@ -51,7 +51,7 @@ function AppearanceSetting() {
 
       <SettingItem
         label={t("setting.AutoResumeAll")}
-        secondary="every time the app starts"
+        secondary={t("setting.AutoResumeAllDescription")}
       >
         <Android12Switch
           checked={!!motrix?.auto_resume_all}

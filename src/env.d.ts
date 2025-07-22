@@ -20,3 +20,5 @@ declare module "bittorrent-peerid" {
 
   export { Parsed };
 }
+
+declare const OS_PLATFORM: NodeJS.Platform;

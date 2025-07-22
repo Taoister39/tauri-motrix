@@ -11,7 +11,7 @@ function NavItem({ children, href, setFalse }: NavItemProps) {
   return (
     <Link
       className={
-        "py-2 text-[#646466] text-center font-bold relative uppercase tracking-[1px] text-sm" +
+        "py-2 text-[#646466] font-bold relative uppercase tracking-[1px] text-sm" +
         " after:contents-[''] "
       }
       href={href}

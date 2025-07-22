@@ -41,6 +41,7 @@
     "TaskManagement": "Task Management",
     "DefaultPath": "Default Path",
     "AutoResumeAll": "Automatically resume all unfinished tasks",
+    "AutoResumeAllDescription": "every time the app starts",
     "BtAutoDownloadContent": "Automatically download magnet and torrent content",
     "BtSaveMetadata": "Save magnet link as torrent file",
     "BtForceEncryption": "BT force encryption",
@@ -52,7 +53,15 @@
     "SeedTime": "BT Seed Time (minutes)",
     "TaskCompletedNotify": "Notify after download is complete",
     "NewTaskShowDownloading": "Automatically show downloading after adding task",
-    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task"
+    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task",
+    "AutoCheckUpdate": "Auto Check Update",
+    "EnableProxy": "Enable Proxy",
+    "ProxyServer": "Proxy Server",
+    "ProxyBypassPlaceholder": "Bypass proxy settings for these Hosts and Domains",
+    "ProxyBypass": "Proxy Bypass No.{{index}}",
+    "DhtPort": "DHT Port",
+    "BtPort": "BT Port",
+    "BtTracker": "Tracker Servers"
   },
   "task": {
     "CloseAll": "Close All Tasks",

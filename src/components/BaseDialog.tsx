@@ -9,6 +9,7 @@ import {
   type Theme,
 } from "@mui/material";
 import { FormEvent, ReactNode, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 // original code from clash verge
 
@@ -28,6 +29,8 @@ export interface BaseDialogProps {
   onClose?: () => void;
   onSubmit?: (e: FormEvent) => void;
   enableForm?: boolean;
+  fullWidth?: boolean;
+  maxWidth?: DialogProps["maxWidth"];
 }
 
 export interface DialogRef {
@@ -36,6 +39,7 @@ export interface DialogRef {
 }
 
 export function BaseDialog(props: BaseDialogProps) {
+  const { t } = useTranslation();
   const {
     open,
     title,
@@ -52,6 +56,8 @@ export function BaseDialog(props: BaseDialogProps) {
     onOk,
     onSubmit,
     enableForm,
+    fullWidth,
+    maxWidth,
   } = props;
 
   const rootSlotProps = useMemo<DialogProps["slotProps"]>(
@@ -73,7 +79,13 @@ export function BaseDialog(props: BaseDialogProps) {
   );
 
   return (
-    <Dialog open={open} onClose={onClose} slotProps={rootSlotProps}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      slotProps={rootSlotProps}
+      fullWidth={fullWidth}
+      maxWidth={maxWidth}
+    >
       <DialogTitle>{title}</DialogTitle>
 
       <DialogContent sx={contentSx}>{children}</DialogContent>
@@ -82,7 +94,7 @@ export function BaseDialog(props: BaseDialogProps) {
         <DialogActions>
           {!disableCancel && (
             <Button variant="outlined" onClick={onCancel}>
-              {cancelBtn}
+              {cancelBtn || t("common.Cancel")}
             </Button>
           )}
           {!disableOk && (
@@ -92,7 +104,7 @@ export function BaseDialog(props: BaseDialogProps) {
               onClick={handleOkBtnSubmit}
               type={enableForm ? "submit" : "button"}
             >
-              {okBtn}
+              {okBtn || t("common.Ok")}
             </Button>
           )}
         </DialogActions>

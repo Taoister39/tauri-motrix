@@ -135,6 +135,8 @@ interface Aria2Config {
   "use-head"?: string;
   "user-agent"?: string;
   "seed-time"?: string;
+  "all-proxy"?: string;
+  "no-proxy"?: string;
 }
 
 interface MotrixConfig {
