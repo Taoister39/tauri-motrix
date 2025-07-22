@@ -5,6 +5,7 @@
     "aaron-bond.better-comments",
     "styled-components.vscode-styled-components",
     "humao.rest-client",
-    "ShinyaSuzuki.rest-formatter"
+    "ShinyaSuzuki.rest-formatter",
+    "yash-singh.stylex"
   ]
 }

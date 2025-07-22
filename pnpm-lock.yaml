@@ -330,6 +330,10 @@ importers:
         version: 5.8.3
 
   packages/unified-base:
+    dependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
     devDependencies:
       '@rslib/core':
         specifier: 'catalog:'
@@ -346,6 +350,9 @@ importers:
       '@stylexjs/stylex':
         specifier: ^0.13.1
         version: 0.13.1
+      '@tauri-motrix/unified-base':
+        specifier: workspace:*
+        version: link:../unified-base
       react-dom:
         specifier: '>=16.9.0'
         version: 19.1.0(react@19.1.0)
