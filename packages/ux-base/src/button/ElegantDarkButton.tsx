@@ -12,11 +12,11 @@ const styles = stylex.create({
   },
 });
 
-interface ButtonProps extends IButtonProps {
+export interface ElegantDarkButtonProps extends IButtonProps {
   children: ReactNode;
 }
 
-function ElegantDarkButton(inProps: ButtonProps) {
+function ElegantDarkButton(inProps: ElegantDarkButtonProps) {
   const resolvedProps = uni_utils.resolveProps(
     stylex.props(styles.root),
     inProps,
