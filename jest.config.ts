@@ -5,6 +5,9 @@ const config: Config = {
   projects: [
     {
       testEnvironment: "jest-environment-jsdom",
+      globals: {
+        OS_PLATFORM: process.platform,
+      },
       setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
       displayName: "common-platform",
       testMatch: [
