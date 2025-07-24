@@ -1,6 +1,6 @@
 import process from "process";
 
-import { isMac, isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
+import { isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
 import { createFetchOptionsFactory, log_error, log_info } from "./utils.mjs";
 
 // There is no windows arm64 version in official repository at latest.
@@ -46,7 +46,6 @@ export async function getLatestAria2Tag() {
     const latestTag = tagListRes[0];
 
     const tag = latestTag?.name;
-    // release-x.xx.x
     if (tag) {
       log_info(`Latest release tag: ${tag}`);
 
@@ -68,7 +67,7 @@ export async function getLatestAria2Tag() {
 export function createAria2BinInfo(latestTag) {
   const name = ARIA2_MAP[TARGET_KEY];
 
-  const urlExt = isMac ? "dmg" : "zip";
+  const urlExt = "zip";
   const tagCompositions = latestTag.split("-");
   // assume the version is the last part of the tag
   // aria2c-release-1.xx.x
