@@ -54,7 +54,7 @@ else
   echo "Code signing secrets not found, skipping signing and notarization."
 fi
 
-7z a aria2-${aria2_ver}-macos-${zip_suffix}.zip aria2c
-mv aria2-${aria2_ver}-macos-${zip_suffix}.zip $work_dir
+7z a aria2-${aria2_ver}-${zip_suffix}.zip aria2c
+mv aria2-${aria2_ver}-${zip_suffix}.zip $work_dir
 popd
 make clean

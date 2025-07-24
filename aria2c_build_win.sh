@@ -74,7 +74,7 @@ fi
 make -j$(nproc)
 pushd src
 $TARGET-strip aria2c.exe
-7z a aria2-${aria2_ver}-win$zip_suffix.zip aria2c.exe
-mv aria2-${aria2_ver}-macos-${zip_suffix}.zip $work_dir
+7z a aria2-${aria2_ver}-$zip_suffix.zip aria2c.exe
+mv aria2-${aria2_ver}-${zip_suffix}.zip $work_dir
 popd
 make clean
