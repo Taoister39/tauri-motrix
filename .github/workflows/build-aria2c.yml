@@ -5,13 +5,21 @@ on:
 
 jobs:
   build-windows:
-    name: Build for Windows
+    name: Build for Windows (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
       aria2_version: "1.37.0"
       libssh2_version: "1.11.0"
       llvm_path: "${{ github.workspace }}/llvm-mingw"
       libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
+      VCPKG_DEFAULT_TRIPLET: "${{ matrix.arch }}-windows-static"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: "arm64"
+          - arch: "x64"
 
     steps:
       - name: Checkout repository
@@ -36,50 +44,30 @@ jobs:
           git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
-          cp triplets/community/arm64-mingw-static.cmake triplets_overlay/arm64-mingw-static-release.cmake
-          cp triplets/community/arm-mingw-static.cmake triplets_overlay/arm-mingw-static-release.cmake
-          cp triplets/community/x64-mingw-static.cmake triplets_overlay/x64-mingw-static-release.cmake
-          cp triplets/community/x86-mingw-static.cmake triplets_overlay/x86-mingw-static-release.cmake
-          echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/arm64-mingw-static-release.cmake
-          echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/arm-mingw-static-release.cmake
-          echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/x64-mingw-static-release.cmake
-          echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/x86-mingw-static-release.cmake
+          cp triplets/community/arm64-mingw-static.cmake triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
+          echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
+
           # clear buildtrees after each package installation to reduce disk space requirements
           packages="zlib expat sqlite3 c-ares gmp"
           ./vcpkg upgrade \
             --overlay-triplets=triplets_overlay \
             --no-dry-run
+
           ./vcpkg install \
             --overlay-triplets=triplets_overlay \
             --clean-after-build \
-            --triplet=arm64-mingw-static-release \
-            $packages
-          ./vcpkg install \
-            --overlay-triplets=triplets_overlay \
-            --clean-after-build \
-            --triplet=arm-mingw-static-release \
-            $packages
-          ./vcpkg install \
-            --overlay-triplets=triplets_overlay \
-            --clean-after-build \
-            --triplet=x64-mingw-static-release \
-            $packages
-          ./vcpkg install \
-            --overlay-triplets=triplets_overlay \
-            --clean-after-build \
-            --triplet=x86-mingw-static-release \
+            --triplet=${{ matrix.arch }}-mingw-static-release \
             $packages
 
       - name: Build aria2
         run: |
-          chmod 755 build.sh
-          ./build.sh arm64
-          ./build.sh x64
+          chmod 755 aria2c_build_win.sh
+          ./aria2c_build_win.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-windows
+          name: aria2-windows-${{ matrix.arch }}
           path: aria2*.zip
 
   build-macos:
@@ -111,8 +99,8 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          chmod +x build-mac.sh
-          ./build-mac.sh
+          chmod +x aria2c_build_mac.sh
+          ./aria2c_build_mac.sh
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

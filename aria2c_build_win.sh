@@ -4,28 +4,21 @@ help_msg="Usage: ./build.sh [arm32|arm64|x64|x86]"
 vcpkg_dir=${vcpkg_dir:-$PWD/vcpkg}
 llvm_dir=${llvm_dir:-$PWD/llvm-mingw}
 work_dir=$PWD
+zip_suffix=""
 
 handle_arch() {
     case $1 in
-    arm32)
-        arch=arm32
-        vcpkg_arch=arm
-        TARGET=armv7-w64-mingw32
-        ;;
     arm64)
         arch=arm64
         vcpkg_arch=arm64
         TARGET=aarch64-w64-mingw32
+        zip_suffix=win-arm64bit-build1
         ;;
     x64)
         arch=x64
         vcpkg_arch=x64
         TARGET=x86_64-w64-mingw32
-        ;;
-    x86)
-        arch=x86
-        vcpkg_arch=x86
-        TARGET=i686-w64-mingw32
+        zip_suffix=win-64bit-build1
         ;;
     *)
         echo "$help_msg"
@@ -81,7 +74,7 @@ fi
 make -j$(nproc)
 pushd src
 $TARGET-strip aria2c.exe
-7z a aria2-${aria2_ver}-win$arch.zip aria2c.exe
-mv aria2-${aria2_ver}-win$arch.zip $work_dir
+# 7z a aria2-${aria2_ver}-win$zip_suffix.zip aria2c.exe
+mv aria2c.exe $work_dir
 popd
 make clean

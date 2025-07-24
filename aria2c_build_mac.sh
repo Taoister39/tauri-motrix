@@ -3,6 +3,7 @@
 work_dir=$PWD
 aria2_ver="1.37.0"
 arch=$(uname -m) # x86_64 or arm64
+zip_suffix=""
 
 # Set flags for Homebrew dependencies
 export PKG_CONFIG_PATH="$(brew --prefix)/opt/libssh2/lib/pkgconfig:$(brew --prefix)/opt/c-ares/lib/pkgconfig:$(brew --prefix)/opt/sqlite3/lib/pkgconfig:$(brew --prefix)/opt/zlib/lib/pkgconfig:$(brew --prefix)/opt/gmp/lib/pkgconfig:$(brew --prefix)/opt/expat/lib/pkgconfig"
@@ -26,8 +27,10 @@ fi
 # On Apple Silicon, gmp may need a hint
 if [ "$arch" == "arm64" ]; then
     ./configure --with-libgmp --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
+    zip_suffix=osx-darwin
 else
     ./configure --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
+    zip_suffix=osx-darwin-x64
 fi
 
 make -j$(sysctl -n hw.ncpu)
@@ -51,7 +54,7 @@ else
   echo "Code signing secrets not found, skipping signing and notarization."
 fi
 
-7z a aria2-${aria2_ver}-macos-${arch}.zip aria2c
-mv aria2-${aria2_ver}-macos-${arch}.zip $work_dir
+# 7z a aria2-${aria2_ver}-macos-${zip_suffix}.zip aria2c
+mv aria2c $work_dir
 popd
 make clean
