@@ -18,6 +18,7 @@ const ARIA2_MAP = {
   "win32-x64": "win-64bit-build1",
   "win32-arm64": "win-arm64bit-build1",
   "darwin-arm64": "osx-darwin",
+  "darwin-x64": "osx-x64-darwin",
   // TODO
   // "aarch64-unknown-linux-gnu": "aarch64-linux-android-build1",
 };
@@ -68,7 +69,10 @@ export function createAria2BinInfo(latestTag) {
   const name = ARIA2_MAP[TARGET_KEY];
 
   const urlExt = isMac ? "dmg" : "zip";
-  const [, version] = latestTag.split("-");
+  const tagCompositions = latestTag.split("-");
+  // assume the version is the last part of the tag
+  // aria2c-release-1.xx.x
+  const version = tagCompositions[tagCompositions.length - 1];
 
   const downloadName = `aria2-${version}-${name}`;
 
