@@ -44,7 +44,7 @@ jobs:
           git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
-          cp triplets/community/arm64-mingw-static.cmake triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
+          cp triplets/community/${{ matrix.arch }}-mingw-static.cmake triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
           echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
 
           # clear buildtrees after each package installation to reduce disk space requirements
@@ -75,7 +75,10 @@ jobs:
     runs-on: macos-latest
     env:
       aria2_version: "1.37.0"
-
+    strategy:
+      fail-fast: true
+      matrix:
+        arch: [x86_64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -100,19 +103,19 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           chmod +x aria2c_build_mac.sh
-          ./aria2c_build_mac.sh
+          ./aria2c_build_mac.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-macos
+          name: aria2-macos-${{ matrix.arch }}
           path: aria2*.zip
 
   release:
     name: Release
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/aria2c-release-')
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4

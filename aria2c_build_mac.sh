@@ -30,7 +30,7 @@ if [ "$arch" == "arm64" ]; then
     zip_suffix=osx-darwin
 else
     ./configure --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
-    zip_suffix=osx-darwin-x64
+    zip_suffix=osx-x64-darwin
 fi
 
 make -j$(sysctl -n hw.ncpu)
@@ -54,7 +54,7 @@ else
   echo "Code signing secrets not found, skipping signing and notarization."
 fi
 
-# 7z a aria2-${aria2_ver}-macos-${zip_suffix}.zip aria2c
-mv aria2c $work_dir
+7z a aria2-${aria2_ver}-macos-${zip_suffix}.zip aria2c
+mv aria2-${aria2_ver}-macos-${zip_suffix}.zip $work_dir
 popd
 make clean
