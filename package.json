@@ -43,7 +43,7 @@
     "@tauri-motrix/aria2": "workspace:*",
     "@tauri-motrix/unified-base": "workspace:*",
     "@tauri-motrix/ux-base": "workspace:*",
-    "ahooks": "^3.8.4",
+    "ahooks": "^3.9.0",
     "bittorrent-peerid": "^1.3.6",
     "dayjs": "^1.11.13",
     "i18next": "^24.2.1",
@@ -99,12 +99,6 @@
   },
   "engines": {
     "node": ">=22"
-  },
-  "overrides": {
-    "ahooks": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
   },
   "packageManager": "pnpm@10.12.4"
 }
