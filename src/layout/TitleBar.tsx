@@ -14,11 +14,10 @@ import {
   buttonGroupClasses,
   IconButton,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useEffect, useState } from "react";
-
-import { useCustomTheme } from "@/hooks/theme";
 
 const appWindow = getCurrentWindow();
 
@@ -30,7 +29,7 @@ function TitleBar({ toggleOpenAside }: TitleBarProps) {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isPined, setIsPined] = useState(false);
 
-  const { theme } = useCustomTheme();
+  const theme = useTheme();
 
   const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
 
