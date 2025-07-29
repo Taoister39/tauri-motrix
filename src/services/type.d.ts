@@ -36,6 +36,7 @@ interface Aria2Config {
   "bt-save-metadata"?: string;
   "bt-seed-unverified"?: string;
   "bt-stop-timeout"?: string;
+  "bt-tracker"?: string;
   "bt-tracker-connect-timeout"?: string;
   "bt-tracker-interval"?: string;
   "bt-tracker-timeout"?: string;
@@ -174,6 +175,7 @@ interface Aria2Option {
   "bt-save-metadata": string;
   "bt-seed-unverified": string;
   "bt-stop-timeout": string;
+  "bt-tracker"?: string;
   "bt-tracker-connect-timeout": string;
   "bt-tracker-interval": string;
   "bt-tracker-timeout": string;

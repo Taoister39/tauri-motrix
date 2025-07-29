@@ -1,30 +1,59 @@
+import { OpenInNew } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   Autocomplete,
   Box,
   Button,
+  darken,
   FormControlLabel,
+  lighten,
   styled,
   Switch,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBoolean, useLocalStorageState } from "ahooks";
 import dayjs from "dayjs";
-import { Ref, useImperativeHandle, useMemo, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MonacoEditor from "react-monaco-editor";
 
 import BaseDialog, { DialogRef } from "@/components/BaseDialog";
 import Tag from "@/components/Tag";
 import { TRACKER_SOURCE_OPTIONS } from "@/constant/speed";
+import { useAria2 } from "@/hooks/aria2";
+import {
+  convertCommaToLine,
+  convertLineToComma,
+  convertTrackerDataToLine,
+  reduceTrackerString,
+} from "@/utils/tracker";
 
 const TheQuick = styled(Box)`
   position: absolute;
   left: 14px;
   bottom: 8px;
 `;
+
+const GroupHeader = styled("div")(({ theme }) => ({
+  position: "sticky",
+  top: "-8px",
+  padding: "4px 10px",
+  color: theme.palette.primary.main,
+  backgroundColor: lighten(theme.palette.primary.light, 0.85),
+  ...theme.applyStyles("dark", {
+    backgroundColor: darken(theme.palette.primary.main, 0.8),
+  }),
+  display: "flex",
+  alignItems: "center",
+  gap: 4,
+}));
+
+const GroupItems = styled("ul")({
+  padding: 0,
+});
 
 interface TrackerOption {
   group: string;
@@ -41,14 +70,26 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
 
   const [open, { setFalse, setTrue }] = useBoolean();
   const [syncRemotes, setSyncRemotes] = useState<TrackerOption[]>([]);
-  const [lastSyncTrackerTime] = useLocalStorageState("last-sync-tracker-time", {
-    defaultValue: Date.now(),
-  });
+  const [lastSyncTrackerTime, setLastSyncTrackerTime] = useLocalStorageState(
+    "last-sync-tracker-time",
+    {
+      defaultValue: Date.now(),
+    },
+  );
+  const [tracker, setTracker] = useState("");
+  const { aria2, patchAria2 } = useAria2();
 
   useImperativeHandle(props.ref, () => ({
     open: setTrue,
     close: setFalse,
   }));
+
+  useEffect(() => {
+    const btTracker = aria2?.["bt-tracker"];
+    if (btTracker) {
+      setTracker(convertCommaToLine(btTracker));
+    }
+  }, [aria2]);
 
   const trackerOptions = useMemo(
     () =>
@@ -65,12 +106,37 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     [],
   );
 
-  const syncTrackerFromSource = () => {
+  const groupUrlMap = useMemo(
+    () =>
+      TRACKER_SOURCE_OPTIONS.reduce(
+        (previousValue, currentValue) => {
+          previousValue[currentValue.label] = currentValue.url;
+          return previousValue;
+        },
+        {} as Record<string, string>,
+      ),
+    [],
+  );
+
+  const syncTrackerFromSource = async () => {
     const now = Date.now();
     const promises = syncRemotes.map(({ url }) => {
       return fetch(`${url}?t=${now}`).then((res) => res.text());
     });
-    Promise.all(promises);
+    const res = await Promise.all(promises);
+
+    const line = convertTrackerDataToLine(res);
+
+    setTracker(line);
+    setLastSyncTrackerTime(now);
+  };
+
+  const handleOk = async () => {
+    const btTracker = reduceTrackerString(convertLineToComma(tracker));
+
+    await patchAria2({ "bt-tracker": btTracker });
+
+    setFalse();
   };
 
   return (
@@ -90,6 +156,7 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
         flexDirection: "column",
         pt: "6px !important",
       })}
+      onOk={handleOk}
     >
       <Box sx={{ display: "flex", gap: "16px", alignItems: "center" }}>
         <Autocomplete
@@ -105,6 +172,19 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
               label="Tracker Servers Autocomplete"
               variant="standard"
             />
+          )}
+          renderGroup={(params) => (
+            <li key={params.key}>
+              <GroupHeader>
+                {params.group}
+                <OpenInNew
+                  fontSize="small"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => openUrl(groupUrlMap[params.group])}
+                />
+              </GroupHeader>
+              <GroupItems>{params.children}</GroupItems>
+            </li>
           )}
           renderOption={(props, option, { selected }) => {
             return (
@@ -131,12 +211,14 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
           variant="contained"
           onClick={syncTrackerFromSource}
         >
-          Sync
+          {t("common.Sync")}
         </Button>
       </Box>
       <MonacoEditor
         language="txt"
         theme={themeMode === "light" ? "vs" : "vs-dark"}
+        value={tracker}
+        onChange={setTracker}
       />
       <TheQuick>
         <FormControlLabel

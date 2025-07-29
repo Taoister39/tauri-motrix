@@ -55,6 +55,7 @@ export const XIU2_TRACKERS_HTTP_URL_CDN =
 
 export const TRACKER_SOURCE_OPTIONS = [
   {
+    url: "https://github.com/ngosang/trackerslist",
     label: "ngosang/trackerslist",
     options: [
       {
@@ -100,6 +101,7 @@ export const TRACKER_SOURCE_OPTIONS = [
     ],
   },
   {
+    url: "https://github.com/XIU2/TrackersListCollection",
     label: "XIU2/TrackersListCollection",
     options: [
       {
@@ -135,3 +137,5 @@ export const TRACKER_SOURCE_OPTIONS = [
     ],
   },
 ];
+
+export const MAX_BT_TRACKER_LENGTH = 6144;
