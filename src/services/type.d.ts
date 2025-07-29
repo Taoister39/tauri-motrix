@@ -153,6 +153,7 @@ interface MotrixConfig {
   new_task_show_downloading: boolean;
   task_completed_notify: boolean;
   no_confirm_before_delete_task: boolean;
+  tracker_source: string[];
 }
 
 interface Aria2Option {

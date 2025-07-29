@@ -24,6 +24,7 @@ import BaseDialog, { DialogRef } from "@/components/BaseDialog";
 import Tag from "@/components/Tag";
 import { TRACKER_SOURCE_OPTIONS } from "@/constant/speed";
 import { useAria2 } from "@/hooks/aria2";
+import { useMotrix } from "@/hooks/motrix";
 import {
   convertCommaToLine,
   convertLineToComma,
@@ -77,19 +78,14 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     },
   );
   const [tracker, setTracker] = useState("");
+
   const { aria2, patchAria2 } = useAria2();
+  const { motrix, patchMotrix } = useMotrix();
 
   useImperativeHandle(props.ref, () => ({
     open: setTrue,
     close: setFalse,
   }));
-
-  useEffect(() => {
-    const btTracker = aria2?.["bt-tracker"];
-    if (btTracker) {
-      setTracker(convertCommaToLine(btTracker));
-    }
-  }, [aria2]);
 
   const trackerOptions = useMemo(
     () =>
@@ -118,6 +114,24 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     [],
   );
 
+  useEffect(() => {
+    const btTracker = aria2?.["bt-tracker"];
+    if (btTracker) {
+      setTracker(convertCommaToLine(btTracker));
+    }
+  }, [aria2]);
+
+  useEffect(() => {
+    const trackerSource = motrix?.tracker_source;
+
+    if (trackerSource) {
+      const options = trackerOptions.filter((x) =>
+        trackerSource.includes(x.url),
+      );
+      setSyncRemotes(options);
+    }
+  }, [motrix?.tracker_source, trackerOptions]);
+
   const syncTrackerFromSource = async () => {
     const now = Date.now();
     const promises = syncRemotes.map(({ url }) => {
@@ -135,6 +149,9 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     const btTracker = reduceTrackerString(convertLineToComma(tracker));
 
     await patchAria2({ "bt-tracker": btTracker });
+    await patchMotrix({
+      tracker_source: syncRemotes.map((x) => x.url),
+    });
 
     setFalse();
   };
