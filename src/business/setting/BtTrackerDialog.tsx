@@ -162,14 +162,11 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
   }, [motrix?.tracker_source, trackerOptions]);
 
   const syncTrackerFromSource = useCallback(async () => {
-    const now = Date.now();
     const line = await syncTrackerFromSourceHelper(
       syncRemotes.map((x) => x.url),
-      now,
     );
     setTracker(line);
-    setLastSyncTrackerTime(now);
-  }, [setLastSyncTrackerTime, syncRemotes]);
+  }, [syncRemotes]);
 
   const handleOk = useCallback(async () => {
     const btTracker = reduceTrackerString(convertLineToComma(tracker));
@@ -179,8 +176,17 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
       tracker_source: syncRemotes.map((x) => x.url),
     });
 
+    setLastSyncTrackerTime(Date.now());
+
     setFalse();
-  }, [patchAria2, patchMotrix, setFalse, syncRemotes, tracker]);
+  }, [
+    patchAria2,
+    patchMotrix,
+    setFalse,
+    setLastSyncTrackerTime,
+    syncRemotes,
+    tracker,
+  ]);
 
   return (
     <BaseDialog
