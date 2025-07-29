@@ -11,8 +11,8 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
-import { emit, listen } from "@tauri-apps/api/event";
-import { useBoolean, useMount } from "ahooks";
+import { listen } from "@tauri-apps/api/event";
+import { useBoolean } from "ahooks";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useRoutes } from "react-router-dom";
@@ -24,14 +24,13 @@ import UpdateButton from "@/business/update/UpdateButton";
 import { DialogRef } from "@/components/BaseDialog";
 import { isWin } from "@/constant/environment";
 import { ADD_DIALOG } from "@/constant/url";
-import { useMotrix } from "@/hooks/motrix";
+import { useRootAction } from "@/hooks/root_action";
 import { useCustomTheme } from "@/hooks/theme";
 import LayoutItem from "@/layout/LayoutItem";
 import LayoutTraffic from "@/layout/LayoutTraffic";
 import TitleBar from "@/layout/TitleBar";
 import { routers } from "@/routes/application";
 import { usePollingStore } from "@/store/polling";
-import { useTaskStore } from "@/store/task";
 
 const TheLogo = styled("section")(() => ({
   display: "flex",
@@ -66,14 +65,17 @@ const Main = styled("main")(() => ({
 }));
 
 function Application() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { theme } = useCustomTheme();
-  const { motrix } = useMotrix();
-  const { registerEvent, syncByMotrix } = useTaskStore();
-  const { polling, stop } = usePollingStore();
+
+  const polling = usePollingStore((store) => store.polling);
+  const stop = usePollingStore((store) => store.stop);
+
   const addRef = useRef<DialogRef>(null);
 
   const routerElements = useRoutes(routers);
+
+  useRootAction();
 
   useEffect(() => {
     const unlisten = listen(ADD_DIALOG, () => {
@@ -86,29 +88,12 @@ function Application() {
   }, []);
 
   useEffect(() => {
-    if (motrix) {
-      syncByMotrix(motrix);
-    }
-  }, [motrix, syncByMotrix]);
-
-  useEffect(() => {
-    if (motrix?.language) {
-      i18n.changeLanguage(motrix.language);
-    }
-  }, [i18n, motrix?.language]);
-
-  useEffect(() => {
     polling();
 
     return () => {
       stop();
     };
   }, [polling, stop]);
-
-  useMount(() => {
-    registerEvent();
-    emit("motrix://web-ready");
-  });
 
   const [
     isOpenAside,
@@ -162,7 +147,7 @@ function Application() {
                 border: "none",
               },
             })}
-            open={!isDownSm ? true : isOpenAside}
+            open={!isDownSm || isOpenAside}
             onClose={setFalseOpenAside}
             variant={isDownSm ? "temporary" : "permanent"}
           >

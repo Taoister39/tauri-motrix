@@ -42,3 +42,22 @@ export const convertCommaToLine = (text = "") => {
   const result = arr.join("\n").trim();
   return result;
 };
+
+export const fetchBtTrackerFromSource = async (
+  syncRemotes: string[],
+  now = Date.now(),
+) => {
+  const promises = syncRemotes.map((url) => {
+    return fetch(`${url}?t=${now}`).then((res) => res.text());
+  });
+  const res = await Promise.all(promises);
+  return res;
+};
+
+export const syncTrackerFromSourceHelper = async (
+  syncRemotes: string[],
+  now?: number,
+) => {
+  const res = await fetchBtTrackerFromSource(syncRemotes, now);
+  return convertTrackerDataToLine(res);
+};

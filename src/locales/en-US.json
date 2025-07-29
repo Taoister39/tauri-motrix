@@ -142,7 +142,7 @@
     "Delete": "Delete",
     "All": "All",
     "More": "More",
-    "LastSyncTime": "Last sync time at {{time}}",
+    "LastSyncTime": "Last sync time at: {{time}}",
     "Sync": "Sync"
   },
   "update": {

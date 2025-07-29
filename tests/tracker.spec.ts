@@ -4,6 +4,7 @@ import {
   convertLineToComma,
   convertTrackerDataToComma,
   convertTrackerDataToLine,
+  fetchBtTrackerFromSource,
   reduceTrackerString,
 } from "@/utils/tracker";
 
@@ -58,5 +59,28 @@ https://tracker1.520.jp:443/announce`);
     const str = "1,2,3,4";
     const result = convertCommaToLine(str);
     expect(result).toBe("1\n2\n3\n4");
+  });
+
+  it.skip("fetchBtTrackerFromSource", async () => {
+    const mockData = "";
+    const mockResponse = {
+      ok: true,
+      text: () => Promise.resolve(mockData),
+    };
+
+    const fetchSpy = jest
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(mockResponse as Response);
+
+    const result = await fetchBtTrackerFromSource([
+      "http://test",
+      "http://test2",
+    ]);
+
+    expect(result).toEqual([]);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy).toHaveBeenCalledWith("http://test");
+
+    fetchSpy.mockRestore();
   });
 });

@@ -16,7 +16,14 @@ import {
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBoolean, useLocalStorageState } from "ahooks";
 import dayjs from "dayjs";
-import { Ref, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import {
+  Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import MonacoEditor from "react-monaco-editor";
 
@@ -28,8 +35,8 @@ import { useMotrix } from "@/hooks/motrix";
 import {
   convertCommaToLine,
   convertLineToComma,
-  convertTrackerDataToLine,
   reduceTrackerString,
+  syncTrackerFromSourceHelper,
 } from "@/utils/tracker";
 
 const TheQuick = styled(Box)`
@@ -63,6 +70,28 @@ interface TrackerOption {
   cdn: boolean;
 }
 
+export function useSyncTrackerLocalStorage() {
+  const [lastSyncTrackerTime, setLastSyncTrackerTime] = useLocalStorageState<
+    number | undefined
+  >("last-sync-tracker-time", {
+    listenStorageChange: true,
+  });
+  const [isAutoSyncTracker, setIsAutoSyncTracker] = useLocalStorageState(
+    "auto-sync-tracker",
+    {
+      defaultValue: true,
+      listenStorageChange: true,
+    },
+  );
+
+  return {
+    lastSyncTrackerTime,
+    setLastSyncTrackerTime,
+    isAutoSyncTracker,
+    setIsAutoSyncTracker,
+  };
+}
+
 function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
   const { t } = useTranslation();
   const {
@@ -71,12 +100,12 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
 
   const [open, { setFalse, setTrue }] = useBoolean();
   const [syncRemotes, setSyncRemotes] = useState<TrackerOption[]>([]);
-  const [lastSyncTrackerTime, setLastSyncTrackerTime] = useLocalStorageState(
-    "last-sync-tracker-time",
-    {
-      defaultValue: Date.now(),
-    },
-  );
+  const {
+    isAutoSyncTracker,
+    lastSyncTrackerTime,
+    setIsAutoSyncTracker,
+    setLastSyncTrackerTime,
+  } = useSyncTrackerLocalStorage();
   const [tracker, setTracker] = useState("");
 
   const { aria2, patchAria2 } = useAria2();
@@ -132,20 +161,17 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     }
   }, [motrix?.tracker_source, trackerOptions]);
 
-  const syncTrackerFromSource = async () => {
+  const syncTrackerFromSource = useCallback(async () => {
     const now = Date.now();
-    const promises = syncRemotes.map(({ url }) => {
-      return fetch(`${url}?t=${now}`).then((res) => res.text());
-    });
-    const res = await Promise.all(promises);
-
-    const line = convertTrackerDataToLine(res);
-
+    const line = await syncTrackerFromSourceHelper(
+      syncRemotes.map((x) => x.url),
+      now,
+    );
     setTracker(line);
     setLastSyncTrackerTime(now);
-  };
+  }, [setLastSyncTrackerTime, syncRemotes]);
 
-  const handleOk = async () => {
+  const handleOk = useCallback(async () => {
     const btTracker = reduceTrackerString(convertLineToComma(tracker));
 
     await patchAria2({ "bt-tracker": btTracker });
@@ -154,7 +180,7 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
     });
 
     setFalse();
-  };
+  }, [patchAria2, patchMotrix, setFalse, syncRemotes, tracker]);
 
   return (
     <BaseDialog
@@ -239,7 +265,14 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
       />
       <TheQuick>
         <FormControlLabel
-          control={<Switch defaultChecked />}
+          control={
+            <Switch
+              checked={isAutoSyncTracker}
+              onChange={(_, checked) => {
+                setIsAutoSyncTracker(checked);
+              }}
+            />
+          }
           label={
             <Box>
               <Typography variant="body1" fontSize={14}>
@@ -247,9 +280,9 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
               </Typography>
               <Typography variant="body2" color="textSecondary" fontSize={12}>
                 {t("common.LastSyncTime", {
-                  time: dayjs(lastSyncTrackerTime).format(
-                    "YYYY-MM-DD HH:mm:ss",
-                  ),
+                  time: lastSyncTrackerTime
+                    ? dayjs(lastSyncTrackerTime).format("YYYY-MM-DD HH:mm:ss")
+                    : "-",
                 })}
               </Typography>
             </Box>
