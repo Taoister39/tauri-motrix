@@ -18,6 +18,7 @@ enum UpdateFlags {
     // MotrixConfig = 1 << 2,
     Launch = 1 << 3,
     TrayMenu = 1 << 4,
+    UPnp = 1 << 5,
 }
 
 /// expose outside for motrix config
@@ -26,6 +27,7 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 
     let language = data.language;
     let auto_launch = data.enable_auto_launch;
+    let u_pnp = data.enable_upnp;
 
     let res: Result<()> = {
         let mut flag_signal: i32 = UpdateFlags::None as i32;
@@ -38,6 +40,11 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
             flag_signal |= UpdateFlags::Launch as i32;
         }
 
+        if u_pnp.is_some() {
+            flag_signal |= UpdateFlags::UPnp as i32;
+        }
+
+        // ------
         // Process updates based on flags
         if (flag_signal & (UpdateFlags::Launch as i32)) != 0 {
             sys_opt::SysOpt::global().update_launch()?;
@@ -45,6 +52,10 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 
         if (flag_signal & (UpdateFlags::TrayMenu as i32)) != 0 {
             service::tray::update_tray_menu()?;
+        }
+
+        if (flag_signal & (UpdateFlags::UPnp as i32)) != 0 {
+            // TODO
         }
 
         Ok(())
