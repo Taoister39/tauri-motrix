@@ -41,6 +41,10 @@ pub struct IMotrix {
     /// to fetch tracker server
     /// TODO: migrate config center
     pub tracker_source: Option<Vec<String>>,
+
+    pub bt_listen_port: Option<u16>,
+    pub dht_listen_port: Option<u16>,
+    pub enable_upnp: Option<bool>,
 }
 
 impl IMotrix {
@@ -101,6 +105,9 @@ impl IMotrix {
             no_confirm_before_delete_task: Some(false),
             task_completed_notify: Some(true),
             tracker_source: Some(tracker_source),
+            enable_upnp: Some(true),
+            bt_listen_port: Some(21301),
+            dht_listen_port: Some(26701),
             ..Self::default()
         }
     }
@@ -133,7 +140,11 @@ impl IMotrix {
         patch!(new_task_show_downloading);
         patch!(no_confirm_before_delete_task);
         patch!(task_completed_notify);
-        patch!(tracker_source)
+        patch!(tracker_source);
+
+        patch!(enable_upnp);
+        patch!(bt_listen_port);
+        patch!(dht_listen_port);
     }
 }
 

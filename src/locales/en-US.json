@@ -62,7 +62,8 @@
     "DhtPort": "DHT Port",
     "BtPort": "BT Port",
     "BtTracker": "Tracker Servers",
-    "AutoSyncTracker": "Update tracker list every day automatically"
+    "AutoSyncTracker": "Update tracker list every day automatically",
+    "ListenPorts": "Listen Ports"
   },
   "task": {
     "CloseAll": "Close All Tasks",

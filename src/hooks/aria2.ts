@@ -1,4 +1,5 @@
 import { useLockFn } from "ahooks";
+import { useCallback } from "react";
 import useSWR, { mutate } from "swr";
 
 import { getAria2, getVersionApi } from "@/services/aria2c_api";
@@ -15,12 +16,14 @@ export function useAria2() {
     getVersionApi,
   );
 
-  const patchAria2 = useLockFn(
+  const patchAria2MemoizedFn = useCallback(
     async (data: Parameters<typeof patchAria2Config>[0]) => {
       await patchAria2Config(data);
       mutateAria2();
     },
+    [mutateAria2],
   );
+  const patchAria2 = useLockFn(patchAria2MemoizedFn);
 
   const version = versionData?.version;
   const enabledFeatures = versionData?.enabledFeatures;
@@ -41,17 +44,21 @@ export function useAria2Info() {
     getAria2Info,
   );
 
-  const patchInfo = async (data: Record<string, string>) => {
-    // TODO
+  const patchInfoMemoizedFn = useCallback(
+    async (data: Record<string, string>) => {
+      // TODO
 
-    console.log("aria2 info change ", data);
+      console.log("aria2 info change ", data);
 
-    mutate("getAria2Config");
-    mutate("getAria2Version");
+      mutate("getAria2Config");
+      mutate("getAria2Version");
 
-    // update new instance
-    getAria2(true);
-  };
+      // update new instance
+      getAria2(true);
+    },
+    [],
+  );
+  const patchInfo = useLockFn(patchInfoMemoizedFn);
 
   return {
     aria2Info,
