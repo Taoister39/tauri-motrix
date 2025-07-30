@@ -37,11 +37,11 @@ const styles = stylex.create({
   },
   open: {
     "::before": {
-      transform: "scaleX(0.8) rotate(45deg)",
+      transform: "rotate(45deg)",
       top: "50%",
     },
     "::after": {
-      transform: "scaleX(0.8) rotate(-45deg)",
+      transform: "rotate(-45deg)",
       top: "50%",
       bottom: "auto",
     },
