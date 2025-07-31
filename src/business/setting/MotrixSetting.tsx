@@ -12,11 +12,14 @@ import { LOG_LEVELS } from "@/constant/log";
 import { useMotrix } from "@/hooks/motrix";
 import { exitApp, openAppDir, openCoreDir, openLogsDir } from "@/services/cmd";
 
+import ListenPortsViewer from "./ListenPortsViewer";
+
 function MotrixSetting() {
   const { motrix, patchMotrix } = useMotrix();
   const { t } = useTranslation();
 
   const updateRef = useRef<DialogRef>(null);
+  const listenPortsRef = useRef<DialogRef>(null);
 
   const onCheckUpdate = async () => {
     try {
@@ -35,6 +38,7 @@ function MotrixSetting() {
   return (
     <SettingList title={t("setting.Motrix")}>
       <UpdateViewer ref={updateRef} />
+      <ListenPortsViewer ref={listenPortsRef} />
 
       <SettingItem label={t("setting.LogLevelInfo")}>
         <Select
@@ -87,6 +91,22 @@ function MotrixSetting() {
           }}
         />
       </SettingItem>
+
+      <SettingItem label={t("setting.AutoCheckUpdate")}>
+        <Android12Switch
+          checked={!!motrix?.auto_check_update}
+          onChange={(e) => {
+            patchMotrix({
+              auto_check_update: e.target.checked,
+            });
+          }}
+        />
+      </SettingItem>
+
+      <SettingItem
+        label={t("setting.ListenPorts")}
+        onClick={() => listenPortsRef.current?.open()}
+      />
 
       <SettingItem label={t("setting.OpenConfDir")} onClick={openAppDir} />
       <SettingItem label={t("setting.OpenCoreDir")} onClick={openCoreDir} />

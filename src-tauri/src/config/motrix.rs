@@ -38,6 +38,13 @@ pub struct IMotrix {
     pub task_completed_notify: Option<bool>,
 
     pub no_confirm_before_delete_task: Option<bool>,
+    /// to fetch tracker server
+    /// TODO: migrate config center
+    pub tracker_source: Option<Vec<String>>,
+
+    pub bt_listen_port: Option<u16>,
+    pub dht_listen_port: Option<u16>,
+    pub enable_upnp: Option<bool>,
 }
 
 impl IMotrix {
@@ -53,9 +60,13 @@ impl IMotrix {
                 if let Some(template_map) = template.as_mapping() {
                     if let Some(config_map) = config_value.as_mapping_mut() {
                         for (key, value) in template_map {
-                            config_map
-                                .entry(key.clone())
-                                .or_insert_with(|| value.clone());
+                            if let Some(v) = config_map.get_mut(key) {
+                                if v.is_null() {
+                                    *v = value.clone();
+                                }
+                            } else {
+                                config_map.insert(key.clone(), value.clone());
+                            }
                         }
                     }
                 }
@@ -73,6 +84,14 @@ impl IMotrix {
     }
 
     pub fn template() -> Self {
+        let mut tracker_source = Vec::new();
+
+        tracker_source
+            .push("https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best_ip.txt".into());
+
+        tracker_source
+            .push("https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt".into());
+
         IMotrix {
             aria2_engine: Some("aria2c".into()),
             language: i18n::get_system_language().into(),
@@ -85,6 +104,10 @@ impl IMotrix {
             new_task_show_downloading: Some(false),
             no_confirm_before_delete_task: Some(false),
             task_completed_notify: Some(true),
+            tracker_source: Some(tracker_source),
+            enable_upnp: Some(true),
+            bt_listen_port: Some(21301),
+            dht_listen_port: Some(26701),
             ..Self::default()
         }
     }
@@ -117,6 +140,11 @@ impl IMotrix {
         patch!(new_task_show_downloading);
         patch!(no_confirm_before_delete_task);
         patch!(task_completed_notify);
+        patch!(tracker_source);
+
+        patch!(enable_upnp);
+        patch!(bt_listen_port);
+        patch!(dht_listen_port);
     }
 }
 
