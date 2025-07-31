@@ -6,7 +6,7 @@ use serde_json::json;
 use crate::{
     config::{Config, IMotrix},
     core::sys_opt,
-    service,
+    feat, service,
 };
 
 // Define update flags as bitflags for better performance
@@ -27,7 +27,9 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 
     let language = data.language;
     let auto_launch = data.enable_auto_launch;
-    let u_pnp = data.enable_upnp;
+    let enable_upnp = data.enable_upnp;
+    let bt_listen_port = data.bt_listen_port;
+    let dht_listen_port = data.dht_listen_port;
 
     let res: Result<()> = {
         let mut flag_signal: i32 = UpdateFlags::None as i32;
@@ -40,7 +42,7 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
             flag_signal |= UpdateFlags::Launch as i32;
         }
 
-        if u_pnp.is_some() {
+        if enable_upnp.is_some() || bt_listen_port.is_some() || dht_listen_port.is_some() {
             flag_signal |= UpdateFlags::UPnp as i32;
         }
 
@@ -55,7 +57,7 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
         }
 
         if (flag_signal & (UpdateFlags::UPnp as i32)) != 0 {
-            // TODO
+            feat::patch_upnp_config(enable_upnp, bt_listen_port, dht_listen_port)?;
         }
 
         Ok(())

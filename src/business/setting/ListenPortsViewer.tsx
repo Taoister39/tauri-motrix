@@ -63,7 +63,7 @@ function ListenPortsViewer(props: { ref: Ref<DialogRef> }) {
         render={({ field }) => (
           <FormControlLabel
             control={<Android12Switch {...field} checked={field.value} />}
-            label="UPnP/NAT-PMP"
+            label="UPnP"
           />
         )}
       />
