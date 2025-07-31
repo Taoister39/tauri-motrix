@@ -67,9 +67,6 @@ async function resolveSidecar(binInfo) {
       } else {
         throw new Error(`Expected file not found in ${tempDir}`);
       }
-    } else if (zipFile.endsWith(".dmg")) {
-      // dmg - macOS executable file
-      await baseExecutableMove(tempZip, sidecarPath);
     } else {
       // gz
       const readStream = fs.createReadStream(tempZip);

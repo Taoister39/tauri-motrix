@@ -61,7 +61,9 @@
     "ProxyBypass": "Proxy Bypass No.{{index}}",
     "DhtPort": "DHT Port",
     "BtPort": "BT Port",
-    "BtTracker": "Tracker Servers"
+    "BtTracker": "Tracker Servers",
+    "AutoSyncTracker": "Update tracker list every day automatically",
+    "ListenPorts": "Listen Ports"
   },
   "task": {
     "CloseAll": "Close All Tasks",
@@ -140,7 +142,9 @@
     "Pause": "Pause",
     "Delete": "Delete",
     "All": "All",
-    "More": "More"
+    "More": "More",
+    "LastSyncTime": "Last sync time at: {{time}}",
+    "Sync": "Sync"
   },
   "update": {
     "GotoReleasePage": "Go to release page",

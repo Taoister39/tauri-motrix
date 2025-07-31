@@ -6,7 +6,6 @@ import {
   Grid,
   gridClasses,
   IconButton,
-  useColorScheme,
 } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useLockFn } from "ahooks";
@@ -20,13 +19,12 @@ import MotrixSetting from "@/business/setting/MotrixSetting";
 import { DialogRef } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
 import { APP_REPO } from "@/constant/url";
+import { useIsDark } from "@/hooks/theme";
 
 function SettingsPage() {
   const { t } = useTranslation();
 
-  const { mode } = useColorScheme();
-
-  const isDark = mode === "dark";
+  const isDark = useIsDark();
 
   const toGithubRepo = useLockFn(() => openUrl(APP_REPO));
 

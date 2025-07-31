@@ -77,6 +77,11 @@ function Aria2Setting() {
       />
 
       <SettingItem
+        label={t("setting.BtTracker")}
+        onClick={() => btTrackerRef.current?.open()}
+      />
+
+      <SettingItem
         label={t("common.More")}
         onClick={() => taskManagementRef.current?.open()}
       />
@@ -133,11 +138,6 @@ function Aria2Setting() {
           }}
         />
       </SettingItem>
-
-      <SettingItem
-        label={t("setting.BtTracker")}
-        onClick={() => btTrackerRef.current?.open()}
-      />
     </SettingList>
   );
 }

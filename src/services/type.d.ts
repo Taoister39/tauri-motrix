@@ -36,6 +36,7 @@ interface Aria2Config {
   "bt-save-metadata"?: string;
   "bt-seed-unverified"?: string;
   "bt-stop-timeout"?: string;
+  "bt-tracker"?: string;
   "bt-tracker-connect-timeout"?: string;
   "bt-tracker-interval"?: string;
   "bt-tracker-timeout"?: string;
@@ -152,6 +153,11 @@ interface MotrixConfig {
   new_task_show_downloading: boolean;
   task_completed_notify: boolean;
   no_confirm_before_delete_task: boolean;
+  tracker_source: string[];
+
+  enable_upnp: boolean;
+  bt_listen_port: number;
+  dht_listen_port: number;
 }
 
 interface Aria2Option {
@@ -174,6 +180,7 @@ interface Aria2Option {
   "bt-save-metadata": string;
   "bt-seed-unverified": string;
   "bt-stop-timeout": string;
+  "bt-tracker"?: string;
   "bt-tracker-connect-timeout": string;
   "bt-tracker-interval": string;
   "bt-tracker-timeout": string;

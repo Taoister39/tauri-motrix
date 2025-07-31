@@ -29,13 +29,14 @@
     "storybook-addon-rslib": "^2.0.2",
     "storybook-react-rsbuild": "^2.0.2",
     "typescript": "catalog:",
-    "unplugin-stylex": "^0.5.3"
+    "unplugin-stylex": "^0.5.4"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   },
   "dependencies": {
-    "@stylexjs/stylex": "^0.13.1"
+    "@stylexjs/stylex": "^0.13.1",
+    "@tauri-motrix/unified-base": "workspace:*"
   }
 }

@@ -16,5 +16,6 @@ onlyBuiltDependencies:
   - "@vercel/speed-insights"
   - core-js
   - es5-ext
+  - esbuild
   - sharp
   - unrs-resolver

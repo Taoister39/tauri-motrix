@@ -1,11 +1,10 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BaseCopyright } from "@tauri-motrix/ux-base";
+import { BaseCopyright, MenuButton } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
-import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
 import { useStackPageOpen } from "@/components/StackPageProviderWrapper";
 import { NAV_LINK, NAV_LIST } from "@/constants/nav";
