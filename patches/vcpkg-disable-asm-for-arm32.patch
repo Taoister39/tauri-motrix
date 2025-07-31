@@ -1,0 +1,28 @@
+diff --git a/ports/gmp/portfile.cmake b/ports/gmp/portfile.cmake
+index 410b28be5..1a47a8585 100644
+--- a/ports/gmp/portfile.cmake
++++ b/ports/gmp/portfile.cmake
+@@ -58,6 +58,8 @@ if(VCPKG_DETECTED_CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+ elseif(VCPKG_TARGET_IS_MINGW AND VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
+     # not exporting asm functions
+     set(disable_assembly ON)
++elseif(VCPKG_TARGET_IS_MINGW AND VCPKG_TARGET_ARCHITECTURE STREQUAL "arm")
++    set(disable_assembly ON)
+ elseif(VCPKG_TARGET_IS_LINUX AND VCPKG_TARGET_ARCHITECTURE STREQUAL "x86")
+     set(ccas "${VCPKG_DETECTED_CMAKE_C_COMPILER}")
+     vcpkg_list(APPEND OPTIONS "ABI=32")
+diff --git a/ports/nettle/portfile.cmake b/ports/nettle/portfile.cmake
+index 26ff533b3..9f55bc06e 100644
+--- a/ports/nettle/portfile.cmake
++++ b/ports/nettle/portfile.cmake
+@@ -56,6 +56,10 @@ else()
+     set(ccas "${VCPKG_DETECTED_CMAKE_C_COMPILER}")
+ endif()
+ 
++if(VCPKG_TARGET_IS_MINGW AND VCPKG_TARGET_ARCHITECTURE STREQUAL "arm")
++    set(disable_assembly ON)
++endif()
++
+ if(disable_assembly)
+     vcpkg_list(APPEND OPTIONS "--enable-assembler=no")
+ elseif(ccas)
