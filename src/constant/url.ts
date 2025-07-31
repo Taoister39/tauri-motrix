@@ -15,3 +15,5 @@ export const UA_MAP = {
   chrome: CHROME_UA,
   du: DU_UA,
 };
+
+export const APP_WEBSITE_ORIGIN = "https://tauri-motrix-website.vercel.app";

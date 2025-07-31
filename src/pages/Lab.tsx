@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import BasePage from "@/components/BasePage";
+import { APP_WEBSITE_ORIGIN } from "@/constant/url";
 import { useMotrix } from "@/hooks/motrix";
 import { getLanguage } from "@/services/i18n";
 
@@ -15,7 +16,8 @@ const TheIframe = styled("iframe")`
   background: ${({ theme }) => theme.palette.background.paper};
 `;
 
-const ORIGIN = "https://tauri-motrix-website.vercel.app";
+// In a development environment, you can replace it with http://localhost:3000
+const ORIGIN = APP_WEBSITE_ORIGIN;
 
 export interface BaseMessage {
   type: string;

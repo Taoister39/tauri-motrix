@@ -12,6 +12,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBoolean } from "ahooks";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,7 +24,7 @@ import AddTaskDialog from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
 import { DialogRef } from "@/components/BaseDialog";
 import { isWin } from "@/constant/environment";
-import { ADD_DIALOG } from "@/constant/url";
+import { ADD_DIALOG, APP_WEBSITE_ORIGIN } from "@/constant/url";
 import { useRootAction } from "@/hooks/root_action";
 import { useCustomTheme } from "@/hooks/theme";
 import LayoutItem from "@/layout/LayoutItem";
@@ -169,8 +170,13 @@ function Application() {
               <MenuIcon />
             </IconButton>
 
-            <TheLogo data-tauri-drag-region>
-              <SvgIcon sx={{ width: 62 }} component={logoIcon} inheritViewBox />
+            <TheLogo data-tauri-drag-regio>
+              <SvgIcon
+                sx={{ width: 62, cursor: "pointer" }}
+                component={logoIcon}
+                inheritViewBox
+                onClick={() => openUrl(APP_WEBSITE_ORIGIN)}
+              />
               <UpdateButton className="the-newbtn" />
             </TheLogo>
 
