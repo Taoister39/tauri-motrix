@@ -1,5 +1,13 @@
 # Update Log
 
+## v0.2.4
+
+- Support tracker list customization
+- Update tracker list every day automatically
+- Added app website
+- Added lab page
+- Support proxy setting for aria2
+
 ## v0.2.3
 
 ### Fix Bugs
