@@ -21,5 +21,8 @@
     "@rslib/core": "catalog:",
     "@types/node": "^22.15.33",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
   }
 }

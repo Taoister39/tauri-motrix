@@ -53,7 +53,17 @@
     "SeedTime": "BT Seed Time (minutes)",
     "TaskCompletedNotify": "Notify after download is complete",
     "NewTaskShowDownloading": "Automatically show downloading after adding task",
-    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task"
+    "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task",
+    "AutoCheckUpdate": "Auto Check Update",
+    "EnableProxy": "Enable Proxy",
+    "ProxyServer": "Proxy Server",
+    "ProxyBypassPlaceholder": "Bypass proxy settings for these Hosts and Domains",
+    "ProxyBypass": "Proxy Bypass No.{{index}}",
+    "DhtPort": "DHT Port",
+    "BtPort": "BT Port",
+    "BtTracker": "Tracker Servers",
+    "AutoSyncTracker": "Update tracker list every day automatically",
+    "ListenPorts": "Listen Ports"
   },
   "task": {
     "CloseAll": "Close All Tasks",
@@ -132,7 +142,9 @@
     "Pause": "Pause",
     "Delete": "Delete",
     "All": "All",
-    "More": "More"
+    "More": "More",
+    "LastSyncTime": "Last sync time at: {{time}}",
+    "Sync": "Sync"
   },
   "update": {
     "GotoReleasePage": "Go to release page",

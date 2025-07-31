@@ -10,6 +10,8 @@ import zlib from "zlib";
 import { createAria2BinInfo, getLatestAria2Tag } from "./aria2_helper.mjs";
 import { cwd, TEMP_DIR } from "./environment.mjs";
 import {
+  baseExecutableMove,
+  baseMove,
   downloadFile,
   log_debug,
   log_error,
@@ -36,6 +38,7 @@ async function resolveSidecar(binInfo) {
     }
 
     if (zipFile.endsWith(".zip")) {
+      // sometimes occur type error in new AdmZip() or AdmZip();
       const zip = new AdmZip(tempZip);
       zip.getEntries().forEach((entry) => {
         log_debug(`"${name}" entry name`, entry.entryName);
@@ -45,7 +48,8 @@ async function resolveSidecar(binInfo) {
       await fsp.rm(tempZip);
       await pullUpOnlySubDirectory(tempDir);
 
-      await fsp.rename(tempExe, sidecarPath);
+      await baseMove(tempExe, sidecarPath);
+
       log_success(`unzip finished: "${name}"`);
     } else if (zipFile.endsWith(".tgz")) {
       // tgz
@@ -56,12 +60,13 @@ async function resolveSidecar(binInfo) {
       });
       const files = await fsp.readdir(tempDir);
       log_debug(`"${name}" files in tempDir:`, files);
-
-      // TODO
-      // await fsp.rename(tempExe, sidecarPath);
-      // log_success(`"${name}" file renamed to "${sidecarPath}"`);
-      // execSync(`chmod 755 ${sidecarPath}`);
-      // log_success(`chmod binary finished: "${name}"`);
+      const extractedFile = files.find((item) => item.startsWith("aria2c"));
+      if (extractedFile) {
+        const extractedFilePath = path.join(tempDir, extractedFile);
+        await baseExecutableMove(extractedFilePath, sidecarPath);
+      } else {
+        throw new Error(`Expected file not found in ${tempDir}`);
+      }
     } else {
       // gz
       const readStream = fs.createReadStream(tempZip);

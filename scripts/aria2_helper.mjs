@@ -3,7 +3,7 @@ import process from "process";
 import { isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
 import { createFetchOptionsFactory, log_error, log_info } from "./utils.mjs";
 
-// There is no arm64 version in official repository at latest.
+// There is no windows arm64 version in official repository at latest.
 // The official aria2 release version also is unsupported 128 threads.
 // It's recommended to switch to the community repo.
 
@@ -13,11 +13,12 @@ const ARIA2_URL_PREFIX =
 const ARIA2_REPO_TAG_API_URL =
   "https://api.github.com/repos/Taoister39/aria2-windows-arm64/tags";
 
+// Try to keep it consistent with the official repository release
 const ARIA2_MAP = {
-  "win32-x64": "winx64",
-  // "win32-ia32": "winx86",
-  "win32-arm64": "winarm64",
-  // "win32-arm": "winarm",
+  "win32-x64": "win-64bit-build1",
+  "win32-arm64": "win-arm64bit-build1",
+  "darwin-arm64": "osx-darwin",
+  "darwin-x64": "osx-x64-darwin",
   // TODO
   // "aarch64-unknown-linux-gnu": "aarch64-linux-android-build1",
 };
@@ -45,7 +46,6 @@ export async function getLatestAria2Tag() {
     const latestTag = tagListRes[0];
 
     const tag = latestTag?.name;
-    // release-x.xx.x
     if (tag) {
       log_info(`Latest release tag: ${tag}`);
 
@@ -68,7 +68,10 @@ export function createAria2BinInfo(latestTag) {
   const name = ARIA2_MAP[TARGET_KEY];
 
   const urlExt = "zip";
-  const [, version] = latestTag.split("-");
+  const tagCompositions = latestTag.split("-");
+  // assume the version is the last part of the tag
+  // aria2c-release-1.xx.x
+  const version = tagCompositions[tagCompositions.length - 1];
 
   const downloadName = `aria2-${version}-${name}`;
 

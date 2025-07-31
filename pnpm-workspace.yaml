@@ -12,7 +12,10 @@ catalog:
 
 onlyBuiltDependencies:
   - '@swc/core'
+  - '@tailwindcss/oxide'
   - '@vercel/speed-insights'
   - core-js
   - es5-ext
+  - esbuild
+  - sharp
   - unrs-resolver

@@ -1,11 +1,10 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BaseCopyright } from "@tauri-motrix/ux-base";
+import { BaseCopyright, MenuButton } from "@tauri-motrix/ux-base";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
-import MenuButton from "@/components/MenuButton";
 import NavItem from "@/components/NavItem";
 import { useStackPageOpen } from "@/components/StackPageProviderWrapper";
 import { NAV_LINK, NAV_LIST } from "@/constants/nav";
@@ -44,7 +43,7 @@ export default function OfficialLayoutClient({
     >
       <header
         className={clsx(
-          "px-12 h-15 md:h-20 flex items-center justify-between fixed top-0 left-0 right-0 z-1000",
+          "px-6 md:px-12 h-15 md:h-20 flex items-center justify-between fixed top-0 left-0 right-0 z-1000",
           !open ? "bg-[hsla(0,0%,100%,.75)]" : "bg-transparent",
         )}
       >
@@ -63,12 +62,12 @@ export default function OfficialLayoutClient({
       <nav
         className={clsx(
           { hidden: !open },
-          "absolute top-20 left-0 right-0 z-1000",
+          "absolute md:top-20 top-15 left-0 right-0 z-1000 px-5 md:px-0",
         )}
       >
         <section
           className={
-            "grid gap-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-10 my-4"
+            "grid md:gap-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 md:gap-y-10 md:my-4 text-start md:text-center"
           }
         >
           {NAV_LIST.map((item) => (
@@ -77,7 +76,7 @@ export default function OfficialLayoutClient({
             </NavItem>
           ))}
         </section>
-        <section className="flex justify-center items-center gap-16 mt-10">
+        <section className="flex md:justify-center items-center gap-4 md:gap-16 md:mt-10">
           {NAV_LINK.map((item) => (
             <Link href={item.href} key={item.href}>
               <FontAwesomeIcon

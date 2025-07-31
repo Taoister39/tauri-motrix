@@ -42,6 +42,18 @@ pub fn create_window(is_showup: bool) -> bool {
     .maximizable(true)
     .build();
 
+    #[cfg(target_os = "macos")]
+    let window = tauri::WebviewWindowBuilder::new(
+        &app_handle,
+        "main".to_string(),
+        tauri::WebviewUrl::App("index.html".into()),
+    )
+    .title("Tauri Motrix")
+    .inner_size(800.0, 600.0)
+    .min_inner_size(650.0, 550.0)
+    .decorations(true)
+    .build();
+
     match window {
         Ok(window) => {
             logging!(info, Type::Window, true, "Window created successfully");

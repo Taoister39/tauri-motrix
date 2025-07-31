@@ -5,7 +5,7 @@ export interface CopyrightProps {
 function BaseCopyright({ component }: CopyrightProps) {
   const BaseComponent = component || "span";
 
-  return <BaseComponent>&copy;2025 Tauri Motrix</BaseComponent>;
+  return <BaseComponent>©2025 Tauri Motrix</BaseComponent>;
 }
 
 export default BaseCopyright;

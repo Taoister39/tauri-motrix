@@ -17,3 +17,15 @@ export const enum DOWNLOAD_ENGINE {
   Aria2 = "aria2c",
   // more
 }
+
+export const enum PROXY_SCOPES {
+  DOWNLOAD = "download",
+  UPDATE_APP = "update-app",
+  UPDATE_TRACKERS = "update-trackers",
+}
+
+export const PROXY_SCOPE_OPTIONS = [
+  PROXY_SCOPES.DOWNLOAD,
+  PROXY_SCOPES.UPDATE_APP,
+  PROXY_SCOPES.UPDATE_TRACKERS,
+];

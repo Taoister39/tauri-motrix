@@ -3,6 +3,7 @@ use tauri::AppHandle;
 use crate::{
     config::Config,
     core::{handle, CoreManager},
+    feat::run_upnp_mapping,
     log_err,
     service::{aria2c, tray},
     utils::{init, window::create_window},
@@ -24,11 +25,17 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     log_err!(CoreManager::global().init().await);
 
     // TODO: temporary
-    let resume_all_when_app_launched = Config::motrix().latest().auto_resume_all;
+    let motrix = Config::motrix().latest().clone();
+    let resume_all_when_app_launched = motrix.auto_resume_all;
     let resume_all_when_app_launched = resume_all_when_app_launched.unwrap_or(false);
 
     if resume_all_when_app_launched {
         let _ = aria2c::unpause_all().await;
+    }
+    // TODO: temporary
+    let enable_upnp = motrix.enable_upnp.unwrap_or(false);
+    if enable_upnp {
+        let _ = run_upnp_mapping(&motrix);
     }
 
     log_err!(tray::create_tray(app_handle));

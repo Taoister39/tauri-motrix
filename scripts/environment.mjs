@@ -42,6 +42,7 @@ export const arch = _target ? ARCH_MAP[_target] : _arch;
 export const cwd = cwdFn();
 
 export const isWin = platform === "win32";
+export const isMac = platform === "darwin";
 
 /**
  * Special directory to store temporary files for tauri-motrix
