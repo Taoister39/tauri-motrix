@@ -1,7 +1,9 @@
-name: Build and Release
+name: Build Aria2c
 
 on:
   push:
+    tags:
+      - aria2c-release-*.*.*
 
 jobs:
   build-windows:
@@ -9,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       aria2_version: "1.37.0"
-      libssh2_version: "1.11.0"
       llvm_path: "${{ github.workspace }}/llvm-mingw"
       libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
       VCPKG_DEFAULT_TRIPLET: "${{ matrix.arch }}-windows-static"
@@ -62,7 +63,7 @@ jobs:
       - name: Build aria2
         run: |
           chmod 755 aria2c_build_win.sh
-          ./aria2c_build_win.sh ${{ matrix.arch }}
+          ./scripts/aria2c_build_win.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -103,7 +104,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           chmod +x aria2c_build_mac.sh
-          ./aria2c_build_mac.sh ${{ matrix.arch }}
+          ./scripts/aria2c_build_mac.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
