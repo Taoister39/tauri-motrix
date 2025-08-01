@@ -1,6 +1,8 @@
 #!/bin/bash -e
+aria2_ver="1.37.0"
+libssh2_ver="1.11.1"
 
-help_msg="Usage: ./build.sh [arm32|arm64|x64|x86]"
+help_msg="Usage: ./build.sh [arm64|x64]"
 vcpkg_dir=${vcpkg_dir:-$PWD/vcpkg}
 llvm_dir=${llvm_dir:-$PWD/llvm-mingw}
 work_dir=$PWD
@@ -36,8 +38,6 @@ else
     exit 1
 fi
 
-aria2_ver="1.37.0"
-libssh2_ver="1.11.1"
 export PATH=$PATH:$llvm_dir/bin
 export PKG_CONFIG_PATH=$vcpkg_dir/installed/$vcpkg_arch-mingw-static-release/lib/pkgconfig:$work_dir/libssh2-$arch/lib/pkgconfig
 export ARIA2_STATIC=yes

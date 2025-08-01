@@ -10,10 +10,9 @@ jobs:
     name: Build for Windows (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-      aria2_version: "1.37.0"
       llvm_path: "${{ github.workspace }}/llvm-mingw"
-      libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
-      VCPKG_DEFAULT_TRIPLET: "${{ matrix.arch }}-windows-static"
+      # libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
+      # VCPKG_DEFAULT_TRIPLET: "${{ matrix.arch }}-windows-static"
 
     strategy:
       fail-fast: false
@@ -74,8 +73,6 @@ jobs:
   build-macos:
     name: Build for macOS
     runs-on: macos-latest
-    env:
-      aria2_version: "1.37.0"
     strategy:
       fail-fast: true
       matrix:

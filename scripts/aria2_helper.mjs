@@ -1,17 +1,18 @@
+import { uni_constants } from "@tauri-motrix/unified-base";
 import process from "process";
 
 import { isWin, SIDECAR_HOST, TARGET_KEY } from "./environment.mjs";
 import { createFetchOptionsFactory, log_error, log_info } from "./utils.mjs";
 
+const { APP_RELEASE_DOWNLOAD } = uni_constants;
 // There is no windows arm64 version in official repository at latest.
 // The official aria2 release version also is unsupported 128 threads.
 // It's recommended to switch to the community repo.
 
-const ARIA2_URL_PREFIX =
-  "https://github.com/Taoister39/aria2-windows-arm64/releases/download";
+const ARIA2_URL_PREFIX = APP_RELEASE_DOWNLOAD;
 
 const ARIA2_REPO_TAG_API_URL =
-  "https://api.github.com/repos/Taoister39/aria2-windows-arm64/tags";
+  "https://api.github.com/repos/Taoister39/tauri-motrix/tags";
 
 // Try to keep it consistent with the official repository release
 const ARIA2_MAP = {
