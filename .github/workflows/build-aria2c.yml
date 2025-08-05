@@ -61,7 +61,7 @@ jobs:
 
       - name: Build aria2
         run: |
-          chmod 755 aria2c_build_win.sh
+          chmod 755 ./scripts/aria2c_build_win.sh
           ./scripts/aria2c_build_win.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
@@ -100,7 +100,7 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          chmod +x aria2c_build_mac.sh
+          chmod +x ./scripts/aria2c_build_mac.sh
           ./scripts/aria2c_build_mac.sh ${{ matrix.arch }}
 
       - name: Upload build artifacts
