@@ -25,7 +25,7 @@ pub async fn terminate_process(pid: u32) {
         }
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
         let output = Command::new("kill").arg(pid.to_string()).output();
 
@@ -80,7 +80,7 @@ pub async fn get_occupied_port_pids(port: u16) -> Vec<u32> {
         }
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
         let output = Command::new("lsof")
             .args(["-i", &format!(":{port}")])
