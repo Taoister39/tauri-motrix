@@ -109,9 +109,33 @@ jobs:
           name: aria2-macos-${{ matrix.arch }}
           path: aria2*.zip
 
+  build-linux:
+    name: Build for Linux (${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: "x86_64"
+          - arch: "arm64"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build aria2
+        run: |
+          chmod +x ./scripts/aria2c_build_linux.sh
+          ./scripts/aria2c_build_linux.sh ${{ matrix.arch }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aria2-linux-${{ matrix.arch }}
+          path: aria2*.zip
+
   release:
     name: Release
-    needs: [build-windows, build-macos]
+    needs: [build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/aria2c-release-')
     steps:
