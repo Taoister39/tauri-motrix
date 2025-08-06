@@ -3,6 +3,7 @@
 work_dir=$PWD
 aria2_ver="1.37.0"
 arch=$1 # x86_64 or arm64
+zip_suffix=""
 
 # Install dependencies
 sudo apt-get update
@@ -13,6 +14,9 @@ configure_flags="--with-openssl --without-libxml2"
 if [ "$arch" == "arm64" ]; then
     sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
     configure_flags="$configure_flags --host=aarch64-linux-gnu"
+    zip_suffix="aarch64-linux-build1"
+else
+    zip_suffix="x64-linux-build1"
 fi
 
 # Build aria2
@@ -32,7 +36,7 @@ fi
 make -j$(nproc)
 pushd src
 strip aria2c
-7z a aria2-${aria2_ver}-linux-${arch}.zip aria2c
-mv aria2-${aria2_ver}-linux-${arch}.zip $work_dir
+7z a aria2-${aria2_ver}-${zip_suffix}.zip aria2c
+mv aria2-${aria2_ver}-${zip_suffix}.zip $work_dir
 popd
 make clean
