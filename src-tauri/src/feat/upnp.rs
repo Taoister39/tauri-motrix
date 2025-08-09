@@ -3,10 +3,7 @@ use anyhow::Result;
 
 use crate::config::{Config, IMotrix};
 
-fn create_upnp_config_factory(
-    bt_listen_port: u16,
-    dht_listen_port: u16,
-) -> Result<[UpnpConfig; 2]> {
+fn create_upnp_config_factory(bt_listen_port: u16, dht_listen_port: u16) -> Result<()> {
     // let bt_listen_address = UpnpConfig {
     //     address: None,
     //     port: bt_listen_port,
@@ -24,7 +21,7 @@ fn create_upnp_config_factory(
     // };
 
     // Ok([bt_listen_address, dht_listen_address])
-    Ok([])
+    Ok(())
 }
 
 pub fn run_upnp_mapping(motrix: &IMotrix) -> Result<()> {
