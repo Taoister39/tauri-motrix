@@ -1,6 +1,6 @@
 {
   "name": "tauri-motrix",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "type": "module",
   "description": "A full-featured download manager",
   "repository": {
@@ -17,6 +17,7 @@
     "preinstall": "npx only-allow pnpm",
     "check": "node ./scripts/check.mjs",
     "updater": "node scripts/updater.mjs",
+    "build-engine-version": "node ./scripts/build_engine_version.js",
     "dev": "rsbuild dev",
     "build": "rsbuild build",
     "preview": "rsbuild preview",

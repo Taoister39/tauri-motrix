@@ -1,6 +1,6 @@
 [package]
 name = "tauri-motrix"
-version = "0.2.3"
+version = "0.2.4"
 description = "A Tauri App"
 authors = ["Taoister39"]
 repository = "https://github.com/Taoister39/tauri-motrix"
@@ -44,7 +44,6 @@ open = "5.3.2"
 sys-locale = "0.3.2"
 reqwest = "0.12.15"
 uuid = { version = "1.16.0", features = ["v4", "serde"] }
-easy-upnp = "0.2.1"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"

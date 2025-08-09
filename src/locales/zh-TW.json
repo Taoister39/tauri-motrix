@@ -3,10 +3,12 @@
   "Label-Task-History": "歷史",
   "Label-Task-Recycle": "回收",
   "Label-Settings": "設定",
+  "Label-Lab": "實驗室",
   "Task-Start": "下載列表",
   "Task-History": "歷史列表",
   "Task-Done": "完成列表",
   "Settings": "設定",
+  "Lab": "實驗室",
   "Recycle": "回收",
   "ThemeMode": {
     "light": "明亮",
@@ -51,7 +53,17 @@
     "SeedTime": "BT 做種時間 (分鐘)",
     "TaskCompletedNotify": "下載完成後通知",
     "NewTaskShowDownloading": "新增任務後自動顯示下載中",
-    "NoConfirmBeforeDeleteTask": "刪除任務前無需確認"
+    "NoConfirmBeforeDeleteTask": "刪除任務前無需確認",
+    "AutoCheckUpdate": "自動檢查更新",
+    "EnableProxy": "啟用代理",
+    "ProxyServer": "代理伺服器",
+    "ProxyBypassPlaceholder": "繞過這些主機和網域的代理設定",
+    "ProxyBypass": "代理繞過 No.{{index}}",
+    "DhtPort": "DHT 連接埠",
+    "BtPort": "BT 連接埠",
+    "BtTracker": "Tracker 伺服器",
+    "AutoSyncTracker": "每天自動更新 tracker 列表",
+    "ListenPorts": "監聽連接埠"
   },
   "task": {
     "CloseAll": "關閉所有任務",
@@ -130,7 +142,9 @@
     "Pause": "暫停",
     "Delete": "刪除",
     "All": "全部",
-    "More": "更多"
+    "More": "更多",
+    "LastSyncTime": "上次同步時間: {{time}}",
+    "Sync": "同步"
   },
   "update": {
     "GotoReleasePage": "前往發布頁面",

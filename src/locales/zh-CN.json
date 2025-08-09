@@ -53,7 +53,17 @@
     "SeedTime": "BT 做种时间 (分钟)",
     "TaskCompletedNotify": "下载完成后通知",
     "NewTaskShowDownloading": "新增任务后自动显示下载中",
-    "NoConfirmBeforeDeleteTask": "删除任务前无需确认"
+    "NoConfirmBeforeDeleteTask": "删除任务前无需确认",
+    "AutoCheckUpdate": "自动检查更新",
+    "EnableProxy": "启用代理",
+    "ProxyServer": "代理服务器",
+    "ProxyBypassPlaceholder": "绕过这些主机和域的代理设置",
+    "ProxyBypass": "代理绕过 No.{{index}}",
+    "DhtPort": "DHT 端口",
+    "BtPort": "BT 端口",
+    "BtTracker": "Tracker 服务器",
+    "AutoSyncTracker": "每天自动更新 tracker 列表",
+    "ListenPorts": "监听端口"
   },
   "task": {
     "CloseAll": "关闭所有任务",
@@ -132,7 +142,9 @@
     "Pause": "暂停",
     "Delete": "删除",
     "All": "全部",
-    "More": "更多"
+    "More": "更多",
+    "LastSyncTime": "上次同步时间: {{time}}",
+    "Sync": "同步"
   },
   "update": {
     "CurrentlyOnLatest": "当前已是最新版本",

@@ -3,10 +3,12 @@
   "Label-Task-History": "履歴",
   "Label-Task-Recycle": "ゴミ箱",
   "Label-Settings": "設定",
+  "Label-Lab": "ラボ",
   "Task-Start": "ダウンロード中",
   "Task-History": "履歴",
   "Task-Done": "完了",
   "Settings": "設定",
+  "Lab": "ラボ",
   "Recycle": "ゴミ箱",
   "ThemeMode": {
     "light": "ライト",
@@ -51,7 +53,17 @@
     "SeedTime": "BT シード時間 (分)",
     "TaskCompletedNotify": "ダウンロード完了後に通知する",
     "NewTaskShowDownloading": "タスク追加後に自動的にダウンロード中を表示する",
-    "NoConfirmBeforeDeleteTask": "タスク削除前に確認は不要です"
+    "NoConfirmBeforeDeleteTask": "タスク削除前に確認は不要です",
+    "AutoCheckUpdate": "アップデートを自動で確認する",
+    "EnableProxy": "プロキシを有効にする",
+    "ProxyServer": "プロキシサーバー",
+    "ProxyBypassPlaceholder": "これらのホストとドメインのプロキシ設定をバイパスする",
+    "ProxyBypass": "プロキシバイパス No.{{index}}",
+    "DhtPort": "DHT ポート",
+    "BtPort": "BT ポート",
+    "BtTracker": "トラッカーサーバー",
+    "AutoSyncTracker": "毎日自動的にトラッカーリストを更新する",
+    "ListenPorts": "リッスンポート"
   },
   "task": {
     "CloseAll": "すべてのタスクを閉じる",
@@ -130,7 +142,9 @@
     "Pause": "一時停止",
     "Delete": "削除",
     "All": "すべて",
-    "More": "その他"
+    "More": "その他",
+    "LastSyncTime": "最終同期時刻: {{time}}",
+    "Sync": "同期"
   },
   "update": {
     "GotoReleasePage": "リリースページへ移動",
