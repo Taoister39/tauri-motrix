@@ -1,4 +1,8 @@
-export const APP_REPO = "https://github.com/Taoister39/tauri-motrix";
+import { uni_constants } from "@tauri-motrix/unified-base";
+
+const { APP_REPOSITORY } = uni_constants;
+
+export const APP_REPO = APP_REPOSITORY;
 
 export const ADD_DIALOG = "motrix://open-add-task-dialog";
 

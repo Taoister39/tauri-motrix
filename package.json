@@ -17,6 +17,7 @@
     "preinstall": "npx only-allow pnpm",
     "check": "node ./scripts/check.mjs",
     "updater": "node scripts/updater.mjs",
+    "build-engine-version": "node ./scripts/build_engine_version.js",
     "dev": "rsbuild dev",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
@@ -24,9 +25,11 @@
     "prepare": "husky",
     "test": "jest",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "version": "node ./scripts/version.js"
   },
   "dependencies": {
+    "@changesets/cli": "^2.29.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.2.0",
