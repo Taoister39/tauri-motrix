@@ -38,23 +38,32 @@ export function useAutoSyncTacker() {
     useSyncTrackerLocalStorage();
   // auto sync tracker list
   useEffect(() => {
-    const trackerSource = motrix?.tracker_source;
-    const isNeedSync = lastSyncTrackerTime
-      ? dayjs().diff(lastSyncTrackerTime, "day") >= 1
-      : true;
+    const fn = () => {
+      const trackerSource = motrix?.tracker_source;
+      const isNeedSync = lastSyncTrackerTime
+        ? dayjs().diff(lastSyncTrackerTime, "day") >= 1
+        : true;
 
-    if (isAutoSyncTracker && trackerSource && isNeedSync) {
-      const now = Date.now();
+      if (isAutoSyncTracker && trackerSource && isNeedSync) {
+        const now = Date.now();
 
-      syncTrackerFromSourceHelper(trackerSource).then(async (line) => {
-        const btTracker = reduceTrackerString(convertLineToComma(line));
+        syncTrackerFromSourceHelper(trackerSource).then(async (line) => {
+          const btTracker = reduceTrackerString(convertLineToComma(line));
 
-        await patchAria2({
-          "bt-tracker": btTracker,
+          await patchAria2({
+            "bt-tracker": btTracker,
+          });
+          setLastSyncTrackerTime(now);
         });
-        setLastSyncTrackerTime(now);
-      });
-    }
+      }
+    };
+
+    fn();
+    const timer = setInterval(fn, 1000 * 60 * 30);
+
+    return () => {
+      clearInterval(timer);
+    };
   }, [
     isAutoSyncTracker,
     setLastSyncTrackerTime,

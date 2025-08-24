@@ -1,6 +1,7 @@
 name: Build Aria2c
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - aria2c-release-*.*.*
