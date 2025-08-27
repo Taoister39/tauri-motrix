@@ -14,7 +14,9 @@ const styles = stylex.create({
   container: {
     width: "100%",
     overflow: "auto",
-    border: "1px solid #e5e7eb",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "#e5e7eb",
     borderRadius: "8px",
   },
   inner: {
@@ -125,7 +127,9 @@ const styles = stylex.create({
     flex: 1,
     minWidth: "256px",
     padding: "8px 16px",
-    border: "1px solid #d1d5db",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "#d1d5db",
     borderRadius: "8px",
     fontSize: "14px",
     ":focus": {
@@ -138,7 +142,8 @@ const styles = stylex.create({
     padding: "8px 16px",
     backgroundColor: "#3b82f6",
     color: "#ffffff",
-    border: "none",
+    borderWidth: "0",
+    borderStyle: "none",
     borderRadius: "8px",
     fontSize: "14px",
     fontWeight: 500,
@@ -182,7 +187,8 @@ const styles = stylex.create({
   navButton: {
     padding: "4px 12px",
     backgroundColor: "#f3f4f6",
-    border: "none",
+    borderWidth: "0",
+    borderStyle: "none",
     borderRadius: "4px",
     fontSize: "12px",
     cursor: "pointer",
@@ -226,6 +232,7 @@ interface UseVirtualListOptions {
   itemHeight: number;
   containerHeight: number;
   overscan?: number;
+  onScroll?: (scrollTop: number) => void;
 }
 
 interface UseVirtualListReturn<T = any> {
@@ -255,14 +262,18 @@ const useVirtualList = <T,>(
   items: T[],
   options: UseVirtualListOptions,
 ): UseVirtualListReturn<T> => {
-  const { itemHeight, containerHeight, overscan = 5 } = options;
+  const { itemHeight, containerHeight, overscan = 5, onScroll } = options;
 
   const [scrollTop, setScrollTop] = useState<number>(0);
   const scrollElementRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop);
-  }, []);
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      setScrollTop(e.currentTarget.scrollTop);
+      onScroll?.(e.currentTarget.scrollTop);
+    },
+    [onScroll],
+  );
 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const endIndex = Math.min(
@@ -304,11 +315,13 @@ const VirtualListComponent = <T,>({
   getItemKey,
   overscan = 5,
   className = "",
+  onScroll,
 }: VirtualListProps<T>): JSX.Element => {
   const virtualList = useVirtualList(items, {
     itemHeight,
     containerHeight,
     overscan,
+    onScroll,
   });
 
   return (
@@ -318,6 +331,7 @@ const VirtualListComponent = <T,>({
       ref={virtualList.scrollElementRef}
       onScroll={virtualList.handleScroll}
       style={{ height: containerHeight }}
+      role="list"
     >
       <div
         {...stylex.props(styles.inner)}
