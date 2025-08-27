@@ -7,7 +7,7 @@ catalog:
   react-dom: ^19.1.0
   "@types/react": ^19.1.0
   "@types/react-dom": ^19.1.1
-  "@rslib/core": ^0.10.4
+  "@rslib/core": ^0.12.3
   typescript: ^5.8.3
 
 onlyBuiltDependencies:
