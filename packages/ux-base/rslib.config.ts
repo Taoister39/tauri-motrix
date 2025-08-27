@@ -1,6 +1,6 @@
 import { pluginReact } from "@rsbuild/plugin-react";
 import { defineConfig } from "@rslib/core";
-import stylexPlugin from "unplugin-stylex/rspack";
+import stylexPlugin from "@stylexswc/unplugin/rspack";
 
 export default defineConfig({
   source: {
@@ -21,7 +21,17 @@ export default defineConfig({
   plugins: [pluginReact()],
   tools: {
     rspack: {
-      plugins: [stylexPlugin()],
+      plugins: [
+        stylexPlugin({
+          rsOptions: {
+            dev: true,
+            treeshakeCompensation: true,
+            runtimeInjection: true,
+          },
+          useCSSLayers: true,
+          extractCSS: false,
+        }),
+      ],
     },
   },
 });
