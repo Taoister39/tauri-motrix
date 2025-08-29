@@ -1,0 +1,4 @@
+{
+  "$schema": "./node_modules/syncpack/schema.json",
+  "indent": "    "
+}
