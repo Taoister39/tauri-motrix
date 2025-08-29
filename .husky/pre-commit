@@ -1,1 +1,7 @@
-npx --no-install lint-staged
+#!/usr/bin/env sh
+
+# Check for version mismatches in package.json files.
+./scripts/version_mismatch_check.sh
+
+# lint staged files in root of monorepo.
+pnpm exec lint-staged

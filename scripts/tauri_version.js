@@ -11,11 +11,10 @@ function validateVersion(version) {
 function getVersion({ input, currentVersion }) {
   console.log("Received: " + input);
 
-  if (!validateVersion(currentVersion)) {
-    throw new Error("Invalid current version format");
-  }
-
-  if (["patch", "minor", "major"].includes(input)) {
+  if (
+    ["patch", "minor", "major"].includes(input) &&
+    validateVersion(currentVersion)
+  ) {
     const [major, minor, patch] = currentVersion.split(".").map(Number);
     switch (input) {
       case "patch":
