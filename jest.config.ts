@@ -1,8 +1,7 @@
 import type { Config } from "jest";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { join } from "path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const config: Config = {
   projects: [
