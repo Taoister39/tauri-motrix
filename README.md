@@ -27,8 +27,7 @@ Supports Windows (x64 / arm64).
 
 To run the development server, execute the following commands after all prerequisites for Tauri are installed:
 
-> [!NOTE]
-> **If you are using a Windows ARM device, you additionally need to install [LLVM](https://github.com/llvm/llvm-project/releases) (including clang) and set the environment variable.**
+> [!NOTE] > **If you are using a Windows ARM device, you additionally need to install [LLVM](https://github.com/llvm/llvm-project/releases) (including clang) and set the environment variable.**
 >
 > Because the `ring` crate is compiled based on `clang` under Windows ARM.
 
@@ -51,6 +50,7 @@ Thanks to the following projects for giving me inspiration and reference:
 - [aria2](https://github.com/aria2/aria2)
 - [antd](https://github.com/ant-design/ant-design)
 - [rc-util](https://github.com/react-component/util)
+- [stylex-swc-plugin](https://github.com/Dwlad90/stylex-swc-plugin)
 
 ## License
 

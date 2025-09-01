@@ -32,8 +32,8 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "dependencies": {
     "@stylexjs/stylex": "^0.15.3",
