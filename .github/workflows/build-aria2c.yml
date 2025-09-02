@@ -74,10 +74,6 @@ jobs:
   build-macos:
     name: Build for macOS
     runs-on: macos-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        arch: [x86_64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -102,12 +98,11 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           chmod +x ./scripts/aria2c_build_mac.sh
-          ./scripts/aria2c_build_mac.sh ${{ matrix.arch }}
-
+          ./scripts/aria2c_build_mac.sh
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-macos-${{ matrix.arch }}
+          name: aria2-macos-arm64
           path: aria2*.zip
 
   build-linux:
