@@ -50,6 +50,7 @@ Thanks to the following projects for giving me inspiration and reference:
 - [aria2](https://github.com/aria2/aria2)
 - [antd](https://github.com/ant-design/ant-design)
 - [rc-util](https://github.com/react-component/util)
+- [stylex-swc-plugin](https://github.com/Dwlad90/stylex-swc-plugin)
 
 ## License
 

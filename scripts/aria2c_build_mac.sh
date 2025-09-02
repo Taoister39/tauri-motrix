@@ -2,7 +2,7 @@
 
 work_dir=$PWD
 aria2_ver="1.37.0"
-arch=$(uname -m) # x86_64 or arm64
+arch="${1:-$(uname -m)}" # x86_64 or arm64
 zip_suffix=""
 
 # Set flags for Homebrew dependencies
@@ -14,23 +14,23 @@ export ARIA2_STATIC=yes
 # Build aria2
 aria2_folder=aria2-${aria2_ver}
 if [ ! -d ${aria2_folder} ]; then
-    git clone https://github.com/aria2/aria2.git ${aria2_folder}
-    cd ${aria2_folder}
-    git fetch --tags
-    git checkout tags/release-${aria2_ver}
-    git apply ${work_dir}/patches/aria2-fast.patch
-    autoreconf -i
+  git clone https://github.com/aria2/aria2.git ${aria2_folder}
+  cd ${aria2_folder}
+  git fetch --tags
+  git checkout tags/release-${aria2_ver}
+  git apply ${work_dir}/patches/aria2-fast.patch
+  autoreconf -i
 else
-    cd ${aria2_folder}
+  cd ${aria2_folder}
 fi
 
 # On Apple Silicon, gmp may need a hint
 if [ "$arch" == "arm64" ]; then
-    ./configure --with-libgmp --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
-    zip_suffix=osx-darwin
+  ./configure --with-libgmp --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
+  zip_suffix=osx-darwin
 else
-    ./configure --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
-    zip_suffix=osx-x64-darwin
+  ./configure --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
+  zip_suffix=osx-x64-darwin
 fi
 
 make -j$(sysctl -n hw.ncpu)
@@ -47,7 +47,7 @@ if [ -n "$APPLE_DEVELOPER_ID" ]; then
 
   echo "Notarizing the application..."
   xcrun notarytool submit "aria2-${aria2_ver}-macos-${arch}-unsigned.zip" --apple-id "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "$APPLE_TEAM_ID" --wait
-  
+
   echo "Stapling the notarization ticket..."
   xcrun stapler staple aria2c
 else

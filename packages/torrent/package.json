@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@rslib/core": "catalog:",
-    "@types/node": "^22.8.1",
+    "@types/node": "^22.15.33",
     "typescript": "catalog:"
   }
 }

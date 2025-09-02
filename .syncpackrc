@@ -1,0 +1,71 @@
+{
+  "$schema": "./node_modules/syncpack/schema.json",
+  "indent": "  ",
+  "sortAz": [
+    "contributors",
+    "dependencies",
+    "devDependencies",
+    "keywords",
+    "peerDependencies",
+    "resolutions"
+  ],
+  "sortFirst": [
+    "name",
+    "version",
+    "private",
+    "description",
+    "type",
+    "author",
+    "license",
+    "copyright",
+    "repository",
+    "sideEffects",
+    "main",
+    "module",
+    "types",
+    "exports",
+    "imports",
+    "files",
+    "publishConfig",
+    "scripts",
+    "volta",
+    "config",
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "engines",
+    "packageManager"
+  ],
+  "source": [
+    "package.json",
+    "packages/*/package.json",
+    "apps/*/package.json"
+  ],
+  "versionGroups": [
+    {
+      "label": "Use workspace protocol for internal packages",
+      "packages": [
+        "**"
+      ],
+      "dependencies": [
+        "@tauri-motrix/**"
+      ],
+      "pinVersion": "workspace:*"
+    },
+    {
+      "label": "Use catalog for shared dependencies",
+      "packages": [
+        "**"
+      ],
+      "dependencies": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
+        "@rslib/core",
+        "typescript"
+      ],
+      "pinVersion": "catalog:"
+    }
+  ]
+}

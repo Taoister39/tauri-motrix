@@ -24,7 +24,7 @@
   "packageManager": "pnpm@10.12.4",
   "devDependencies": {
     "@rslib/core": "catalog:",
-    "@types/node": "^22.8.1",
+    "@types/node": "^22.15.33",
     "typescript": "catalog:"
   }
 }
