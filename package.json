@@ -71,7 +71,7 @@
     "@rsbuild/plugin-node-polyfill": "^1.3.1",
     "@rsbuild/plugin-react": "^1.3.2",
     "@rsbuild/plugin-svgr": "^1.2.0",
-    "@stylexswc/jest": "^0.10.5",
+    "@stylexswc/jest": "^0.10.6",
     "@swc/core": "^1.11.21",
     "@swc/jest": "^0.2.39",
     "@tauri-apps/cli": "^2.5.0",

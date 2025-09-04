@@ -23,7 +23,7 @@
     "@rsbuild/core": "^1.5.0",
     "@rsbuild/plugin-react": "^1.3.2",
     "@rslib/core": "catalog:",
-    "@stylexswc/unplugin": "^0.10.5",
+    "@stylexswc/unplugin": "^0.10.6",
     "@types/react": "catalog:",
     "react": "catalog:",
     "storybook": "^9.1.3",
