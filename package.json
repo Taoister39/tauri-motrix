@@ -54,6 +54,7 @@
     "rc-util": "^5.44.4",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.55.0",
     "react-i18next": "^15.4.0",
     "react-markdown": "^10.1.0",
