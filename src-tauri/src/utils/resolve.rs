@@ -35,7 +35,7 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     // TODO: temporary
     let enable_upnp = motrix.enable_upnp.unwrap_or(false);
     if enable_upnp {
-        let _ = run_upnp_mapping(&motrix);
+        run_upnp_mapping(&motrix);
     }
 
     log_err!(tray::create_tray(app_handle));

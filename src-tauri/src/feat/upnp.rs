@@ -24,7 +24,7 @@ fn create_upnp_config_factory(bt_listen_port: u16, dht_listen_port: u16) -> Resu
     Ok(())
 }
 
-pub fn run_upnp_mapping(motrix: &IMotrix) -> Result<()> {
+pub async fn run_upnp_mapping(motrix: &IMotrix) -> Result<()> {
     let bt_listen_port = motrix.bt_listen_port.expect("bt_listen_port is required");
     let dht_listen_port = motrix.dht_listen_port.expect("dht_listen_port is required");
 
