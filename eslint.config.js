@@ -23,5 +23,12 @@ export default tseslint.config(
   tseslint.configs.recommended,
   pluginReact.configs.flat["jsx-runtime"],
   reactHooks.configs["recommended-latest"],
-  reactRefresh.configs.vite,
+  reactRefresh.configs.recommended,
+  // Disable react-refresh rules in Next.js projects
+  {
+    files: ["apps/website/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 );
