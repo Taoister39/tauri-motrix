@@ -10,9 +10,6 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig({
   plugins: [pluginNodePolyfill(), pluginReact(), pluginSvgr()],
   source: {
-    entry: {
-      index: "./src/main.tsx",
-    },
     define: {
       OS_PLATFORM: `"${process.platform}"`,
     },
