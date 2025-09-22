@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useBoolean, useLocalStorageState } from "ahooks";
+import { useBoolean } from "ahooks";
 import dayjs from "dayjs";
 import {
   Ref,
@@ -32,6 +32,7 @@ import Tag from "@/components/Tag";
 import { TRACKER_SOURCE_OPTIONS } from "@/constant/speed";
 import { useAria2 } from "@/hooks/aria2";
 import { useMotrix } from "@/hooks/motrix";
+import { useSyncTrackerLocalStorage } from "@/hooks/useSyncTrackerLocalStorage";
 import {
   convertCommaToLine,
   convertLineToComma,
@@ -68,28 +69,6 @@ interface TrackerOption {
   title: string;
   url: string;
   cdn: boolean;
-}
-
-export function useSyncTrackerLocalStorage() {
-  const [lastSyncTrackerTime, setLastSyncTrackerTime] = useLocalStorageState<
-    number | undefined
-  >("last-sync-tracker-time", {
-    listenStorageChange: true,
-  });
-  const [isAutoSyncTracker, setIsAutoSyncTracker] = useLocalStorageState(
-    "auto-sync-tracker",
-    {
-      defaultValue: true,
-      listenStorageChange: true,
-    },
-  );
-
-  return {
-    lastSyncTrackerTime,
-    setLastSyncTrackerTime,
-    isAutoSyncTracker,
-    setIsAutoSyncTracker,
-  };
 }
 
 function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
@@ -252,13 +231,17 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
             );
           }}
           disableCloseOnSelect
-          onChange={(_, value) => setSyncRemotes(value)}
+          onChange={(_, value) => {
+            setSyncRemotes(value);
+          }}
           value={syncRemotes}
         />
         <Button
           size="small"
           variant="contained"
-          onClick={syncTrackerFromSource}
+          onClick={() => {
+            syncTrackerFromSource();
+          }}
         >
           {t("common.Sync")}
         </Button>

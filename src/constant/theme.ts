@@ -22,3 +22,5 @@ export const DEFAULT_DARK_THEME = {
   warning_color: "#FF9F0A",
   success_color: "#30D158",
 };
+
+export const THEME_MODES = ["light", "dark", "system"] as const;

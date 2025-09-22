@@ -2,7 +2,7 @@ import { Button, ButtonGroup, useColorScheme } from "@mui/material";
 import { app } from "@tauri-apps/api";
 import { useTranslation } from "react-i18next";
 
-export const THEME_MODES = ["light", "dark", "system"] as const;
+import { THEME_MODES } from "@/constant/theme";
 
 function ThemeModeSwitch() {
   const { t } = useTranslation();
@@ -22,7 +22,9 @@ function ThemeModeSwitch() {
       {THEME_MODES.map((value) => (
         <Button
           key={value}
-          onClick={() => onChangeMode(value)}
+          onClick={() => {
+            onChangeMode(value);
+          }}
           variant={value === mode ? "contained" : "outlined"}
         >
           {t(`ThemeMode.${value}`)}
