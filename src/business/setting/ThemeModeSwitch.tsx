@@ -23,7 +23,7 @@ function ThemeModeSwitch() {
         <Button
           key={value}
           onClick={() => {
-            onChangeMode(value);
+            void onChangeMode(value);
           }}
           variant={value === mode ? "contained" : "outlined"}
         >

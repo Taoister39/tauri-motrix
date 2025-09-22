@@ -240,7 +240,7 @@ function BtTrackerDialog(props: { ref: Ref<DialogRef> }) {
           size="small"
           variant="contained"
           onClick={() => {
-            syncTrackerFromSource();
+            void syncTrackerFromSource();
           }}
         >
           {t("common.Sync")}
