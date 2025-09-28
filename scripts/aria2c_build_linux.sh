@@ -1,5 +1,15 @@
 #!/bin/bash -e
 
+# Check if running on Linux
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    echo "Error: This script is designed to run on Linux systems only."
+    echo "Current OS: $OSTYPE"
+    echo "Please use the appropriate build script for your operating system:"
+    echo "  - macOS: ./aria2c_build_mac.sh"
+    echo "  - Windows cross-compile (on Linux): ./aria2c_build_win.sh"
+    exit 1
+fi
+
 work_dir=$PWD
 aria2_ver="1.37.0"
 arch="${1:-$(uname -m)}" # x86_64 or arm64
