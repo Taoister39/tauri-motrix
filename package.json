@@ -21,7 +21,7 @@
     "dev": "rsbuild dev",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
-    "tauri": "tauri",
+    "tauri": "node ./scripts/run-tauri.mjs",
     "prepare": "husky",
     "test": "jest",
     "format": "prettier --write .",
