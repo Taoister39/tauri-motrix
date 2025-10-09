@@ -48,7 +48,7 @@ async function resolveSidecar(binInfo) {
       await fsp.rm(tempZip);
       await pullUpOnlySubDirectory(tempDir);
 
-      await baseMove(tempExe, sidecarPath);
+      await baseExecutableMove(tempExe, sidecarPath);
 
       log_success(`unzip finished: "${name}"`);
     } else if (zipFile.endsWith(".tgz")) {

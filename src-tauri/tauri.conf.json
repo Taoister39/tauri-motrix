@@ -16,7 +16,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": ["nsis", "appimage"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -25,7 +25,7 @@
       "icons/icon.ico"
     ],
     "externalBin": ["sidecar/aria2c"],
-    "createUpdaterArtifacts": true,
+    "createUpdaterArtifacts": false,
     "resources": ["resources", "resources/locales/*"],
     "publisher": "Taoister39",
     "copyright": "GNU General Public License v3.0",
