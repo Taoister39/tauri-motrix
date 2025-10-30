@@ -27,7 +27,9 @@ Supports Windows (x64 / arm64).
 
 To run the development server, execute the following commands after all prerequisites for Tauri are installed:
 
-> [!NOTE] > **If you are using a Windows ARM or Linux ARM device, you need to install [LLVM](https://github.com/llvm/llvm-project/releases) (including clang) and set the environment variable.**
+> [!NOTE]
+>
+> **If you are using a Windows ARM or Linux ARM device, you need to install [LLVM](https://github.com/llvm/llvm-project/releases) (including clang) and set the environment variable.**
 >
 > This is because the `ring` crate is compiled using `clang` on Windows ARM and Linux ARM platforms.
 > See this [PR](https://github.com/briansmith/ring/pull/2216) for the ongoing work to replace cl.exe with clang-cl.
