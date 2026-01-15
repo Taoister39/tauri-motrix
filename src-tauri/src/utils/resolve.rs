@@ -4,9 +4,10 @@ use crate::{
     config::Config,
     core::{handle, CoreManager},
     feat::run_upnp_mapping,
-    log_err,
+    log_err, logging,
     service::{aria2c, tray},
     utils::{init, window::create_window},
+    Type,
 };
 
 pub async fn resolve_setup(app_handle: &AppHandle) {
