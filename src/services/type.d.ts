@@ -40,6 +40,7 @@ interface Aria2Config {
   "bt-tracker-connect-timeout"?: string;
   "bt-tracker-interval"?: string;
   "bt-tracker-timeout"?: string;
+  "bt-user-agent"?: string;
   "check-certificate"?: string;
   "check-integrity"?: string;
   "conditional-get"?: string;
@@ -184,7 +185,8 @@ interface Aria2Option {
   "bt-tracker"?: string;
   "bt-tracker-connect-timeout": string;
   "bt-tracker-interval": string;
-  "bt-tracker-timeout": string;
+  "bt-tracker-timeout"?: string;
+  "bt-user-agent"?: string;
   "check-integrity": string;
   "conditional-get": string;
   "connect-timeout": string;
@@ -224,6 +226,7 @@ interface Aria2Option {
   out: string;
   "parameterized-uri": string;
   "pause-metadata": string;
+  "peer-id-prefix"?: string;
   "piece-length": string;
   "proxy-method": string;
   "realtime-chunk-checksum": string;

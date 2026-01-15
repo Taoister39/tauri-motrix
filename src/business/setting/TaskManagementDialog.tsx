@@ -1,22 +1,15 @@
-import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControlLabel,
   formControlLabelClasses,
-  IconButton,
   Switch,
   TextField,
   textFieldClasses,
 } from "@mui/material";
 import { useBoolean } from "ahooks";
 import { Ref, useImperativeHandle } from "react";
-import {
-  Controller,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { BaseDialog, DialogRef } from "@/components/BaseDialog";
@@ -29,11 +22,8 @@ interface IForm {
   seedRatio: number;
   seedTime: number;
   keepSeeding: boolean;
-  enableProxy: boolean;
-  proxyServer: string;
-  proxyBypass: Array<{
-    value: string;
-  }>;
+  btListenPort: number;
+  dhtListenPort: number;
 }
 
 // TODO: ui upgrade
@@ -54,11 +44,8 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
     Number(aria2?.["max-connection-per-server"]) || 0;
   const seedRatio = Number(aria2?.["seed-ratio"]) || 0;
   const seedTime = Number(aria2?.["seed-time"]) || 0;
-  const allProxy = aria2?.["all-proxy"] ?? "";
-  const noProxy = aria2?.["no-proxy"] ?? "";
-  const proxyBypass = noProxy
-    ? noProxy.split(",").map((value) => ({ value }))
-    : [{ value: "" }];
+  const btListenPort = Number(aria2?.["bt-listen-port"]) || 6881;
+  const dhtListenPort = Number(aria2?.["dht-listen-port"]) || 6881;
 
   const {
     control,
@@ -73,19 +60,9 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
       seedRatio,
       seedTime,
       keepSeeding: seedRatio === 0,
-      enableProxy: !!allProxy,
-      proxyServer: allProxy,
-      proxyBypass,
+      btListenPort,
+      dhtListenPort,
     },
-  });
-
-  const {
-    fields: proxyBypassFields,
-    append: appendProxyBypass,
-    remove: removeProxyBypass,
-  } = useFieldArray({
-    control,
-    name: "proxyBypass",
   });
 
   const onClose = () => {
@@ -100,25 +77,20 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
       seedRatio,
       seedTime,
       keepSeeding,
-      enableProxy,
-      proxyServer,
-      proxyBypass,
+      btListenPort,
+      dhtListenPort,
     } = form;
 
     const seedRatioDto = keepSeeding ? "0" : seedRatio.toString();
     const seedTimeDto = keepSeeding ? "0" : seedTime.toString();
-    const proxyBypassDto = proxyBypass
-      .map(({ value }) => value)
-      .filter(Boolean)
-      .join(",");
 
     await patchAria2({
       "max-concurrent-downloads": maxConcurrentDownloads.toString(),
       "max-connection-per-server": maxConnectionPerServer.toString(),
       "seed-ratio": seedRatioDto,
       "seed-time": seedTimeDto,
-      "all-proxy": enableProxy ? proxyServer : "",
-      "no-proxy": enableProxy ? proxyBypassDto : "",
+      "bt-listen-port": btListenPort.toString(),
+      "dht-listen-port": dhtListenPort.toString(),
     });
 
     Notice.success(t("common.SaveSuccess"));
@@ -239,83 +211,43 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
 
         <Controller
           control={control}
-          name="enableProxy"
+          name="btListenPort"
+          rules={{
+            min: 1024,
+            max: 65535,
+          }}
           render={({ field }) => (
-            <FormControlLabel
-              control={<Switch {...field} checked={field.value} />}
-              label={t("setting.EnableProxy")}
+            <TextField
+              type="number"
+              fullWidth
+              label={t("setting.BtListenPort")}
+              size="small"
+              error={!!errors.btListenPort}
+              helperText={t("setting.BtListenPortHelper")}
+              {...field}
             />
           )}
         />
 
-        {watch("enableProxy") && (
-          <>
-            <Controller
-              control={control}
-              name="proxyServer"
-              rules={{
-                required: true,
-              }}
-              render={({ field }) => (
-                <TextField
-                  label={t("setting.ProxyServer")}
-                  fullWidth
-                  size="small"
-                  error={!!errors.proxyServer}
-                  placeholder="[http://][USER:PASSWORD@]HOST[:PORT]"
-                  {...field}
-                />
-              )}
+        <Controller
+          control={control}
+          name="dhtListenPort"
+          rules={{
+            min: 1024,
+            max: 65535,
+          }}
+          render={({ field }) => (
+            <TextField
+              type="number"
+              fullWidth
+              label={t("setting.DhtListenPort")}
+              size="small"
+              error={!!errors.dhtListenPort}
+              helperText={t("setting.DhtListenPortHelper")}
+              {...field}
             />
-
-            {proxyBypassFields.map((item, index) => (
-              <Controller
-                key={item.id}
-                control={control}
-                name={`proxyBypass.${index}.value`}
-                rules={{
-                  validate: (value) =>
-                    !value.includes(",") ||
-                    t(
-                      "setting.ValueCannotContainCommas",
-                      "Value cannot contain commas",
-                    ),
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <TextField
-                    {...field}
-                    placeholder={t("setting.ProxyBypassPlaceholder")}
-                    fullWidth
-                    size="small"
-                    label={t("setting.ProxyBypass", { index: index + 1 })}
-                    error={!!error}
-                    helperText={error?.message}
-                    slotProps={{
-                      input: {
-                        endAdornment:
-                          proxyBypassFields.length > 1 ? (
-                            <IconButton
-                              size="small"
-                              onClick={() => removeProxyBypass(index)}
-                            >
-                              <Remove />
-                            </IconButton>
-                          ) : null,
-                      },
-                    }}
-                  />
-                )}
-              />
-            ))}
-            <Button
-              startIcon={<Add />}
-              onClick={() => appendProxyBypass({ value: "" })}
-              sx={{ mt: 1, alignSelf: "flex-start" }}
-            >
-              {t("common.add", "Add")}
-            </Button>
-          </>
-        )}
+          )}
+        />
       </Box>
     </BaseDialog>
   );
