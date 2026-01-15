@@ -38,6 +38,7 @@
     "UploadSpeedLimit": "上傳速度限制",
     "DownloadSpeedLimit": "下載速度限制",
     "AutoLaunch": "自動啟動",
+    "MinimizeToTrayOnLaunch": "啟動時最小化到系統匣",
     "TaskManagement": "任務管理",
     "DefaultPath": "預設路徑",
     "AutoResumeAll": "自動恢復所有未完成的任務",

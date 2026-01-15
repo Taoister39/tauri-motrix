@@ -38,6 +38,7 @@
     "UploadSpeedLimit": "アップロード速度制限",
     "DownloadSpeedLimit": "ダウンロード速度制限",
     "AutoLaunch": "自動起動",
+    "MinimizeToTrayOnLaunch": "起動時にタスクトレイに最小化",
     "TaskManagement": "タスク管理",
     "DefaultPath": "デフォルトパス",
     "AutoResumeAll": "未完了のタスクをすべて自動的に再開する",
