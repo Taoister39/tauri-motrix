@@ -1,4 +1,5 @@
 use crate::{core::handle, logging, utils::logging::Type};
+use tauri::Listener;
 
 /// create main window
 /// return true if window is minimized
@@ -61,9 +62,11 @@ pub fn create_window(is_showup: bool) -> bool {
             logging!(info, Type::Window, true, "Window created successfully");
 
             if is_showup {
-                println!("is showup");
-                let _ = window.show();
-                let _ = window.set_focus();
+                let window_clone = window.clone();
+                window.once("motrix://web-ready", move |_| {
+                    let _ = window_clone.show();
+                    let _ = window_clone.set_focus();
+                });
             }
         }
         Err(e) => {
