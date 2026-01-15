@@ -22,8 +22,6 @@ interface IForm {
   seedRatio: number;
   seedTime: number;
   keepSeeding: boolean;
-  btListenPort: number;
-  dhtListenPort: number;
 }
 
 // TODO: ui upgrade
@@ -44,8 +42,6 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
     Number(aria2?.["max-connection-per-server"]) || 0;
   const seedRatio = Number(aria2?.["seed-ratio"]) || 0;
   const seedTime = Number(aria2?.["seed-time"]) || 0;
-  const btListenPort = Number(aria2?.["bt-listen-port"]) || 6881;
-  const dhtListenPort = Number(aria2?.["dht-listen-port"]) || 6881;
 
   const {
     control,
@@ -60,8 +56,6 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
       seedRatio,
       seedTime,
       keepSeeding: seedRatio === 0,
-      btListenPort,
-      dhtListenPort,
     },
   });
 
@@ -77,8 +71,6 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
       seedRatio,
       seedTime,
       keepSeeding,
-      btListenPort,
-      dhtListenPort,
     } = form;
 
     const seedRatioDto = keepSeeding ? "0" : seedRatio.toString();
@@ -89,8 +81,6 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
       "max-connection-per-server": maxConnectionPerServer.toString(),
       "seed-ratio": seedRatioDto,
       "seed-time": seedTimeDto,
-      "bt-listen-port": btListenPort.toString(),
-      "dht-listen-port": dhtListenPort.toString(),
     });
 
     Notice.success(t("common.SaveSuccess"));
@@ -208,46 +198,6 @@ function TaskManagementDialog(props: { ref: Ref<DialogRef> }) {
             />
           </>
         )}
-
-        <Controller
-          control={control}
-          name="btListenPort"
-          rules={{
-            min: 1024,
-            max: 65535,
-          }}
-          render={({ field }) => (
-            <TextField
-              type="number"
-              fullWidth
-              label={t("setting.BtListenPort")}
-              size="small"
-              error={!!errors.btListenPort}
-              helperText={t("setting.BtListenPortHelper")}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="dhtListenPort"
-          rules={{
-            min: 1024,
-            max: 65535,
-          }}
-          render={({ field }) => (
-            <TextField
-              type="number"
-              fullWidth
-              label={t("setting.DhtListenPort")}
-              size="small"
-              error={!!errors.dhtListenPort}
-              helperText={t("setting.DhtListenPortHelper")}
-              {...field}
-            />
-          )}
-        />
       </Box>
     </BaseDialog>
   );
