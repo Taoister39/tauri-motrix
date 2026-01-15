@@ -26,6 +26,7 @@
     "Display": "显示",
     "Aria2": "Aria2 引擎",
     "AutoLaunch": "自动启动",
+    "MinimizeToTrayOnLaunch": "启动时最小化到托盘",
     "CheckForUpdates": "检查更新",
     "DownloadSpeedLimit": "下载速度限制",
     "External": "外部",

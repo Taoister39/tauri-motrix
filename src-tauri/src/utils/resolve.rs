@@ -42,6 +42,13 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     log_err!(tray::update_tray_menu());
 
     // create main window
-    // TODO: silent startup in feature
-    create_window(true);
+    let motrix = Config::motrix().latest().clone();
+    let minimize_to_tray = motrix.minimize_to_tray_on_launch.unwrap_or(false);
+
+    if minimize_to_tray {
+        log::info!(target: "app", "Starting minimized to tray");
+        create_window(false);
+    } else {
+        create_window(true);
+    }
 }

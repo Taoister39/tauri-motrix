@@ -38,6 +38,7 @@
     "UploadSpeedLimit": "Upload Speed Limit",
     "DownloadSpeedLimit": "Download Speed Limit",
     "AutoLaunch": "Auto Launch",
+    "MinimizeToTrayOnLaunch": "Minimize to Tray on Launch",
     "TaskManagement": "Task Management",
     "DefaultPath": "Default Path",
     "AutoResumeAll": "Automatically resume all unfinished tasks",

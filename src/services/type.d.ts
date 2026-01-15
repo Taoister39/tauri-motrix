@@ -149,6 +149,7 @@ interface MotrixConfig {
   theme_mode: "light" | "dark" | "system";
   auto_log_clean: 0 | 1 | 2 | 3;
   enable_auto_launch: boolean;
+  minimize_to_tray_on_launch: boolean;
   auto_resume_all: boolean;
   new_task_show_downloading: boolean;
   task_completed_notify: boolean;
