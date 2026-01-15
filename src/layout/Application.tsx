@@ -9,6 +9,7 @@ import {
   styled,
   SvgIcon,
   ThemeProvider,
+  useColorScheme,
   useMediaQuery,
 } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
@@ -68,6 +69,7 @@ const Main = styled("main")(() => ({
 function Application() {
   const { t } = useTranslation();
   const { theme } = useCustomTheme();
+  const { mode, setMode } = useColorScheme();
 
   const polling = usePollingStore((store) => store.polling);
   const stop = usePollingStore((store) => store.stop);
@@ -95,6 +97,33 @@ function Application() {
       stop();
     };
   }, [polling, stop]);
+
+  useEffect(() => {
+    const initTheme = async () => {
+      try {
+        const { getMotrixConfig } = await import("@/services/cmd");
+        const { app } = await import("@tauri-apps/api");
+        const config = await getMotrixConfig();
+
+        if (config?.theme_mode) {
+          if (config.theme_mode === "system") {
+            setMode("system");
+            await app.setTheme(null);
+          } else if (
+            config.theme_mode === "light" ||
+            config.theme_mode === "dark"
+          ) {
+            setMode(config.theme_mode);
+            await app.setTheme(config.theme_mode);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to initialize theme:", error);
+      }
+    };
+
+    initTheme();
+  }, [setMode]);
 
   const [
     isOpenAside,

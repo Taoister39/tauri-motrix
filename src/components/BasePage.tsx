@@ -32,14 +32,16 @@ const Header = styled("header")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 
-const TheContainer = styled("article")<{ full?: boolean }>(({ full }) => ({
-  width: "100%",
-  height: "100%",
-  overflow: full ? "visible" : "auto",
-  backgroundColor: "var(--background-color)",
-  padding: full ? 0 : "10px",
-  boxSizing: "border-box",
-}));
+const TheContainer = styled("article")<{ full?: boolean }>(
+  ({ theme, full }) => ({
+    width: "100%",
+    height: "100%",
+    overflow: full ? "visible" : "auto",
+    backgroundColor: theme.palette.background.default || theme.palette.grey[50],
+    padding: full ? 0 : "10px",
+    boxSizing: "border-box",
+  }),
+);
 
 function BasePage({ title, header, children, full, fab }: Props) {
   return (
