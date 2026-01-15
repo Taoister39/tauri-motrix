@@ -62,6 +62,7 @@ pub fn create_window(is_showup: bool) -> bool {
             logging!(info, Type::Window, true, "Window created successfully");
 
             if is_showup {
+                logging!(info, Type::Window, true, "Window is showup");
                 let window_clone = window.clone();
                 window.once("motrix://web-ready", move |_| {
                     let _ = window_clone.show();

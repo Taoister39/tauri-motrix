@@ -122,7 +122,7 @@ function Application() {
       }
     };
 
-    initTheme();
+    void initTheme();
   }, [setMode]);
 
   const [
