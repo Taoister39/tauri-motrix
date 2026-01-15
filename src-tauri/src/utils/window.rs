@@ -40,6 +40,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .min_inner_size(500.0, 550.0)
     .decorations(false)
     .maximizable(true)
+    .visible(false)
     .build();
 
     #[cfg(target_os = "macos")]
@@ -52,6 +53,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .inner_size(800.0, 600.0)
     .min_inner_size(650.0, 550.0)
     .decorations(true)
+    .visible(false)
     .build();
 
     match window {
@@ -62,8 +64,6 @@ pub fn create_window(is_showup: bool) -> bool {
                 println!("is showup");
                 let _ = window.show();
                 let _ = window.set_focus();
-            } else {
-                let _ = window.hide();
             }
         }
         Err(e) => {
