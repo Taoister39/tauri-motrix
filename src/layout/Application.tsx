@@ -69,7 +69,7 @@ const Main = styled("main")(() => ({
 function Application() {
   const { t } = useTranslation();
   const { theme } = useCustomTheme();
-  const { mode, setMode } = useColorScheme();
+  const { setMode } = useColorScheme();
 
   const polling = usePollingStore((store) => store.polling);
   const stop = usePollingStore((store) => store.stop);
