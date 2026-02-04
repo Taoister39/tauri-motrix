@@ -114,7 +114,8 @@
     "ConfirmAddTorrentsTitle": "トレントタスクを追加",
     "ConfirmAddTorrentsMessage": "{{count}} 個のトレントタスクを追加しますか？",
     "ConfirmAddTorrentsMore": "上に 10 件表示、あと {{count}} 件は未表示",
-    "ProcessTorrentError": "トレントファイルの処理中にエラーが発生しました"
+    "ProcessTorrentError": "トレントファイルの処理中にエラーが発生しました",
+    "DragTorrentHint": "💡 ヒント：トレントファイルをここにドラッグしてタスクを追加できます"
   },
   "common": {
     "DownloadFile": "ファイルをダウンロード",

@@ -289,6 +289,19 @@ function DownloadingPage() {
             )}
           />
         </Box>
+        <Typography
+          variant="caption"
+          sx={{
+            fontSize: "0.75rem",
+            color: "text.secondary",
+            textAlign: "center",
+            display: "block",
+            px: 2,
+            py: 1,
+          }}
+        >
+          {t("task.DragTorrentHint")}
+        </Typography>
       </BasePageColumn>
       <AddTorrentDialog ref={torrentRef} />
       <BaseDialog

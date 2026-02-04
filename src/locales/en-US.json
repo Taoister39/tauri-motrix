@@ -114,7 +114,8 @@
     "ConfirmAddTorrentsTitle": "Add Torrent Tasks",
     "ConfirmAddTorrentsMessage": "Add {{count}} torrent task(s)?",
     "ConfirmAddTorrentsMore": "10 listed above, {{count}} more not shown",
-    "ProcessTorrentError": "Error processing torrent files"
+    "ProcessTorrentError": "Error processing torrent files",
+    "DragTorrentHint": "💡 Tip: Drag torrent files here to quickly add tasks"
   },
   "common": {
     "DownloadFile": "Download File",
