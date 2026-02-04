@@ -10,25 +10,32 @@ import {
   SpeedDialAction,
   SpeedDialIcon,
   TextField,
+  Typography,
 } from "@mui/material";
 import { emit } from "@tauri-apps/api/event";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import { useLockFn } from "ahooks";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { mutate } from "swr";
 
 import AddTorrentDialog from "@/business/task/AddTorrentDialog";
 import TaskBanner from "@/business/task/TaskBanner";
 import TaskItem from "@/business/task/TaskItem";
 import { BasePageColumn, Column } from "@/client/styled_compose";
 import { TaskList } from "@/client/task_compose";
-import { DialogRef } from "@/components/BaseDialog";
+import { BaseDialog, DialogRef } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
 import { Notice } from "@/components/Notice";
-import { NORMAL_STATUS } from "@/constant/task";
+import { DOWNLOAD_ENGINE, NORMAL_STATUS } from "@/constant/task";
 import { ADD_DIALOG } from "@/constant/url";
-import { addTaskApi } from "@/services/aria2c_api";
+import { useAria2 } from "@/hooks/aria2";
+import { addTaskApi, addTorrentApi } from "@/services/aria2c_api";
+import { readFileAsBase64 } from "@/services/cmd";
+import { addOneDir, findOneDirByPath } from "@/services/save_to_history";
 import { useTaskStore } from "@/store/task";
+import { compactUndefined } from "@/utils/compact_undefined";
 
 function DownloadingPage() {
   const { t } = useTranslation();
@@ -45,10 +52,17 @@ function DownloadingPage() {
     copyTaskLink,
     setFetchType,
     setKeyword,
+    fetchTasks,
   } = useTaskStore();
 
   const torrentRef = useRef<DialogRef>(null);
   const searchRef = useRef<string>("");
+  const [dragOver, setDragOver] = useState(false);
+  /** Paths from Tauri file drop (native drag-drop gives paths, not File objects) */
+  const [pendingTorrentPaths, setPendingTorrentPaths] = useState<string[]>([]);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  const { aria2 } = useAria2();
 
   const addTaskByClipboard = useLockFn(async () => {
     try {
@@ -59,6 +73,83 @@ function DownloadingPage() {
       Notice.error(e.message ?? e);
     }
   });
+
+  /** Process torrent files by path (from Tauri native file drop). */
+  const processTorrentPaths = useLockFn(async (paths: string[]) => {
+    if (paths.length === 0) return;
+
+    try {
+      const dir = aria2?.dir ?? "";
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const path of paths) {
+        try {
+          const torrent = await readFileAsBase64(path);
+          await addTorrentApi(torrent, compactUndefined({ dir }));
+
+          const dirRecord = await findOneDirByPath(dir);
+          if (!dirRecord && dir) {
+            await addOneDir({
+              dir,
+              engine: DOWNLOAD_ENGINE.Aria2,
+            });
+          }
+
+          successCount++;
+        } catch (error) {
+          console.error(`Failed to add torrent ${path}:`, error);
+          errorCount++;
+        }
+      }
+
+      await fetchTasks();
+      mutate("getSaveToHistory");
+
+      if (successCount > 0) {
+        Notice.success(t("task.AddTorrentSuccess", { count: successCount }));
+      }
+      if (errorCount > 0) {
+        Notice.error(t("task.AddTorrentError", { count: errorCount }));
+      }
+    } catch (error) {
+      console.error("Error processing torrent files:", error);
+      // @ts-expect-error string or any
+      Notice.error(error.message ?? t("task.ProcessTorrentError"));
+    } finally {
+      setConfirmDialogOpen(false);
+      setPendingTorrentPaths([]);
+    }
+  });
+
+  const handleConfirmAddTorrents = useCallback(() => {
+    processTorrentPaths(pendingTorrentPaths);
+  }, [pendingTorrentPaths, processTorrentPaths]);
+
+  useEffect(() => {
+    const unlistenPromise = getCurrentWindow().onDragDropEvent((event) => {
+      const payload = event.payload;
+      if (payload.type === "over") {
+        setDragOver(true);
+      } else if (payload.type === "drop") {
+        setDragOver(false);
+        const paths = payload.paths ?? [];
+        const torrentPaths = paths.filter((p) =>
+          p.toLowerCase().endsWith(".torrent"),
+        );
+        if (torrentPaths.length > 0) {
+          setPendingTorrentPaths(torrentPaths);
+          setConfirmDialogOpen(true);
+        }
+      } else {
+        setDragOver(false);
+      }
+    });
+
+    return () => {
+      unlistenPromise.then((unlisten) => unlisten());
+    };
+  }, []);
 
   return (
     <BasePage
@@ -102,7 +193,14 @@ function DownloadingPage() {
         </SpeedDial>
       }
     >
-      <BasePageColumn>
+      <BasePageColumn
+        sx={{
+          position: "relative",
+          outline: dragOver ? "2px dashed #1976d2" : "none",
+          outlineOffset: "-2px",
+          transition: "outline 0.2s",
+        }}
+      >
         <Column
           sx={(theme) => ({
             bgcolor: theme.palette.background.paper,
@@ -193,6 +291,42 @@ function DownloadingPage() {
         </Box>
       </BasePageColumn>
       <AddTorrentDialog ref={torrentRef} />
+      <BaseDialog
+        open={confirmDialogOpen}
+        title={t("task.ConfirmAddTorrentsTitle")}
+        okBtn={t("common.Ok")}
+        cancelBtn={t("common.Cancel")}
+        onOk={handleConfirmAddTorrents}
+        onCancel={() => {
+          setConfirmDialogOpen(false);
+          setPendingTorrentPaths([]);
+        }}
+        onClose={() => {
+          setConfirmDialogOpen(false);
+          setPendingTorrentPaths([]);
+        }}
+      >
+        <Typography sx={{ mb: 1 }}>
+          {t("task.ConfirmAddTorrentsMessage", {
+            count: pendingTorrentPaths.length,
+          })}
+        </Typography>
+        <Box
+          component="ul"
+          sx={{
+            m: 0,
+            pl: 2.5,
+            pr: 1,
+            fontSize: "0.875rem",
+            maxHeight: 280,
+            overflow: "auto",
+          }}
+        >
+          {pendingTorrentPaths.map((path) => (
+            <li key={path}>{path.replace(/^.*[/\\]/, "")}</li>
+          ))}
+        </Box>
+      </BaseDialog>
     </BasePage>
   );
 }
