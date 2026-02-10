@@ -52,12 +52,27 @@ pub fn app_log(level: String, message: String, location: Option<&str>) -> CmdRes
 
 /// Read a file from the given path and return its contents as base64.
 /// Used when user drops torrent files onto the window (Tauri provides file paths, not File objects).
+const MAX_TORRENT_FILE_SIZE: u64 = 10 * 1024 * 1024; // 10 MiB
+
 #[tauri::command]
 pub fn read_file_as_base64(path: String) -> CmdResult<String> {
     let path = Path::new(&path);
+
     if !path.is_file() {
         return Err("Path is not a file".to_string());
     }
-    let bytes = fs::read(path).map_err(|e| e.to_string())?;
+
+    // Only allow .torrent files to be read from the frontend.
+    let ext = path.extension().and_then(|s| s.to_str());
+    if ext != Some("torrent") {
+        return Err("Only .torrent files are allowed".to_string());
+    }
+
+    let metadata = wrap_err!(fs::metadata(path))?;
+    if metadata.len() > MAX_TORRENT_FILE_SIZE {
+        return Err("File is too large".to_string());
+    }
+
+    let bytes = wrap_err!(fs::read(path))?;
     Ok(STANDARD.encode(bytes))
 }
