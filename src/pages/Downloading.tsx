@@ -82,20 +82,26 @@ function DownloadingPage() {
       const dir = aria2?.dir ?? "";
       let successCount = 0;
       let errorCount = 0;
+      let dirInserted = false;
 
+      // Check and add directory once before processing torrents
+      // This avoids repeated DB lookups when adding multiple torrents to the same dir
+      if (dir) {
+        const dirRecord = await findOneDirByPath(dir);
+        if (!dirRecord) {
+          await addOneDir({
+            dir,
+            engine: DOWNLOAD_ENGINE.Aria2,
+          });
+          dirInserted = true;
+        }
+      }
+
+      // Process all torrent files
       for (const path of paths) {
         try {
           const torrent = await readFileAsBase64(path);
           await addTorrentApi(torrent, compactUndefined({ dir }));
-
-          const dirRecord = await findOneDirByPath(dir);
-          if (!dirRecord && dir) {
-            await addOneDir({
-              dir,
-              engine: DOWNLOAD_ENGINE.Aria2,
-            });
-          }
-
           successCount++;
         } catch (error) {
           console.error(`Failed to add torrent ${path}:`, error);
@@ -104,7 +110,12 @@ function DownloadingPage() {
       }
 
       await fetchTasks();
-      mutate("getSaveToHistory");
+
+      // Only mutate if directory was inserted (new directory added)
+      // This avoids unnecessary cache updates when the directory already exists
+      if (dirInserted) {
+        mutate("getSaveToHistory");
+      }
 
       if (successCount > 0) {
         Notice.success(t("task.AddTorrentSuccess", { count: successCount }));
