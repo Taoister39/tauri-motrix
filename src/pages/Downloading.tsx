@@ -346,9 +346,24 @@ function DownloadingPage() {
             overflow: "auto",
           }}
         >
-          {pendingTorrentPaths.map((path) => (
+          {pendingTorrentPaths.slice(0, 10).map((path) => (
             <li key={path}>{path.replace(/^.*[/\\]/, "")}</li>
           ))}
+          {pendingTorrentPaths.length > 10 && (
+            <li key="more">
+              <Typography
+                component="span"
+                sx={(theme) => ({
+                  fontStyle: "italic",
+                  color: theme.palette.text.secondary,
+                })}
+              >
+                {t("task.ConfirmAddTorrentsMore", {
+                  count: pendingTorrentPaths.length - 10,
+                })}
+              </Typography>
+            </li>
+          )}
         </Box>
       </BaseDialog>
     </BasePage>
