@@ -147,7 +147,7 @@ function DownloadingPage() {
     });
 
     return () => {
-      unlistenPromise.then((unlisten) => unlisten());
+      unlistenPromise.then((unlisten) => unlisten()).catch(() => {});
     };
   }, []);
 
