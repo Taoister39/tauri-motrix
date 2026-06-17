@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{fs::create_dir, path::PathBuf};
 
 use anyhow::Result;
 use once_cell::sync::OnceCell;
@@ -61,10 +61,22 @@ pub fn user_downloads_dir() -> Result<PathBuf> {
     match app_handle.path().download_dir() {
         Ok(dir) => Ok(dir),
         Err(e) => {
-            log::error!(target:"app", "Failed to get the user downloads directory: {}", e);
-            Err(anyhow::anyhow!(
-                "Failed to get the user downloads directory"
-            ))
+            let user_dir = app_handle.path().home_dir()?;
+            let user_downloads_dir = user_dir.join(".tauri-motrix-downloads");
+
+            if user_downloads_dir.exists() {
+                return Ok(user_downloads_dir);
+            }
+
+            log::warn!(target:"app", "download_dir() failed: {}, falling back to {:?}", e, user_downloads_dir);
+
+            create_dir(&user_downloads_dir)
+                .map_err(|create_err| {
+                    log::error!(target:"app", "Failed to create fallback downloads dir: {}", create_err);
+                    anyhow::anyhow!("Failed to get or create the user downloads directory")
+                })?;
+
+            Ok(user_downloads_dir)
         }
     }
 }
