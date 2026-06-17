@@ -5,7 +5,7 @@ import {
   SettingsRounded,
 } from "@mui/icons-material";
 import { ReactNode } from "react";
-import { Navigate, RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router";
 
 import DownloadingPage from "@/pages/Downloading";
 import HistoryPage from "@/pages/History";

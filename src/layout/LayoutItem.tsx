@@ -6,7 +6,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { ReactNode } from "react";
-import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import { useMatch, useNavigate, useResolvedPath } from "react-router";
 
 interface LayoutItemProps {
   children: string;
@@ -47,7 +47,9 @@ function LayoutItem({ children, icon, to }: LayoutItemProps) {
           },
         })}
         selected={!!match}
-        onClick={() => navigate(to)}
+        onClick={() => {
+          navigate(to);
+        }}
       >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText>{children}</ListItemText>

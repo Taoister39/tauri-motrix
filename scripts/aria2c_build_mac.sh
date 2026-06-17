@@ -1,8 +1,17 @@
 #!/bin/bash -e
 
+# Check if running on macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  echo "Error: This script is designed to run on macOS systems only."
+  echo "Current OS: $OSTYPE"
+  echo "Please use the appropriate build script for your operating system:"
+  echo "  - Linux: ./aria2c_build_linux.sh"
+  echo "  - Windows cross-compile (on Linux): ./aria2c_build_win.sh"
+  exit 1
+fi
+
 work_dir=$PWD
 aria2_ver="1.37.0"
-arch="${1:-$(uname -m)}" # x86_64 or arm64
 zip_suffix=""
 
 # Set flags for Homebrew dependencies
@@ -24,14 +33,9 @@ else
   cd ${aria2_folder}
 fi
 
-# On Apple Silicon, gmp may need a hint
-if [ "$arch" == "arm64" ]; then
-  ./configure --with-libgmp --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
-  zip_suffix=osx-darwin
-else
-  ./configure --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
-  zip_suffix=osx-x64-darwin
-fi
+# Only Apple Silicon now
+./configure --with-libgmp --with-libssh2 --without-libxml2 --with-libexpat --with-sqlite3 --with-libcares
+zip_suffix=osx-darwin
 
 make -j$(sysctl -n hw.ncpu)
 pushd src

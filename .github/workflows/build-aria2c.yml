@@ -73,11 +73,7 @@ jobs:
 
   build-macos:
     name: Build for macOS
-    runs-on: macos-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        arch: [x86_64, arm64]
+    runs-on: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -87,38 +83,39 @@ jobs:
           brew install automake autoconf libtool pkg-config gettext p7zip
           brew install gmp libssh2 c-ares sqlite3 zlib expat
 
-      - name: Import Code-Signing Certificate
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: apple-actions/import-codesign-certs@v2
-        with:
-          p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
-          p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+      # - name: Import Code-Signing Certificate
+      #   if: startsWith(github.ref, 'refs/tags/')
+      #   uses: apple-actions/import-codesign-certs@v2
+      #   with:
+      #     p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
+      #     p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
 
       - name: Build aria2
-        env:
-          APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        # env:
+        # APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+        # APPLE_ID: ${{ secrets.APPLE_ID }}
+        # APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           chmod +x ./scripts/aria2c_build_mac.sh
-          ./scripts/aria2c_build_mac.sh ${{ matrix.arch }}
-
+          ./scripts/aria2c_build_mac.sh
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-macos-${{ matrix.arch }}
+          name: aria2-macos-arm64
           path: aria2*.zip
 
   build-linux:
     name: Build for Linux (${{ matrix.arch }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - arch: "x86_64"
+            os: ubuntu-22.04
           - arch: "arm64"
+            os: ubuntu-24.04-arm
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -139,6 +136,8 @@ jobs:
     needs: [build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/aria2c-release-')
+    permissions:
+      contents: write
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -158,6 +157,8 @@ jobs:
   release-update:
     runs-on: ubuntu-latest
     needs: [release]
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
