@@ -20,7 +20,7 @@
     "docs:build": "storybook build"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.5.0",
+    "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-react": "^1.3.2",
     "@rslib/core": "catalog:",
     "@stylexswc/unplugin": "^0.10.6",
