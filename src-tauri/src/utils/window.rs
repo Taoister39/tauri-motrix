@@ -42,7 +42,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .maximizable(true)
     .build();
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     let window = tauri::WebviewWindowBuilder::new(
         &app_handle,
         "main".to_string(),

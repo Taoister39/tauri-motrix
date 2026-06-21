@@ -25,7 +25,7 @@ pub async fn terminate_process(pid: u32) {
         }
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
         let output = Command::new("kill").arg(pid.to_string()).output();
 
@@ -80,31 +80,28 @@ pub async fn get_occupied_port_pids(port: u16) -> Vec<u32> {
         }
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
         let output = Command::new("lsof")
             .args(["-i", &format!(":{port}")])
             .output()
             .expect("failed to execute lsof command");
 
-        if output.status.success() {
-            let output_str = String::from_utf8_lossy(&output.stdout);
-            let lines: Vec<&str> = output_str.lines().collect();
+        // lsof exits with code 1 when no processes are found (port is free), which is normal
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        let lines: Vec<&str> = output_str.lines().collect();
 
-            for (index, line) in lines.iter().enumerate() {
-                if index > 0 {
-                    let mut parts = line.split_whitespace();
-                    if let Some(pid_str) = parts.nth(1) {
-                        if let Ok(pid) = pid_str.parse::<u32>() {
-                            if !pids.contains(&pid) {
-                                pids.push(pid);
-                            }
+        for (index, line) in lines.iter().enumerate() {
+            if index > 0 {
+                let mut parts = line.split_whitespace();
+                if let Some(pid_str) = parts.nth(1) {
+                    if let Ok(pid) = pid_str.parse::<u32>() {
+                        if !pids.contains(&pid) {
+                            pids.push(pid);
                         }
                     }
                 }
             }
-        } else {
-            println!("[check_port] failed to execute lsof command");
         }
     }
 
