@@ -1,5 +1,15 @@
 #!/bin/bash -e
 
+# Check if running on macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  echo "Error: This script is designed to run on macOS systems only."
+  echo "Current OS: $OSTYPE"
+  echo "Please use the appropriate build script for your operating system:"
+  echo "  - Linux: ./aria2c_build_linux.sh"
+  echo "  - Windows cross-compile (on Linux): ./aria2c_build_win.sh"
+  exit 1
+fi
+
 work_dir=$PWD
 aria2_ver="1.37.0"
 zip_suffix=""

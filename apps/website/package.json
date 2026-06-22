@@ -18,7 +18,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "next": "15.3.5",
+    "next": "15.4.10",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

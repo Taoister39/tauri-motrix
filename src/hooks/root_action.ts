@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useSyncTrackerLocalStorage } from "@/business/setting/BtTrackerDialog";
+import { useSyncTrackerLocalStorage } from "@/hooks/useSyncTrackerLocalStorage";
 import { useTaskStore } from "@/store/task";
 import {
   convertLineToComma,
