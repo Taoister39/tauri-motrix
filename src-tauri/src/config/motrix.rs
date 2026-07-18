@@ -29,6 +29,8 @@ pub struct IMotrix {
 
     pub enable_auto_launch: Option<bool>,
 
+    pub minimize_to_tray_on_launch: Option<bool>,
+
     pub auto_check_update: Option<bool>,
 
     pub auto_resume_all: Option<bool>,
@@ -98,6 +100,7 @@ impl IMotrix {
             theme_mode: Some("system".into()),
             app_log_level: Some("info".into()),
             enable_auto_launch: Some(false),
+            minimize_to_tray_on_launch: Some(false),
             auto_log_clean: Some(3),
             auto_check_update: Some(true),
             auto_resume_all: Some(false),
@@ -134,6 +137,7 @@ impl IMotrix {
         patch!(aria2_engine);
         patch!(language);
         patch!(enable_auto_launch);
+        patch!(minimize_to_tray_on_launch);
         patch!(auto_log_clean);
         patch!(auto_check_update);
         patch!(auto_resume_all);

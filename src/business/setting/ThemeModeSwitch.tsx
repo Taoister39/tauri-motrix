@@ -3,6 +3,7 @@ import { app } from "@tauri-apps/api";
 import { useTranslation } from "react-i18next";
 
 import { THEME_MODES } from "@/constant/theme";
+import { patchMotrixConfig } from "@/services/cmd";
 
 function ThemeModeSwitch() {
   const { t } = useTranslation();
@@ -15,6 +16,12 @@ function ThemeModeSwitch() {
   const onChangeMode = async (value: (typeof THEME_MODES)[number]) => {
     await app.setTheme(value === "system" ? null : value);
     setMode(value);
+
+    try {
+      await patchMotrixConfig({ theme_mode: value });
+    } catch (error) {
+      console.error("Failed to save theme mode:", error);
+    }
   };
 
   return (

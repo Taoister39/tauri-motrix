@@ -49,6 +49,15 @@ function AppearanceSetting() {
         />
       </SettingItem>
 
+      <SettingItem label={t("setting.MinimizeToTrayOnLaunch")}>
+        <Android12Switch
+          checked={!!motrix?.minimize_to_tray_on_launch}
+          onChange={async (e) => {
+            await patchMotrix({ minimize_to_tray_on_launch: e.target.checked });
+          }}
+        />
+      </SettingItem>
+
       <SettingItem
         label={t("setting.AutoResumeAll")}
         secondary={t("setting.AutoResumeAllDescription")}

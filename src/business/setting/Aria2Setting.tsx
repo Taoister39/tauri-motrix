@@ -6,6 +6,7 @@ import HistoryPathInput from "@/business/history/HistoryPathInput";
 import ExternalControllerDialog from "@/business/setting/ExternalControllerDialog";
 import SpeedLimitDialog from "@/business/setting/SpeedLimitDialog";
 import TaskManagementDialog from "@/business/setting/TaskManagementDialog";
+import UserAgentDialog from "@/business/setting/UserAgentDialog";
 import { SettingItem, SettingList } from "@/client/setting_compose";
 import { Android12Switch } from "@/client/styled_compose";
 import { DialogRef } from "@/components/BaseDialog";
@@ -23,6 +24,7 @@ function Aria2Setting() {
   const speedLimitRef = useRef<DialogRef>(null);
   const taskManagementRef = useRef<DialogRef>(null);
   const btTrackerRef = useRef<DialogRef>(null);
+  const userAgentRef = useRef<DialogRef>(null);
 
   const { aria2, patchAria2 } = useAria2();
 
@@ -65,6 +67,7 @@ function Aria2Setting() {
       <SpeedLimitDialog ref={speedLimitRef} />
       <TaskManagementDialog ref={taskManagementRef} />
       <BtTrackerDialog ref={btTrackerRef} />
+      <UserAgentDialog ref={userAgentRef} />
 
       <SettingItem
         label={t("setting.External")}
@@ -79,6 +82,11 @@ function Aria2Setting() {
       <SettingItem
         label={t("setting.BtTracker")}
         onClick={() => btTrackerRef.current?.open()}
+      />
+
+      <SettingItem
+        label={t("setting.UserAgent")}
+        onClick={() => userAgentRef.current?.open()}
       />
 
       <SettingItem

@@ -16,6 +16,7 @@ const theme = createTheme({
           secondary: DEFAULT_DARK_THEME.secondary_text,
         },
         background: {
+          default: DEFAULT_DARK_THEME.background_color,
           paper: DEFAULT_DARK_THEME.background_color,
         },
       },
@@ -32,7 +33,8 @@ const theme = createTheme({
           secondary: DEFAULT_THEME.secondary_text,
         },
         background: {
-          // paper: DEFAULT_THEME.background_color,
+          default: DEFAULT_THEME.background_color,
+          paper: DEFAULT_THEME.background_color,
         },
       },
     },

@@ -1,4 +1,5 @@
 use crate::{core::handle, logging, utils::logging::Type};
+use tauri::Listener;
 
 /// create main window
 /// return true if window is minimized
@@ -40,6 +41,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .min_inner_size(500.0, 550.0)
     .decorations(false)
     .maximizable(true)
+    .visible(false)
     .build();
 
     #[cfg(target_os = "macos")]
@@ -52,6 +54,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .inner_size(800.0, 600.0)
     .min_inner_size(650.0, 550.0)
     .decorations(true)
+    .visible(false)
     .build();
 
     match window {
@@ -59,11 +62,12 @@ pub fn create_window(is_showup: bool) -> bool {
             logging!(info, Type::Window, true, "Window created successfully");
 
             if is_showup {
-                println!("is showup");
-                let _ = window.show();
-                let _ = window.set_focus();
-            } else {
-                let _ = window.hide();
+                logging!(info, Type::Window, true, "Window is showup");
+                let window_clone = window.clone();
+                window.once("motrix://web-ready", move |_| {
+                    let _ = window_clone.show();
+                    let _ = window_clone.set_focus();
+                });
             }
         }
         Err(e) => {

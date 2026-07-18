@@ -9,14 +9,7 @@ body {
   --text-primary: #1f1f1f;
   --selection-color: #f5f5f5;
   --scroller-color: #90939980;
-  --background-color: #ececec;
   --divider-color: rgba(255, 255, 255, 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #1e1f27;
-  }
 }
 
 ::selection {
