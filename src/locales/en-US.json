@@ -108,7 +108,14 @@
     "UploadLength": "Uploaded",
     "SearchPlaceholder": "Search download tasks...",
     "Selected": "Selected {{count}} tasks",
-    "DownloadErrorMessage": "Error occurred when downloading {{taskName}}"
+    "DownloadErrorMessage": "Error occurred when downloading {{taskName}}",
+    "AddTorrentSuccess": "Successfully added {{count}} tasks",
+    "AddTorrentError": "Failed to add {{count}} tasks",
+    "ConfirmAddTorrentsTitle": "Add Torrent Tasks",
+    "ConfirmAddTorrentsMessage": "Add {{count}} torrent task(s)?",
+    "ConfirmAddTorrentsMore": "10 listed above, {{count}} more not shown",
+    "ProcessTorrentError": "Error processing torrent files",
+    "DragTorrentHint": "💡 Tip: Drag torrent files here to quickly add tasks"
   },
   "common": {
     "DownloadFile": "Download File",
