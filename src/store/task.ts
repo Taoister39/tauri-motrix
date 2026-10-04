@@ -12,9 +12,7 @@ import { DOWNLOAD_ENGINE, TASK_STATUS_ENUM } from "@/constant/task";
 import {
   addTaskApi,
   Aria2Task,
-  batchForcePauseTaskApi,
   batchPauseTaskApi,
-  batchRemoveTaskApi,
   batchResumeTaskApi,
   downloadingTasksApi,
   forcePauseTaskApi,
@@ -187,29 +185,31 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       return;
     }
 
+    const taskIds = taskId ? [taskId] : selectedTaskIds;
+    await Promise.all(
+      taskIds.map(async (gid) => {
+        const task = getTaskByGid(gid);
+
+        if (task.status === TASK_STATUS_ENUM.Active) {
+          await forcePauseTaskApi(gid);
+        }
+
+        if (
+          [
+            TASK_STATUS_ENUM.Error,
+            TASK_STATUS_ENUM.Done,
+            TASK_STATUS_ENUM.Recycle,
+          ].includes(task.status as TASK_STATUS_ENUM)
+        ) {
+          await removeDownloadResultTaskApi(gid);
+        } else {
+          await removeTaskApi(gid);
+        }
+      }),
+    );
+
     if (!taskId) {
-      await batchForcePauseTaskApi(selectedTaskIds);
-      await batchRemoveTaskApi(selectedTaskIds);
-
       set({ selectedTaskIds: [] });
-    } else {
-      const task = getTaskByGid(taskId);
-
-      if (task.status === TASK_STATUS_ENUM.Active) {
-        await forcePauseTaskApi(taskId);
-      }
-
-      if (
-        [
-          TASK_STATUS_ENUM.Error,
-          TASK_STATUS_ENUM.Done,
-          TASK_STATUS_ENUM.Recycle,
-        ].includes(task.status as TASK_STATUS_ENUM)
-      ) {
-        await removeDownloadResultTaskApi(taskId);
-      } else {
-        await removeTaskApi(taskId);
-      }
     }
 
     await saveSessionApi();
