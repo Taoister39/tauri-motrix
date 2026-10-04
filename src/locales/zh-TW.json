@@ -108,7 +108,14 @@
     "UploadLength": "已上傳",
     "SearchPlaceholder": "搜尋下載任務...",
     "Selected": "已選 {{count}} 個任務",
-    "DownloadErrorMessage": "下載 {{taskName}} 時發生錯誤"
+    "DownloadErrorMessage": "下載 {{taskName}} 時發生錯誤",
+    "AddTorrentSuccess": "成功添加 {{count}} 個任務",
+    "AddTorrentError": "{{count}} 個任務添加失敗",
+    "ConfirmAddTorrentsTitle": "添加種子任務",
+    "ConfirmAddTorrentsMessage": "確定要添加 {{count}} 個種子任務嗎？",
+    "ConfirmAddTorrentsMore": "以上已列出 10 個，還有 {{count}} 個未顯示",
+    "ProcessTorrentError": "處理種子檔案時發生錯誤",
+    "DragTorrentHint": "💡 提示：可直接拖拽種子檔案到此處快速添加任務"
   },
   "common": {
     "DownloadFile": "下載檔案",

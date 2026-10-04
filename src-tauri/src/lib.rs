@@ -70,7 +70,8 @@ pub fn run() {
             cmd::patch_aria2_config,
             cmd::get_auto_launch_status,
             cmd::app_log,
-            cmd::stop_engine
+            cmd::stop_engine,
+            cmd::read_file_as_base64
         ]);
 
     let app = builder

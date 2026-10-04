@@ -113,14 +113,7 @@ export interface TaskFilesProps {
   height?: number;
 }
 
-export type RowSelectMethod = "all" | "none" | "invert" | "single" | "multiple";
-
-export const enum FILE_SELECTION {
-  Video = "video",
-  Audio = "audio",
-  Image = "image",
-  Document = "document",
-}
+import { FILE_SELECTION, RowSelectMethod } from "@/constant/taskFiles";
 
 export default function TaskFiles({
   files,
@@ -154,7 +147,7 @@ export default function TaskFiles({
     }
 
     return (record: TaskFile, index) =>
-      record?.[rowKey as keyof TaskFile] || `default_${index}`;
+      record[rowKey as keyof TaskFile] || `default_${index}`;
   }, [rowKey]);
 
   const derivedSelectedKeySet = useMemo<Set<Key>>(

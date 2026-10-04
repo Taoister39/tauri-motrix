@@ -16,7 +16,7 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { useBoolean } from "ahooks";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router";
 import { SWRConfig } from "swr";
 
 import logoIcon from "@/assets/logo.svg?react";

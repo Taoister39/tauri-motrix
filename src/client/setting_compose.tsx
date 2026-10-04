@@ -9,7 +9,7 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { ReactNode, useTransition } from "react";
 
 import isAsyncFunction from "@/utils/is_async_function";
 
@@ -30,12 +30,11 @@ export function SettingItem(props: {
     </Box>
   );
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const handleClick: ListItemButtonProps["onClick"] = (e) => {
     if (onClick) {
       if (isAsyncFunction(onClick)) {
-        setIsLoading(true);
-        Promise.resolve(onClick(e)).finally(() => setIsLoading(false));
+        startTransition(() => onClick(e));
       } else {
         onClick(e);
       }
@@ -45,9 +44,9 @@ export function SettingItem(props: {
   if (clickable) {
     return (
       <ListItem disablePadding>
-        <ListItemButton onClick={handleClick} disabled={isLoading}>
+        <ListItemButton onClick={handleClick} disabled={isPending}>
           <ListItemText primary={primary} secondary={secondary} />
-          {isLoading ? (
+          {isPending ? (
             <CircularProgress color="inherit" size={20} />
           ) : (
             <ChevronRightRounded />

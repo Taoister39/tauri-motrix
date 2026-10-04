@@ -32,11 +32,7 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     if resume_all_when_app_launched {
         let _ = aria2c::unpause_all().await;
     }
-    // TODO: temporary
-    let enable_upnp = motrix.enable_upnp.unwrap_or(false);
-    if enable_upnp {
-        let _ = run_upnp_mapping(&motrix);
-    }
+    log_err!(run_upnp_mapping());
 
     log_err!(tray::create_tray(app_handle));
     log_err!(tray::update_tray_menu());

@@ -1,4 +1,15 @@
 #!/bin/bash -e
+
+# Check if running on Linux (this script cross-compiles for Windows on Linux)
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    echo "Error: This script is designed to cross-compile Windows binaries on Linux systems only."
+    echo "Current OS: $OSTYPE"
+    echo "Please use the appropriate build script for your operating system:"
+    echo "  - Linux (native): ./aria2c_build_linux.sh"
+    echo "  - macOS: ./aria2c_build_mac.sh"
+    exit 1
+fi
+
 aria2_ver="1.37.0"
 libssh2_ver="1.11.1"
 
@@ -27,7 +38,6 @@ handle_arch() {
         exit 1
         ;;
     esac
-    vcpkg_libs_dir="$vcpkg_dir/installed/${vcpkg_arch}-mingw-static-release"
 
 }
 

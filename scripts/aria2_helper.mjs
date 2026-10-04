@@ -20,8 +20,8 @@ const ARIA2_MAP = {
   "win32-arm64": "win-arm64bit-build1",
   "darwin-arm64": "osx-darwin",
   "darwin-x64": "osx-x64-darwin",
-  // TODO
-  // "aarch64-unknown-linux-gnu": "aarch64-linux-android-build1",
+  "linux-arm64": "aarch64-linux-build1",
+  "linux-x64": "x64-linux-build1",
 };
 
 // ensure aria2 task

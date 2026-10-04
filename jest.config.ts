@@ -37,6 +37,7 @@ const config: Config = {
           },
         ],
       },
+      transformIgnorePatterns: ["node_modules/(?!.*react-error-boundary.*)"],
       moduleNameMapper: {
         "^@root/(.*)$": "<rootDir>/$1",
         "^@/(.*)$": "<rootDir>/src/$1",

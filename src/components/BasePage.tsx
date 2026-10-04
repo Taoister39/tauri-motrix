@@ -1,6 +1,8 @@
 import { styled, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
+import BaseErrorBoundary from "@/components/BaseErrorBoundary";
+
 interface Props {
   title?: ReactNode; // the page title
   header?: ReactNode; // something behind title
@@ -41,18 +43,20 @@ const TheContainer = styled("article")<{ full?: boolean }>(({ full }) => ({
 
 function BasePage({ title, header, children, full, fab }: Props) {
   return (
-    <ThePage className="base-page">
-      <Header data-tauri-drag-region>
-        <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-          {title}
-        </Typography>
-        {header}
-      </Header>
-      <TheContainer full={full}>
-        {children}
-        {fab}
-      </TheContainer>
-    </ThePage>
+    <BaseErrorBoundary>
+      <ThePage className="base-page">
+        <Header data-tauri-drag-region>
+          <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
+            {title}
+          </Typography>
+          {header}
+        </Header>
+        <TheContainer full={full}>
+          {children}
+          {fab}
+        </TheContainer>
+      </ThePage>
+    </BaseErrorBoundary>
   );
 }
 
