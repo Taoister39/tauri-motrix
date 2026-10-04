@@ -48,6 +48,13 @@ pub fn init_log() -> Result<()> {
         .appender(Appender::builder().build("file", Box::new(to_file)))
         .logger(app_logger_builder.additive(false).build("app", log_level))
         .logger(
+            Logger::builder()
+                .appender("stdout")
+                .appender("file")
+                .additive(false)
+                .build("upnp_mapping", log_level),
+        )
+        .logger(
             webview_logger_builder
                 .additive(false)
                 .build(WEBVIEW_TARGET, log_level),

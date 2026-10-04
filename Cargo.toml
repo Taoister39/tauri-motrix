@@ -2,5 +2,10 @@
 resolver = "3"
 members = ["src-tauri", "crates/*"]
 
+[workspace.dependencies]
+igd-next = { version = "0.17", features = ["aio_tokio"] }
+log = "0.4.27"
+tokio = "1.44.1"
+
 [workspace.lints.clippy]
 dbg_macro = "deny"

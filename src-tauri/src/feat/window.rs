@@ -27,9 +27,10 @@ pub fn clean() -> bool {
     use tokio::time::{timeout, Duration};
     let rt = tokio::runtime::Runtime::new().unwrap();
     let cleanup_result = rt.block_on(async {
-        let core_res = timeout(Duration::from_secs(1), CoreManager::global().stop_engine()).await;
-
-        // TODO: more procedure
+        let (core_res, ()) = tokio::join!(
+            timeout(Duration::from_secs(1), CoreManager::global().stop_engine()),
+            super::shutdown_upnp_mapping(),
+        );
 
         core_res.is_ok()
     });

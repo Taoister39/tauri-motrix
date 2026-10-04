@@ -18,7 +18,6 @@ enum UpdateFlags {
     // MotrixConfig = 1 << 2,
     Launch = 1 << 3,
     TrayMenu = 1 << 4,
-    UPnp = 1 << 5,
 }
 
 /// expose outside for motrix config
@@ -31,7 +30,13 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
     let bt_listen_port = data.bt_listen_port;
     let dht_listen_port = data.dht_listen_port;
 
-    let res: Result<()> = {
+    let upnp_changed =
+        enable_upnp.is_some() || bt_listen_port.is_some() || dht_listen_port.is_some();
+    let updated_motrix = Config::motrix().draft().clone();
+    let res: Result<()> = (|| {
+        if upnp_changed {
+            feat::create_upnp_mappings(&updated_motrix)?;
+        }
         let mut flag_signal: i32 = UpdateFlags::None as i32;
 
         if language.is_some() {
@@ -40,10 +45,6 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 
         if auto_launch.is_some() {
             flag_signal |= UpdateFlags::Launch as i32;
-        }
-
-        if enable_upnp.is_some() || bt_listen_port.is_some() || dht_listen_port.is_some() {
-            flag_signal |= UpdateFlags::UPnp as i32;
         }
 
         // ------
@@ -56,17 +57,18 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
             service::tray::update_tray_menu()?;
         }
 
-        if (flag_signal & (UpdateFlags::UPnp as i32)) != 0 {
-            feat::patch_upnp_config(enable_upnp, bt_listen_port, dht_listen_port)?;
-        }
-
+        updated_motrix.save_file()?;
         Ok(())
-    };
+    })();
 
     match res {
         Ok(()) => {
             Config::motrix().apply();
-            Config::motrix().data().save_file()?;
+            if upnp_changed {
+                if let Err(error) = feat::run_upnp_mapping() {
+                    log::error!(target: "app", "Failed to submit UPnP configuration: {error}");
+                }
+            }
             Ok(())
         }
         Err(err) => {
