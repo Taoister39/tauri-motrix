@@ -72,8 +72,18 @@ jobs:
           path: aria2*.zip
 
   build-macos:
-    name: Build for macOS
-    runs-on: macos-15
+    name: Build for macOS (${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: "arm64"
+            os: macos-15
+            archive-suffix: osx-darwin
+          - arch: "x64"
+            os: macos-15-intel
+            archive-suffix: osx-x64-darwin
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -98,12 +108,13 @@ jobs:
         # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           chmod +x ./scripts/aria2c_build_mac.sh
-          ./scripts/aria2c_build_mac.sh
+          ./scripts/aria2c_build_mac.sh ${{ matrix.arch }}
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-macos-arm64
-          path: aria2*.zip
+          name: aria2-macos-${{ matrix.arch }}
+          path: aria2-*-${{ matrix.archive-suffix }}.zip
+          if-no-files-found: error
 
   build-linux:
     name: Build for Linux (${{ matrix.arch }})
