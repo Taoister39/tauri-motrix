@@ -108,7 +108,14 @@
     "UploadLength": "アップロード済み",
     "SearchPlaceholder": "ダウンロードタスクを検索...",
     "Selected": "{{count}} 個のタスクを選択済み",
-    "DownloadErrorMessage": "{{taskName}} のダウンロード中にエラーが発生しました"
+    "DownloadErrorMessage": "{{taskName}} のダウンロード中にエラーが発生しました",
+    "AddTorrentSuccess": "{{count}} 個のタスクを正常に追加しました",
+    "AddTorrentError": "{{count}} 個のタスクの追加に失敗しました",
+    "ConfirmAddTorrentsTitle": "トレントタスクを追加",
+    "ConfirmAddTorrentsMessage": "{{count}} 個のトレントタスクを追加しますか？",
+    "ConfirmAddTorrentsMore": "上に 10 件表示、あと {{count}} 件は未表示",
+    "ProcessTorrentError": "トレントファイルの処理中にエラーが発生しました",
+    "DragTorrentHint": "💡 ヒント：トレントファイルをここにドラッグしてタスクを追加できます"
   },
   "common": {
     "DownloadFile": "ファイルをダウンロード",
