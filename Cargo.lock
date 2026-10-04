@@ -5071,6 +5071,7 @@ name = "tauri-motrix"
 version = "0.2.4"
 dependencies = [
  "anyhow",
+ "base64 0.22.1",
  "chrono",
  "dunce",
  "fs2",

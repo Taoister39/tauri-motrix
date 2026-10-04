@@ -108,7 +108,14 @@
     "UploadLength": "已上传",
     "SearchPlaceholder": "搜索下载任务...",
     "Selected": "已选 {{count}} 个任务",
-    "DownloadErrorMessage": "下载 {{taskName}} 时发生错误"
+    "DownloadErrorMessage": "下载 {{taskName}} 时发生错误",
+    "AddTorrentSuccess": "成功添加 {{count}} 个任务",
+    "AddTorrentError": "{{count}} 个任务添加失败",
+    "ConfirmAddTorrentsTitle": "添加种子任务",
+    "ConfirmAddTorrentsMessage": "确定要添加 {{count}} 个种子任务吗？",
+    "ConfirmAddTorrentsMore": "以上已列出 10 个，还有 {{count}} 个未显示",
+    "ProcessTorrentError": "处理种子文件时出错",
+    "DragTorrentHint": "💡 提示：可直接拖拽种子文件到此处快速添加任务"
   },
   "common": {
     "DownloadFile": "下载文件",

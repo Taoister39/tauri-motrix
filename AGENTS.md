@@ -1,0 +1,8 @@
+# AGENTS.md
+
+- Use Node.js and pnpm from `package.json`.
+- Keep shared dependency versions in `pnpm-workspace.yaml` catalogs.
+- Run `pnpm build` once before unit or e2e tests, including focused runs; tests depend on built workspace packages.
+- use unit tests for single-function behavior.
+- Keep tests minimal and focused on observable behavior; avoid redundant coverage, implementation details, and unnecessary complexity.
+- Update all affected unit test snapshots, not just a subset.

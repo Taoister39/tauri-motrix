@@ -36,3 +36,6 @@ export const appLog = (
 ) => invoke<null>("app_log", { level, message, location });
 
 export const stopEngine = () => invoke("stop_engine");
+
+export const readFileAsBase64 = (path: string) =>
+  invoke<string>("read_file_as_base64", { path });
