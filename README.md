@@ -22,6 +22,13 @@ Supports Windows (x64 / arm64).
 - 🚀 Supports 128 threads in a single task
 - 📦 Lightweight, small package size
 - 🚥 Supports speed limit
+- 🔌 Configurable aria2 RPC port and secret for third-party download tools
+
+## RPC downloads
+
+Open **Settings → Aria2 Engine → RPC Settings** to change the RPC port (1024–65535) and optional secret. Copy the RPC address into your browser extension or cloud-drive download tool, and use the same secret there. The default address is `http://127.0.0.1:16801/jsonrpc`.
+
+Saving restarts the built-in aria2 engine and restores its saved task session. If the new port is occupied or the restart fails, the previous settings are retained. Clearing the secret disables RPC authentication.
 
 ## Development
 

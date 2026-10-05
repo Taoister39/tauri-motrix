@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt, fs::read_to_string};
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use serde::Serialize;
 
 use crate::utils::{
@@ -25,27 +25,22 @@ impl IAria2Temp {
         let template = Self::template();
         let mut map = template.0;
 
-        let mut is_changed = false;
-        for line in str.lines() {
+        Self::parse_config(&str, &mut map);
+        let aria2_instance = Self(map);
+        let _ = Self::save_file(&aria2_instance);
+        aria2_instance
+    }
+
+    fn parse_config(content: &str, map: &mut HashMap<String, String>) {
+        for line in content.lines() {
             if line.starts_with('#') || line.is_empty() {
                 continue;
             }
 
-            let mut split = line.split('=');
-            let key = split.next().unwrap().trim().to_string();
-            let value = split.next().unwrap().trim().to_string();
-
-            map.insert(key, value);
-            is_changed = true;
+            if let Some((key, value)) = line.split_once('=') {
+                map.insert(key.trim().to_string(), value.trim().to_string());
+            }
         }
-
-        let aria2_instance = Self(map);
-
-        if is_changed {
-            let _ = Self::save_file(&aria2_instance);
-        }
-
-        aria2_instance
     }
 
     pub fn template() -> Self {
@@ -114,9 +109,25 @@ impl IAria2Temp {
 
         Aria2Info {
             port: Self::guard_port(config),
-            // TODO: temporary solution, need to be fixed
             server: Self::guard_server(config),
+            secret: config.get("rpc-secret").cloned().unwrap_or_default(),
         }
+    }
+
+    pub fn patch_rpc(&mut self, port: u16, secret: String) -> Result<()> {
+        if port < 1024 {
+            bail!("RPC port must be between 1024 and 65535");
+        }
+        if secret.contains(['\r', '\n', '\0']) || secret.trim() != secret {
+            bail!("RPC secret must not contain line breaks or leading/trailing whitespace");
+        }
+        self.0.insert("rpc-listen-port".into(), port.to_string());
+        if secret.is_empty() {
+            self.0.remove("rpc-secret");
+        } else {
+            self.0.insert("rpc-secret".into(), secret);
+        }
+        Ok(())
     }
 
     pub fn patch_config(&mut self, patch: HashMap<String, String>) {
@@ -145,6 +156,7 @@ impl fmt::Display for IAria2Temp {
 pub struct Aria2Info {
     pub port: u16,
     pub server: String,
+    pub secret: String,
 }
 
 #[cfg(test)]
@@ -165,7 +177,8 @@ mod tests {
             aria2.get_client_info(),
             Aria2Info {
                 port: 2239,
-                server: "127.0.0.1:2239".into()
+                server: "127.0.0.1:2239".into(),
+                secret: String::new(),
             }
         );
     }
@@ -176,5 +189,38 @@ mod tests {
         map.insert("rpc-listen-port".into(), "1234".into());
 
         assert_eq!(IAria2Temp::guard_port(&map), 1234);
+    }
+
+    #[test]
+    fn rpc_settings_round_trip() {
+        let mut config = IAria2Temp::default();
+        config.patch_rpc(6800, "secret=with=equals".into()).unwrap();
+        let mut map = HashMap::new();
+        IAria2Temp::parse_config(&config.to_string(), &mut map);
+        assert_eq!(
+            IAria2Temp(map).get_client_info(),
+            Aria2Info {
+                port: 6800,
+                server: "127.0.0.1:6800".into(),
+                secret: "secret=with=equals".into(),
+            }
+        );
+        config.patch_rpc(65535, String::new()).unwrap();
+        assert_eq!(config.get_client_info().secret, "");
+        assert!(!config.to_string().contains("rpc-secret="));
+    }
+
+    #[test]
+    fn invalid_rpc_settings_do_not_change_config() {
+        let mut config = IAria2Temp::default();
+        for (port, secret) in [
+            (0, ""),
+            (1023, ""),
+            (6800, "secret\nrpc-listen-all=true"),
+            (6800, " secret "),
+        ] {
+            assert!(config.patch_rpc(port, secret.into()).is_err());
+            assert!(config.0.is_empty());
+        }
     }
 }

@@ -3,7 +3,12 @@ import { useCallback } from "react";
 import useSWR, { mutate } from "swr";
 
 import { getAria2, getVersionApi } from "@/services/aria2c_api";
-import { getAria2Config, getAria2Info, patchAria2Config } from "@/services/cmd";
+import {
+  getAria2Config,
+  getAria2Info,
+  patchAria2Config,
+  patchAria2Rpc,
+} from "@/services/cmd";
 
 export function useAria2() {
   const { data: aria2, mutate: mutateAria2 } = useSWR(
@@ -45,18 +50,20 @@ export function useAria2Info() {
   );
 
   const patchInfoMemoizedFn = useCallback(
-    async (data: Record<string, string>) => {
-      // TODO
-
-      console.log("aria2 info change ", data);
-
-      mutate("getAria2Config");
-      mutate("getAria2Version");
-
-      // update new instance
-      getAria2(true);
+    async (data: Pick<Aria2Info, "port" | "secret">) => {
+      let info: Aria2Info;
+      try {
+        info = await patchAria2Rpc(data);
+      } catch (error) {
+        // A failed restart may have restored the old engine with a new socket.
+        await getAria2(true).catch(() => {});
+        throw error;
+      }
+      await getAria2(true);
+      await mutateInfo(info, false);
+      await Promise.all([mutate("getAria2Config"), mutate("getAria2Version")]);
     },
-    [],
+    [mutateInfo],
   );
   const patchInfo = useLockFn(patchInfoMemoizedFn);
 

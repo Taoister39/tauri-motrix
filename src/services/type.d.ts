@@ -1,6 +1,7 @@
 interface Aria2Info {
   port: number;
   server: string;
+  secret: string;
 }
 
 interface Aria2Config {
@@ -13,6 +14,7 @@ interface Aria2Config {
   "input-file": string;
   dir: string;
   "rpc-listen-port": string;
+  "rpc-secret"?: string;
   // json convert to ts type
   "allow-overwrite"?: string;
   "allow-piece-length-change"?: string;

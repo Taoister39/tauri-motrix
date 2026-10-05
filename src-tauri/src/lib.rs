@@ -72,6 +72,7 @@ pub fn run() {
             cmd::patch_motrix_config,
             cmd::exit_app,
             cmd::patch_aria2_config,
+            cmd::patch_aria2_rpc,
             cmd::get_auto_launch_status,
             cmd::app_log,
             cmd::stop_engine,

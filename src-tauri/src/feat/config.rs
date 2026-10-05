@@ -2,12 +2,15 @@ use std::collections::HashMap;
 
 use anyhow::Result;
 use serde_json::json;
+use tokio::sync::Mutex;
 
 use crate::{
-    config::{Config, IMotrix},
+    config::{Aria2Info, Config, IMotrix},
     core::sys_opt,
     feat, service,
 };
+
+static ARIA2_CONFIG_UPDATE: Mutex<()> = Mutex::const_new(());
 
 // Define update flags as bitflags for better performance
 #[derive(Clone, Copy)]
@@ -92,19 +95,24 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 }
 
 pub async fn patch_aria2(data: HashMap<String, String>) -> Result<()> {
+    let _update = ARIA2_CONFIG_UPDATE.lock().await;
+    if data.contains_key("rpc-listen-port") || data.contains_key("rpc-secret") {
+        anyhow::bail!("Use RPC settings to change the RPC port or secret");
+    }
     Config::aria2().draft().patch_config(data.clone());
 
     // TODO: check conf
 
-    let res = {
+    let res = async {
         service::aria2c::change_global_option(&[json!(data)]).await?;
+        Config::aria2().draft().save_file()?;
         <Result<()>>::Ok(())
-    };
+    }
+    .await;
 
     match res {
         Ok(()) => {
             Config::aria2().apply();
-            let _ = Config::aria2().data().save_file();
 
             Ok(())
         }
@@ -113,4 +121,20 @@ pub async fn patch_aria2(data: HashMap<String, String>) -> Result<()> {
             Err(err)
         }
     }
+}
+
+pub async fn patch_aria2_rpc(port: u16, secret: String) -> Result<Aria2Info> {
+    let _update = ARIA2_CONFIG_UPDATE.lock().await;
+    let mut config = Config::aria2().data().clone();
+    let previous = config.get_client_info();
+    config.patch_rpc(port, secret)?;
+    let info = config.get_client_info();
+    if info != previous {
+        crate::core::CoreManager::global()
+            .reconfigure_aria2(&config)
+            .await?;
+        *Config::aria2().draft() = config;
+        Config::aria2().apply();
+    }
+    Ok(info)
 }

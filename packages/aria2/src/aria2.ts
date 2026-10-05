@@ -137,7 +137,9 @@ export class Aria2 {
       jsonrpc: "2.0",
       id: crypto.randomUUID(),
       method: ensurePrefix(method),
-      params: addSecret(params, instanceConfig.secret),
+      params: ensurePrefix(method).startsWith("aria2.")
+        ? addSecret(params, instanceConfig.secret)
+        : params,
     };
 
     if (webSocketIns?.readyState === WebSocket.OPEN) {
@@ -159,7 +161,9 @@ export class Aria2 {
       calls.map(({ method, params }) => {
         return {
           methodName: ensurePrefix(method),
-          params: params,
+          params: ensurePrefix(method).startsWith("aria2.")
+            ? addSecret(params, this.instanceConfig.secret)
+            : params,
         };
       }),
     ];

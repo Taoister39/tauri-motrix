@@ -13,7 +13,8 @@ beforeAll(() => {
     if (cmd === "get_aria2_info") {
       return {
         port: 16801,
-        server: "http://127.0.0.1:16801",
+        server: "127.0.0.1:16801",
+        secret: "test-secret",
       };
     }
   });
@@ -24,7 +25,8 @@ describe("getAria2 fn", () => {
     // getAria2();
     const expectObj = {
       port: 16801,
-      server: "http://127.0.0.1:16801",
+      server: "127.0.0.1:16801",
+      secret: "test-secret",
     };
     expect(invoke("get_aria2_info")).resolves.toEqual(expectObj);
   });
@@ -39,6 +41,7 @@ describe("getAria2 fn", () => {
     const instance = await getAria2();
 
     expect(instance).toBeDefined();
+    expect(instance.instanceConfig.secret).toBe("test-secret");
   });
 
   it("should call aria2 version", async () => {
@@ -111,4 +114,40 @@ describe("Aria2 api", () => {
   it("should undefined for not mock", async () => {
     expect(saveSessionApi()).resolves.toBeUndefined();
   });
+});
+
+it("reconnects with updated settings and preserves download notifications", async () => {
+  const socket = { onmessage: null, close: jest.fn() } as unknown as WebSocket;
+  const websocket = jest
+    .spyOn(globalThis, "WebSocket")
+    .mockImplementation(() => socket);
+  try {
+    const previous = await getAria2();
+    const notification = jest.fn();
+    previous.addListener("onDownloadComplete", notification);
+    mockIPC((command) =>
+      command === "get_aria2_info"
+        ? {
+            port: 6800,
+            server: "127.0.0.1:6800",
+            secret: "updated-secret",
+          }
+        : undefined,
+    );
+    const updated = await getAria2(true);
+    expect(updated.instanceConfig).toMatchObject({
+      server: "127.0.0.1:6800",
+      secret: "updated-secret",
+    });
+    socket.onmessage?.({
+      data: JSON.stringify({
+        method: "aria2.onDownloadComplete",
+        params: [{ gid: "task" }],
+      }),
+    } as MessageEvent);
+    expect(notification).toHaveBeenCalledWith([{ gid: "task" }]);
+    updated.close();
+  } finally {
+    websocket.mockRestore();
+  }
 });

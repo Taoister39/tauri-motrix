@@ -6,6 +6,9 @@ export function getAria2Info() {
   return invoke<Aria2Info>("get_aria2_info");
 }
 
+export const patchAria2Rpc = (data: Pick<Aria2Info, "port" | "secret">) =>
+  invoke<Aria2Info>("patch_aria2_rpc", data);
+
 export const getAria2Config = () =>
   invoke<Aria2Config | null>("get_aria2_config");
 

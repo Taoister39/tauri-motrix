@@ -122,6 +122,23 @@ describe("Aria2 Class", () => {
   });
 
   describe("multiCall", () => {
+    it("authenticates each nested aria2 call when a secret is set", async () => {
+      aria2.instanceConfig.secret = "secret";
+      const received: unknown[] = [];
+      mockRPC((_method, params) => {
+        received.push(params);
+        return "OK";
+      });
+      expect(
+        await aria2.multiCall([
+          { method: "tellActive", params: [] },
+          { method: "aria2.tellWaiting", params: [0, 20] },
+          { method: "system.listMethods", params: [] },
+        ]),
+      ).toEqual([["OK"], ["OK"], ["OK"]]);
+      expect(received).toEqual([["token:secret"], ["token:secret", 0, 20], []]);
+    });
+
     it("multiCall should call system.multicall with correct parameters", async () => {
       const calls = [
         { method: "aria2.getVersion", params: [] },

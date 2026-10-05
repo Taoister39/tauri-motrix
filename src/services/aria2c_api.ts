@@ -22,6 +22,7 @@ async function getInstancePromise() {
 
   const instance = create({
     server,
+    secret: aria2Info.secret,
     eventSubscribeMap,
   });
 
@@ -42,7 +43,7 @@ async function getInstancePromise() {
 
 export function getAria2(force = false) {
   if (!instancePromise || force) {
-    instancePromise?.then(({ close }) => close());
+    instancePromise?.then(({ close }) => close()).catch(() => {});
     instancePromise = getInstancePromise();
   }
   return instancePromise;

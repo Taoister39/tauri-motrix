@@ -1,18 +1,23 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use fs2::FileExt;
 use once_cell::sync::OnceCell;
 use std::{path::PathBuf, sync::Arc, time::Duration};
-use tauri_plugin_shell::{process::CommandChild, ShellExt};
-use tokio::{sync::Mutex, time::sleep};
+use tauri_plugin_shell::{
+    process::{CommandChild, CommandEvent},
+    ShellExt,
+};
+use tokio::{
+    sync::{oneshot, Mutex},
+    time::{sleep, timeout, Instant},
+};
 
 use crate::{
-    config::Config,
+    config::{Aria2Info, Config, IAria2Temp},
     core::handle,
     log_err, logging,
     utils::{
         dirs::{self, aria2_path},
         logging::Type,
-        sys,
     },
 };
 
@@ -20,6 +25,7 @@ use crate::{
 pub struct CoreManager {
     running: Arc<Mutex<bool>>,
     aria2c_sidecar: Arc<Mutex<Option<CommandChild>>>,
+    aria2c_exit: Mutex<Option<oneshot::Receiver<()>>>,
 }
 
 impl CoreManager {
@@ -28,6 +34,7 @@ impl CoreManager {
         CORE_MANGER.get_or_init(|| CoreManager {
             running: Arc::new(Mutex::new(false)),
             aria2c_sidecar: Arc::new(Mutex::new(None)),
+            aria2c_exit: Mutex::new(None),
         })
     }
 
@@ -47,8 +54,13 @@ impl CoreManager {
 
         let config_path = aria2_path()?;
 
-        self.ensure_port_available().await;
+        self.ensure_port_available().await?;
         self.run_core_by_sidecar(&config_path).await?;
+        let info = Config::aria2().data().get_client_info();
+        if let Err(error) = Self::wait_for_rpc(&info).await {
+            let _ = self.kill_core_by_sidecar().await;
+            return Err(error);
+        }
 
         *running = true;
 
@@ -56,19 +68,99 @@ impl CoreManager {
     }
 
     pub async fn stop_engine(&self) {
+        let mut running = self.running.lock().await;
         if let Err(error) = crate::service::vortex::shutdown().await {
             log::error!("Vortex shutdown failed: {error}");
         }
         // TODO aria2c external control for user
         let _ = self.kill_core_by_sidecar().await;
+        *running = false;
     }
 
-    pub async fn ensure_port_available(&self) {
-        let aria2_map = Config::aria2().latest().0.clone();
-        let aria2_port = aria2_map
-            .get("rpc-listen-port")
-            .and_then(|value| value.parse::<u16>().ok())
-            .unwrap_or(16801);
+    /// Save unfinished tasks and restart only the managed aria2 process.
+    pub async fn reconfigure_aria2(&self, config: &IAria2Temp) -> Result<()> {
+        let mut running = self.running.lock().await;
+        let was_running = *running;
+        let previous = Config::aria2().data().clone();
+        let old_info = previous.get_client_info();
+        let new_info = config.get_client_info();
+        if !was_running || old_info.port != new_info.port {
+            std::net::TcpListener::bind(("0.0.0.0", new_info.port))
+                .with_context(|| format!("RPC port {} is unavailable", new_info.port))?;
+        }
+
+        if was_running {
+            crate::service::aria2c::call_with_info(&old_info, "saveSession", &[]).await?;
+        }
+        config.save_file()?;
+        let config_path = aria2_path()?;
+        let result: Result<()> = async {
+            if was_running {
+                crate::service::aria2c::call_with_info(&old_info, "forceShutdown", &[]).await?;
+                self.wait_for_exit().await?;
+                self.aria2c_sidecar.lock().await.take();
+                handle::Handle::global().core_lock.write().take();
+                *running = false;
+            }
+
+            self.run_core_by_sidecar(&config_path).await?;
+            Self::wait_for_rpc(&new_info).await?;
+            *running = true;
+            Ok(())
+        }
+        .await;
+
+        if let Err(error) = result {
+            let recovery: Result<()> = async {
+                previous.save_file()?;
+                self.kill_core_by_sidecar().await?;
+                *running = false;
+                if was_running {
+                    self.run_core_by_sidecar(&config_path).await?;
+                    Self::wait_for_rpc(&old_info).await?;
+                    *running = true;
+                }
+                Ok(())
+            }
+            .await;
+            if let Err(recovery_error) = recovery {
+                let _ = self.kill_core_by_sidecar().await;
+                *running = false;
+                return Err(error.context(format!(
+                    "Failed to restore the previous RPC configuration: {recovery_error}"
+                )));
+            }
+            return Err(error);
+        }
+        Ok(())
+    }
+
+    async fn wait_for_rpc(info: &Aria2Info) -> Result<()> {
+        let deadline = Instant::now() + Duration::from_secs(10);
+        loop {
+            match crate::service::aria2c::call_with_info(info, "getVersion", &[]).await {
+                Ok(_) => return Ok(()),
+                Err(error) if Instant::now() >= deadline => {
+                    return Err(error.context("aria2 RPC did not become ready"))
+                }
+                Err(_) => sleep(Duration::from_millis(100)).await,
+            }
+        }
+    }
+
+    async fn wait_for_exit(&self) -> Result<()> {
+        let mut exit = self.aria2c_exit.lock().await;
+        if let Some(receiver) = exit.as_mut() {
+            let _ = timeout(Duration::from_secs(10), receiver)
+                .await
+                .context("Timed out waiting for aria2 to stop")?;
+        }
+        exit.take();
+        Ok(())
+    }
+
+    pub async fn ensure_port_available(&self) -> Result<()> {
+        let aria2_port = Config::aria2().data().get_client_info().port;
 
         logging!(
             info,
@@ -78,25 +170,9 @@ impl CoreManager {
             aria2_port
         );
 
-        let occupies = sys::get_occupied_port_pids(aria2_port).await;
-
-        if !occupies.is_empty() {
-            logging!(
-                info,
-                Type::Core,
-                true,
-                "port {} is already occupied",
-                aria2_port
-            );
-        }
-
-        for pid in occupies {
-            logging!(info, Type::Core, true, "try to kill process: {}", pid);
-            sys::terminate_process(pid).await;
-        }
-
-        logging!(info, Type::Core, true, "waiting for process to exit...");
-        sleep(Duration::from_millis(500)).await;
+        std::net::TcpListener::bind(("0.0.0.0", aria2_port))
+            .with_context(|| format!("RPC port {aria2_port} is unavailable"))?;
+        Ok(())
     }
 
     /// Start core by sidecar
@@ -121,14 +197,9 @@ impl CoreManager {
             .create(true)
             .open(&lock_file)?;
 
-        match file.try_lock_exclusive() {
-            Ok(_) => {
-                logging!(info, Type::Core, true, "acquired lock for core process");
-                handle::Handle::global().set_core_lock(file);
-            }
-            // TODO
-            Err(_) => todo!(),
-        }
+        file.try_lock_exclusive()
+            .context("Failed to acquire the aria2 process lock")?;
+        logging!(info, Type::Core, true, "acquired lock for core process");
 
         let app_handle = handle::Handle::global()
             .app_handle()
@@ -137,11 +208,12 @@ impl CoreManager {
         let config_path_str = dirs::path_to_str(config_path)?;
 
         logging!(info, Type::Core, true, "begin start run core process");
-        let (_, child) = app_handle
+        let (mut events, child) = app_handle
             .shell()
             .sidecar(aria2_engine)?
             .args(["--conf-path", config_path_str])
             .spawn()?;
+        handle::Handle::global().set_core_lock(file);
 
         // save process id
         logging!(
@@ -153,6 +225,16 @@ impl CoreManager {
         );
         // handle::Handle::global().set_core_process(child);
         *self.aria2c_sidecar.lock().await = Some(child);
+        let (sender, receiver) = oneshot::channel();
+        *self.aria2c_exit.lock().await = Some(receiver);
+        tauri::async_runtime::spawn(async move {
+            while let Some(event) = events.recv().await {
+                if matches!(event, CommandEvent::Terminated(_)) {
+                    break;
+                }
+            }
+            let _ = sender.send(());
+        });
 
         sleep(Duration::from_millis(300)).await;
 
@@ -175,6 +257,8 @@ impl CoreManager {
                 pid
             );
         }
+        self.wait_for_exit().await?;
+        handle::Handle::global().core_lock.write().take();
 
         Ok(())
     }
