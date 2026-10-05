@@ -3,6 +3,7 @@ import { context, getOctokit } from "@actions/github";
 import process from "process";
 
 import { resolveUpdateLog } from "./update_log.mjs";
+import { resolveUpdaterPlatforms } from "./updater_assets.mjs";
 import { getSignature } from "./utils.mjs";
 
 // Add stable update JSON filenames
@@ -101,53 +102,15 @@ async function processRelease(github, options, tag, isAlpha) {
     });
 
     const updateData = {
-      name: tag.name,
+      version: tag.name,
       notes: await resolveUpdateLog(tag.name).catch(
         () => "No changelog available",
       ),
       pub_date: new Date().toISOString(),
-      platforms: {
-        "windows-aarch64": { signature: "", url: "" },
-        "windows-x86_64": { signature: "", url: "" },
-      },
+      platforms: await resolveUpdaterPlatforms(release.assets, getSignature),
     };
 
-    const promises = release.assets.map(async (asset) => {
-      const { name, browser_download_url } = asset;
-
-      // Process all the platform URL and signature data
-      // win64 url
-      if (name.endsWith("x64-setup.exe")) {
-        updateData.platforms["windows-x86_64"].url = browser_download_url;
-      }
-      // win64 signature
-      if (name.endsWith("x64-setup.exe.sig")) {
-        const sig = await getSignature(browser_download_url);
-        updateData.platforms["windows-x86_64"].signature = sig;
-      }
-
-      // win arm url
-      if (name.endsWith("arm64-setup.exe")) {
-        updateData.platforms["windows-aarch64"].url = browser_download_url;
-      }
-      // win arm signature
-      if (name.endsWith("arm64-setup.exe.sig")) {
-        const sig = await getSignature(browser_download_url);
-        updateData.platforms["windows-aarch64"].signature = sig;
-      }
-    });
-
-    await Promise.allSettled(promises);
     console.log(updateData);
-
-    // maybe should test the signature as well
-    // delete the null field
-    Object.entries(updateData.platforms).forEach(([key, value]) => {
-      if (!value.url) {
-        console.log(`[Error]: failed to parse release for "${key}"`);
-        delete updateData.platforms[key];
-      }
-    });
 
     // Get the appropriate updater release based on isAlpha flag
     const releaseTag = isAlpha ? ALPHA_TAG_NAME : UPDATE_TAG_NAME;
@@ -184,7 +147,7 @@ async function processRelease(github, options, tag, isAlpha) {
               prerelease: isAlpha,
             });
             console.log(
-              `Created new ${releaseTag} release with ID: ${updateRelease.id}`,
+              `Created new ${releaseTag} release with ID: ${createResponse.data.id}`,
             );
             return createResponse.data;
           }

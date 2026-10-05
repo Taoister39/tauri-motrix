@@ -8,7 +8,7 @@ import { extract } from "tar";
 import zlib from "zlib";
 
 import { createAria2BinInfo, getLatestAria2Tag } from "./aria2_helper.mjs";
-import { cwd, TEMP_DIR } from "./environment.mjs";
+import { cwd, isWin, TEMP_DIR } from "./environment.mjs";
 import {
   baseExecutableMove,
   baseMove,
@@ -49,6 +49,9 @@ async function resolveSidecar(binInfo) {
       await pullUpOnlySubDirectory(tempDir);
 
       await baseMove(tempExe, sidecarPath);
+      if (!isWin) {
+        await fsp.chmod(sidecarPath, 0o755);
+      }
 
       log_success(`unzip finished: "${name}"`);
     } else if (zipFile.endsWith(".tgz")) {
@@ -105,7 +108,7 @@ async function resolveAria2() {
 
   const binInfo = createAria2BinInfo(latestTag);
 
-  resolveSidecar(binInfo);
+  await resolveSidecar(binInfo);
 }
 
 /**
