@@ -2,6 +2,8 @@
 import { useTheme } from "@mui/material";
 import { Ref, useEffect, useImperativeHandle, useRef } from "react";
 
+import { getTrafficGraphY } from "@/utils/traffic";
+
 const maxPoint = 30;
 
 const refLineAlpha = 1;
@@ -12,8 +14,6 @@ const upLineWidth = 4;
 
 const downLineAlpha = 1;
 const downLineWidth = 4;
-
-const defaultList = Array(maxPoint + 2).fill({ up: 0, down: 0 });
 
 type TrafficData = { up: number; down: number };
 
@@ -28,10 +28,13 @@ export interface TrafficRef {
 function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
   const countRef = useRef(0);
   const styleRef = useRef(true);
-  const listRef = useRef<TrafficData[]>(defaultList);
+  const listRef = useRef<TrafficData[]>(
+    Array.from({ length: maxPoint + 2 }, () => ({ up: 0, down: 0 })),
+  );
   const canvasRef = useRef<HTMLCanvasElement>(null!);
 
-  const cacheRef = useRef<TrafficData | null>(null);
+  // Polling can be slower than the graph, so hold the latest reported speed.
+  const cacheRef = useRef<TrafficData>({ up: 0, down: 0 });
 
   const { palette } = useTheme();
 
@@ -46,15 +49,10 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
-    const zero = { up: 0, down: 0 };
-
     const handleData = () => {
-      const data = cacheRef.current ? cacheRef.current : zero;
-      cacheRef.current = null;
-
       const list = listRef.current;
-      if (list.length > maxPoint + 2) list.shift();
-      list.push(data);
+      if (list.length >= maxPoint + 2) list.shift();
+      list.push(cacheRef.current);
       countRef.current = 0;
 
       timer = setTimeout(handleData, 1000);
@@ -89,24 +87,10 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
     const l1 = dy;
     const l2 = dy * 4;
 
-    const countY = (v: number) => {
-      const h = height;
-
-      if (v == 0) return h - 1;
-      if (v <= 10) return h - (v / 10) * dy;
-      if (v <= 100) return h - (v / 100 + 1) * dy;
-      if (v <= 1024) return h - (v / 1024 + 2) * dy;
-      if (v <= 10240) return h - (v / 10240 + 3) * dy;
-      if (v <= 102400) return h - (v / 102400 + 4) * dy;
-      if (v <= 1048576) return h - (v / 1048576 + 5) * dy;
-      if (v <= 10485760) return h - (v / 10485760 + 6) * dy;
-      return 1;
-    };
-
-    const drawBezier = (list: number[], offset: number) => {
+    const drawBezier = (list: number[], offset: number, peakSpeed: number) => {
       const points = list.map((y, i) => [
         (dx * (i - 1) - offset + 3) | 0,
-        countY(y),
+        getTrafficGraphY(y, peakSpeed, height),
       ]);
 
       let x = points[0][0];
@@ -127,10 +111,10 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
       }
     };
 
-    const drawLine = (list: number[], offset: number) => {
+    const drawLine = (list: number[], offset: number, peakSpeed: number) => {
       const points = list.map((y, i) => [
         (dx * (i - 1) - offset) | 0,
-        countY(y),
+        getTrafficGraphY(y, peakSpeed, height),
       ]);
 
       context.moveTo(points[0][0], points[0][1]);
@@ -156,6 +140,9 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
       const offset = countRef.current === 0 ? 0 : temp;
       countRef.current = temp;
 
+      // Keep both series on one scale with headroom above the recent peak.
+      const peakSpeed = Math.max(...listUp, ...listDown);
+
       context.clearRect(0, 0, width, height);
 
       // Reference lines
@@ -176,9 +163,9 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
       context.strokeStyle = upLineColor;
 
       if (lineStyle) {
-        drawBezier(listUp, offset);
+        drawBezier(listUp, offset, peakSpeed);
       } else {
-        drawLine(listUp, offset);
+        drawLine(listUp, offset, peakSpeed);
       }
 
       context.stroke();
@@ -190,9 +177,9 @@ function TrafficGraph(props: { ref: Ref<TrafficRef> }) {
       context.strokeStyle = downLineColor;
 
       if (lineStyle) {
-        drawBezier(listDown, offset);
+        drawBezier(listDown, offset, peakSpeed);
       } else {
-        drawLine(listDown, offset);
+        drawLine(listDown, offset, peakSpeed);
       }
 
       context.stroke();

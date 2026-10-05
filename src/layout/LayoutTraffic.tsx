@@ -49,7 +49,7 @@ function LayoutTraffic() {
     const down = +stat.downloadSpeed || 0;
 
     trafficRef.current?.appendData({ up, down });
-  }, [stat]);
+  }, [stat, documentVisibility]);
 
   return (
     <Box sx={{ position: "relative" }}>
