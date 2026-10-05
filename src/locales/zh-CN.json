@@ -164,5 +164,15 @@
   },
   "history": {
     "Empty": "没有下载记录"
+  },
+  "vortex": {
+    "Engine": "HTTP(S) 下载引擎",
+    "Description": "仅影响新建 HTTP(S) 任务；已有任务和 BT 任务保持原引擎。",
+    "Tasks": "Vortex 同时下载任务数",
+    "Connections": "Vortex 每任务连接数",
+    "RestartRequired": "并发配置在重启应用后生效。",
+    "ResumeDescription": "重启后自动恢复运行和排队的 Vortex 任务；暂停和失败任务保持停止。",
+    "Retry": "重试",
+    "AriaResume": "启动时恢复 aria2 任务"
   }
 }

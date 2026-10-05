@@ -22,6 +22,19 @@ enum UpdateFlags {
 
 /// expose outside for motrix config
 pub async fn patch_motrix(data: IMotrix) -> Result<()> {
+    if data
+        .http_engine
+        .as_deref()
+        .is_some_and(|e| !matches!(e, "aria2c" | "vortex"))
+        || data
+            .vortex_max_tasks
+            .is_some_and(|n| !(1..=32).contains(&n))
+        || data
+            .vortex_connections
+            .is_some_and(|n| !(1..=16).contains(&n))
+    {
+        anyhow::bail!("Invalid download engine configuration");
+    }
     Config::motrix().draft().patch_config(data.clone());
 
     let language = data.language;

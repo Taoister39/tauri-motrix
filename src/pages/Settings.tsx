@@ -16,6 +16,7 @@ import AboutDialog from "@/business/about/AboutDialog";
 import Aria2Setting from "@/business/setting/Aria2Setting";
 import AppearanceSetting from "@/business/setting/DisplaySetting";
 import MotrixSetting from "@/business/setting/MotrixSetting";
+import VortexSetting from "@/business/setting/VortexSetting";
 import { DialogRef } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
 import { APP_REPO } from "@/constant/url";
@@ -80,6 +81,9 @@ function SettingsPage() {
         <Grid size={6}>
           <Box>
             <MotrixSetting />
+          </Box>
+          <Box>
+            <VortexSetting />
           </Box>
         </Grid>
       </Grid>

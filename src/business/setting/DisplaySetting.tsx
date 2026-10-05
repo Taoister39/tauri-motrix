@@ -50,7 +50,7 @@ function AppearanceSetting() {
       </SettingItem>
 
       <SettingItem
-        label={t("setting.AutoResumeAll")}
+        label={t("vortex.AriaResume")}
         secondary={t("setting.AutoResumeAllDescription")}
       >
         <Android12Switch

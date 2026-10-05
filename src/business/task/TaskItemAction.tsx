@@ -39,6 +39,7 @@ function TaskItemAction({
   const statusActionElem = useMemo(() => {
     switch (status) {
       case TASK_STATUS_ENUM.Active:
+      case TASK_STATUS_ENUM.Waiting:
         return (
           <TaskActionButton
             title={t("task.Pause")}
@@ -54,6 +55,14 @@ function TaskItemAction({
             onClick={() => onResume(gid)}
           />
         );
+      case TASK_STATUS_ENUM.Error:
+        return gid.startsWith("vortex:") ? (
+          <TaskActionButton
+            title={t("vortex.Retry")}
+            icon={<PlayArrowOutlined />}
+            onClick={() => onResume(gid)}
+          />
+        ) : null;
       // case TASK_STATUS_ENUM.Done:
       //   return (
       //     <TaskActionButton title={t("Resume")} icon={<RefreshOutlined />} />

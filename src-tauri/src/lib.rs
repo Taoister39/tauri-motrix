@@ -60,6 +60,10 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             cmd::get_aria2_info,
+            cmd::vortex_add,
+            cmd::vortex_list,
+            cmd::vortex_get,
+            cmd::vortex_control,
             cmd::get_aria2_config,
             cmd::get_motrix_config,
             cmd::open_logs_dir,

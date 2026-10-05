@@ -7,3 +7,16 @@ edition = "2024"
 workspace = true
 
 [dependencies]
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "sync", "time", "fs", "io-util", "net"] }
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+sqlx.workspace = true
+tokio-util.workspace = true
+sha2.workspace = true
+bytes.workspace = true
+fs2.workspace = true
+httpdate.workspace = true
+tempfile.workspace = true
+percent-encoding.workspace = true

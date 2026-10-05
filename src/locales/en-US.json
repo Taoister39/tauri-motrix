@@ -164,5 +164,15 @@
   },
   "history": {
     "Empty": "No download history"
+  },
+  "vortex": {
+    "Engine": "HTTP(S) download engine",
+    "Description": "Applies to new HTTP(S) tasks. Existing tasks and BitTorrent keep their current engine.",
+    "Tasks": "Concurrent Vortex tasks",
+    "Connections": "Connections per Vortex task",
+    "RestartRequired": "Concurrency changes apply after restarting the application.",
+    "ResumeDescription": "Running and queued Vortex tasks resume after restart. Paused and failed tasks remain stopped.",
+    "Retry": "Retry",
+    "AriaResume": "Resume aria2 tasks at startup"
   }
 }

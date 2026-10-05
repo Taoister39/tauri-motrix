@@ -28,7 +28,7 @@ pub fn clean() -> bool {
     let rt = tokio::runtime::Runtime::new().unwrap();
     let cleanup_result = rt.block_on(async {
         let (core_res, ()) = tokio::join!(
-            timeout(Duration::from_secs(1), CoreManager::global().stop_engine()),
+            timeout(Duration::from_secs(30), CoreManager::global().stop_engine()),
             super::shutdown_upnp_mapping(),
         );
 

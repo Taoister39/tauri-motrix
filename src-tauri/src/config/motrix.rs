@@ -11,6 +11,9 @@ use crate::{
 pub struct IMotrix {
     /// aria2c run name for sidecar
     pub aria2_engine: Option<String>,
+    pub http_engine: Option<String>,
+    pub vortex_max_tasks: Option<usize>,
+    pub vortex_connections: Option<usize>,
 
     // i18n
     pub language: Option<String>,
@@ -94,6 +97,9 @@ impl IMotrix {
 
         IMotrix {
             aria2_engine: Some("aria2c".into()),
+            http_engine: Some("aria2c".into()),
+            vortex_max_tasks: Some(3),
+            vortex_connections: Some(4),
             language: i18n::get_system_language().into(),
             theme_mode: Some("system".into()),
             app_log_level: Some("info".into()),
@@ -132,6 +138,9 @@ impl IMotrix {
         patch!(theme_mode);
         patch!(app_log_level);
         patch!(aria2_engine);
+        patch!(http_engine);
+        patch!(vortex_max_tasks);
+        patch!(vortex_connections);
         patch!(language);
         patch!(enable_auto_launch);
         patch!(auto_log_clean);

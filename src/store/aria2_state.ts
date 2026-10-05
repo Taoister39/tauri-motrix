@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import * as aria2Api from "@/services/aria2c_api";
+import * as aria2Api from "@/services/download";
 import { usePollingStore } from "@/store/polling";
 
 export interface Aria2StateStore {

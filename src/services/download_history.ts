@@ -62,7 +62,7 @@ export async function createHistory(
   const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
 
   return db.execute(
-    `INSERT INTO download_history (${columns.join(", ")}) VALUES (${placeholders})`,
+    `INSERT INTO download_history (${columns.join(", ")}) SELECT ${placeholders} WHERE NOT EXISTS (SELECT 1 FROM download_history WHERE engine = $3 AND plat_id = $6)`,
     values,
   );
 }
@@ -85,12 +85,13 @@ export async function findManyHistory(): Promise<DownloadHistoryVO[]> {
 
 export async function findOneHistoryByPlatId(
   id: string,
+  engine: DOWNLOAD_ENGINE = DOWNLOAD_ENGINE.Aria2,
 ): Promise<DownloadHistoryVO | undefined> {
   const db = await getMotrixDB();
 
   const result = await db.select<DownloadHistory[]>(
-    "SELECT id, link, path, engine, name, created_at, total_length, plat_id, json_ext FROM download_history WHERE plat_id = $1 ORDER BY created_at DESC LIMIT 1",
-    [id],
+    "SELECT id, link, path, engine, name, status, created_at, total_length, plat_id, json_ext FROM download_history WHERE plat_id = $1 AND engine = $2 ORDER BY created_at DESC LIMIT 1",
+    [id, engine],
   );
 
   if (result.length > 0) {
@@ -106,6 +107,7 @@ export async function findOneHistoryByPlatId(
 export async function updateHistoryByPlatId(
   id: string,
   dto: Partial<DownloadHistoryDTO>,
+  engine: DOWNLOAD_ENGINE = DOWNLOAD_ENGINE.Aria2,
 ) {
   const db = await getMotrixDB();
 
@@ -143,12 +145,12 @@ export async function updateHistoryByPlatId(
     return;
   }
 
-  values.push(id); // Add id for the WHERE clause
+  values.push(id, engine);
 
   const setClause = updates.join(", ");
 
   return db.execute(
-    `UPDATE download_history SET ${setClause} WHERE plat_id = $${paramIndex}`,
+    `UPDATE download_history SET ${setClause} WHERE plat_id = $${paramIndex} AND engine = $${paramIndex + 1}`,
     values,
   );
 }

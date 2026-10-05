@@ -2,11 +2,11 @@ import { LinearProgressProps } from "@mui/material";
 import { resolve } from "@tauri-apps/api/path";
 
 import { TASK_STATUS_ENUM } from "@/constant/task";
-import { Aria2Task } from "@/services/aria2c_api";
+import { DownloadTask } from "@/services/download";
 // code from Motrix repo
 
 export const getTaskName = (
-  task: Aria2Task | undefined | null,
+  task: DownloadTask | undefined | null,
   defaultName = "",
   maxLen?: number,
 ) => {
@@ -46,7 +46,7 @@ export const ellipsis = (str = "", maxLen = 64) => {
   return result;
 };
 
-export const getFileNameFromFile = (file: Aria2Task["files"][number]) => {
+export const getFileNameFromFile = (file: DownloadTask["files"][number]) => {
   if (!file) {
     return "";
   }
@@ -118,7 +118,7 @@ export const timeFormat = (
   return result ? `${prefix} ${result} ${suffix}` : result;
 };
 
-export const getTaskFullPath = async (task: Aria2Task) => {
+export const getTaskFullPath = async (task: DownloadTask) => {
   const { dir, files, bittorrent } = task;
   let result = await resolve(dir);
 
@@ -150,12 +150,12 @@ export const getTaskFullPath = async (task: Aria2Task) => {
   return result;
 };
 
-export const isMagnetTask = (task: Aria2Task) => {
+export const isMagnetTask = (task: DownloadTask) => {
   const { bittorrent } = task;
   return !!bittorrent && !bittorrent.info;
 };
 
-export const getTaskUri = (task: Aria2Task, withTracker = false) => {
+export const getTaskUri = (task: DownloadTask, withTracker = false) => {
   const { files } = task;
   let result = "";
   if (checkTaskIsBT(task)) {
@@ -171,13 +171,13 @@ export const getTaskUri = (task: Aria2Task, withTracker = false) => {
   return result;
 };
 
-export const checkTaskIsBT = (task: Aria2Task) => {
+export const checkTaskIsBT = (task: DownloadTask) => {
   const { bittorrent } = task;
   return !!bittorrent;
 };
 
 export const buildMagnetLink = (
-  task: Aria2Task,
+  task: DownloadTask,
   withTracker = false,
   btTracker: string[] = [],
 ) => {
@@ -194,9 +194,9 @@ export const buildMagnetLink = (
   }
 
   if (withTracker) {
-    const trackers = bittorrent.announceList.filter(
-      (tracker) => !btTracker.includes(tracker),
-    );
+    const trackers = bittorrent.announceList
+      .flat()
+      .filter((tracker) => !btTracker.includes(tracker));
     trackers.forEach((tracker) => {
       params.push(`tr=${encodeURI(tracker)}`);
     });

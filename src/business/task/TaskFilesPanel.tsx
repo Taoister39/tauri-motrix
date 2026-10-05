@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import TaskFiles from "@/business/task/TaskFiles";
 import ConfirmPanel from "@/components/ConfirmPanel";
 import { Notice } from "@/components/Notice";
-import { Aria2File, changeOptionApi } from "@/services/aria2c_api";
+import { Aria2File, changeOptionApi } from "@/services/download";
 import { useTaskStore } from "@/store/task";
 import { getFileExtension, getFileName } from "@/utils/file";
 
@@ -66,17 +66,20 @@ function TaskFilesPanel({ files, gid }: TaskFilesPanelProps) {
 
   return (
     <ConfirmPanel
-      hide={isHideConfirm}
+      hide={isHideConfirm || gid.startsWith("vortex:")}
       onCancel={() => setSelectedKeys(defaultSelectedRowKeys)}
       onOk={() => startTransition(handleChangeFile)}
       loading={loading}
     >
       <TaskFiles
+        readOnly={gid.startsWith("vortex:")}
         files={fileList}
         mode="DETAIL"
         rowKey="idx"
         selectedRowKeys={selectedKeys}
-        onSelectionChange={(keys) => setSelectedKeys(keys)}
+        onSelectionChange={(keys) => {
+          if (!gid.startsWith("vortex:")) setSelectedKeys(keys);
+        }}
       />
     </ConfirmPanel>
   );

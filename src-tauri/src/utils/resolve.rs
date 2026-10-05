@@ -20,6 +20,9 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     // core start engine
     log::trace!(target:"app", "init config");
     log_err!(Config::init_config().await);
+    if let Err(error) = crate::service::vortex::engine().await {
+        log::error!(target: "app", "Vortex initialization failed: {error}");
+    }
 
     log::trace!(target: "app", "launch core");
     log_err!(CoreManager::global().init().await);

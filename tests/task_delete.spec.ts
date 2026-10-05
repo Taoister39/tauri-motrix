@@ -74,7 +74,9 @@ describe("handleTaskDelete", () => {
       ["removed"],
     ]);
     expect(saveSessionApi).toHaveBeenCalledTimes(1);
-    expect(useTaskStore.getState().tasks).toEqual([remainingTask]);
+    expect(useTaskStore.getState().tasks).toEqual([
+      expect.objectContaining(remainingTask),
+    ]);
     expect(useTaskStore.getState().selectedTaskIds).toEqual([]);
   });
 
@@ -96,7 +98,9 @@ describe("handleTaskDelete", () => {
     expect(forcePauseTaskApi).not.toHaveBeenCalled();
     expect(removeTaskApi).not.toHaveBeenCalled();
     expect(saveSessionApi).toHaveBeenCalledTimes(1);
-    expect(useTaskStore.getState().tasks).toEqual([remainingTask]);
+    expect(useTaskStore.getState().tasks).toEqual([
+      expect.objectContaining(remainingTask),
+    ]);
   });
 
   it("keeps the tasks and selection when batch deletion is cancelled", async () => {

@@ -15,7 +15,7 @@ export const NORMAL_STATUS = [
 
 export const enum DOWNLOAD_ENGINE {
   Aria2 = "aria2c",
-  // more
+  Vortex = "vortex",
 }
 
 export const enum PROXY_SCOPES {

@@ -44,6 +44,7 @@ tauri-plugin-notification = "2"
 open = "5.3.2"
 sys-locale = "0.3.2"
 reqwest = "0.12.15"
+tauri-motrix-vortex = { path = "../crates/vortex" }
 uuid = { version = "1.16.0", features = ["v4", "serde"] }
 base64 = "0.22"
 

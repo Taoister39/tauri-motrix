@@ -98,6 +98,7 @@ export type TaskFile = Omit<
 };
 
 export interface TaskFilesProps {
+  readOnly?: boolean;
   mode?: "DETAIL";
   files?: TaskFile[];
   rowKey?: string;
@@ -116,6 +117,7 @@ export interface TaskFilesProps {
 import { FILE_SELECTION, RowSelectMethod } from "@/constant/taskFiles";
 
 export default function TaskFiles({
+  readOnly = false,
   files,
   rowKey = "path",
   defaultSelectedRowKeys,
@@ -287,6 +289,7 @@ export default function TaskFiles({
         <StyledTableRow key={index}>
           <StyledTableCell component="th" scope="row">
             <Checkbox
+              disabled={readOnly}
               size="small"
               checked={checked}
               onChange={() => {
@@ -340,7 +343,7 @@ export default function TaskFiles({
         </StyledTableRow>
       );
     },
-    [derivedSelectedKeySet, mode, setSelectedKeys],
+    [derivedSelectedKeySet, mode, setSelectedKeys, readOnly],
   );
 
   return (
@@ -357,6 +360,7 @@ export default function TaskFiles({
               <TableRow>
                 <StyledTableCell>
                   <Checkbox
+                    disabled={readOnly}
                     checked={mergedSelectedKeys.length === rawData.length}
                     sx={(theme) => ({
                       color: theme.palette.common.white,
@@ -427,6 +431,7 @@ export default function TaskFiles({
           }}
         >
           <ToggleButtonGroup
+            disabled={readOnly}
             size="small"
             value={toggleFileType}
             onChange={handleToggleFile}

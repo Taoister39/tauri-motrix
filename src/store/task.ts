@@ -8,26 +8,28 @@ import { create } from "zustand";
 
 import { Notice } from "@/components/Notice";
 import { APP_LOG_LEVEL } from "@/constant/log";
-import { DOWNLOAD_ENGINE, TASK_STATUS_ENUM } from "@/constant/task";
+import { TASK_STATUS_ENUM } from "@/constant/task";
+import { appLog } from "@/services/cmd";
 import {
   addTaskApi,
-  Aria2Task,
   batchPauseTaskApi,
   batchResumeTaskApi,
   downloadingTasksApi,
+  DownloadTask,
   forcePauseTaskApi,
   getAria2,
   pauseTaskApi,
+  registerVortexEvents,
   removeDownloadResultTaskApi,
   removeTaskApi,
   resumeTaskApi,
   saveSessionApi,
   stoppedTasksApi,
   taskItemApi,
+  taskRef,
   waitingTasksApi,
-} from "@/services/aria2c_api";
-import { DownloadOption } from "@/services/aria2c_api";
-import { appLog } from "@/services/cmd";
+} from "@/services/download";
+import { DownloadOption } from "@/services/download";
 import {
   createHistory,
   findOneHistoryByPlatId,
@@ -41,11 +43,11 @@ import { getTaskFullPath, getTaskName, getTaskUri } from "@/utils/task";
 export type WrapGid = [{ gid: string }];
 
 interface TaskStore {
-  tasks: Array<Aria2Task>;
+  tasks: Array<DownloadTask>;
   fetchType: TASK_STATUS_ENUM;
   keyword: string;
   selectedTaskIds: Array<string>;
-  selectedTasks: Array<Aria2Task>;
+  selectedTasks: Array<DownloadTask>;
   skipConfirm: boolean;
   enableNotify: boolean;
   syncByMotrix: (config: Partial<MotrixConfig>) => void;
@@ -60,8 +62,8 @@ interface TaskStore {
   openTaskFile: (taskId: string) => void;
   copyTaskLink: (taskId: string) => void;
   addTask: (url: string, option: DownloadOption) => void;
-  getTaskByGid: (gid: string) => Aria2Task;
-  syncToDownloadHistory: (task: Aria2Task) => void;
+  getTaskByGid: (gid: string) => DownloadTask;
+  syncToDownloadHistory: (task: DownloadTask) => Promise<void>;
   registerEvent: () => void;
   onDownloadStart: (wrap: WrapGid) => void;
   onDownloadStop: (wrap: WrapGid) => void;
@@ -83,7 +85,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   async fetchTasks() {
     const { fetchType, keyword } = get();
 
-    let tasks: Array<Aria2Task> = [];
+    let tasks: Array<DownloadTask> = [];
     switch (fetchType) {
       case TASK_STATUS_ENUM.Active:
         tasks = await downloadingTasksApi().then((res) => res?.flat(2));
@@ -107,6 +109,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       });
     }
 
+    if (get().fetchType !== fetchType || get().keyword !== keyword) return;
+    const previous = new Map(get().tasks.map((task) => [task.gid, task]));
+    tasks = tasks.map((task) => {
+      const current = previous.get(task.gid);
+      return current && (current.revision ?? 0) > (task.revision ?? 0)
+        ? current
+        : task;
+    });
     set({ tasks });
   },
   async fetchItem(plat_id) {
@@ -186,7 +196,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }
 
     const taskIds = taskId ? [taskId] : selectedTaskIds;
-    await Promise.all(
+    const results = await Promise.allSettled(
       taskIds.map(async (gid) => {
         const task = getTaskByGid(gid);
 
@@ -212,8 +222,15 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       set({ selectedTaskIds: [] });
     }
 
-    await saveSessionApi();
-    await fetchTasks();
+    try {
+      if (taskIds.some((id) => taskRef(id).engine === "aria2c"))
+        await saveSessionApi();
+    } finally {
+      await fetchTasks();
+    }
+    const failed = results.filter((result) => result.status === "rejected");
+    if (failed.length)
+      Notice.error(failed.map((result) => String(result.reason)).join("; "));
   },
   async openTaskFile(taskId) {
     const task = get().getTaskByGid(taskId);
@@ -280,6 +297,29 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     get().syncToDownloadHistory(task);
   },
   async registerEvent() {
+    void registerVortexEvents(async (task, previous, initial) => {
+      const changed = previous?.status !== task.status;
+      if (task.status === TASK_STATUS_ENUM.Recycle) {
+        set({ tasks: get().tasks.filter((item) => item.gid !== task.gid) });
+        return;
+      }
+      if (changed || initial) await get().syncToDownloadHistory(task);
+      set({
+        tasks: get().tasks.map((item) => (item.gid === task.gid ? task : item)),
+      });
+      if (changed) await get().fetchTasks();
+      if (!initial && changed && get().enableNotify) {
+        const taskName = getTaskName(task);
+        if (task.status === TASK_STATUS_ENUM.Done) {
+          await sendNotification({
+            title: taskName,
+            body: t("common.Complete"),
+          });
+        } else if (task.status === TASK_STATUS_ENUM.Error) {
+          Notice.error(`${taskName}: ${task.errorMessage ?? task.errorCode}`);
+        }
+      }
+    }).catch((error) => Notice.error(String(error)));
     const {
       onDownloadComplete,
       onDownloadStart,
@@ -304,24 +344,26 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     const link = getTaskUri(task);
     const path = await getTaskFullPath(task);
 
-    const historyRecord = await findOneHistoryByPlatId(task.gid);
+    const ref = task.ref ?? taskRef(task.gid);
+    const historyRecord = await findOneHistoryByPlatId(ref.id, ref.engine);
 
     const historyDto = {
-      engine: DOWNLOAD_ENGINE.Aria2,
+      engine: ref.engine,
       link,
       name: taskName,
       path,
       total_length: Number(task.totalLength),
-      plat_id: task.gid,
+      plat_id: ref.id,
       status: task.status,
     };
 
     if (historyRecord) {
-      await updateHistoryByPlatId(task.gid, historyDto);
+      await updateHistoryByPlatId(ref.id, historyDto, ref.engine);
     } else {
-      await createHistory(historyDto, {
-        plat_gid: task.gid,
-      });
+      await createHistory(
+        historyDto,
+        ref.engine === "aria2c" ? { plat_gid: ref.id } : undefined,
+      );
     }
 
     mutate("getDownloadHistory");

@@ -142,6 +142,9 @@ interface Aria2Config {
 
 interface MotrixConfig {
   aria2_engine: string;
+  http_engine: "aria2c" | "vortex";
+  vortex_max_tasks: number;
+  vortex_connections: number;
   app_hide_window: boolean;
   auto_check_update: boolean;
   language: string;

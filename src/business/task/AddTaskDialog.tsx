@@ -49,6 +49,7 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<IFormInput>({
     values: {
@@ -59,12 +60,14 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
     },
   });
 
+  const useVortex =
+    motrix?.http_engine === "vortex" && /^https?:\/\//i.test(watch("link"));
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const { link, out, split, dir } = data;
 
     await addTask(link, {
       dir,
-      split,
+      ...(useVortex ? {} : { split }),
       out,
     });
 
@@ -140,30 +143,32 @@ function AddTaskDialog(props: { ref: Ref<DialogRef> }) {
               />
             )}
           />
-          <Controller
-            name="split"
-            rules={{
-              min: {
-                value: 1,
-                message: t("task.SplitMin", { min: 1 }),
-              },
-              max: {
-                value: 128,
-                message: t("task.SplitMax", { max: 128 }),
-              },
-            }}
-            control={control}
-            render={({ field }) => (
-              <TextField
-                variant="standard"
-                type="number"
-                label={t("task.Splits")}
-                error={!!errors.split}
-                helperText={errors.split?.message}
-                {...field}
-              />
-            )}
-          />
+          {!useVortex && (
+            <Controller
+              name="split"
+              rules={{
+                min: {
+                  value: 1,
+                  message: t("task.SplitMin", { min: 1 }),
+                },
+                max: {
+                  value: 128,
+                  message: t("task.SplitMax", { max: 128 }),
+                },
+              }}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  variant="standard"
+                  type="number"
+                  label={t("task.Splits")}
+                  error={!!errors.split}
+                  helperText={errors.split?.message}
+                  {...field}
+                />
+              )}
+            />
+          )}
         </Box>
 
         <Box>

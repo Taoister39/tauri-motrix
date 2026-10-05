@@ -164,5 +164,15 @@
   },
   "history": {
     "Empty": "ダウンロード履歴がありません"
+  },
+  "vortex": {
+    "Engine": "HTTP(S) ダウンロードエンジン",
+    "Description": "新しい HTTP(S) タスクに適用します。既存タスクと BT は元のエンジンを使用します。",
+    "Tasks": "Vortex の同時タスク数",
+    "Connections": "Vortex のタスクごとの接続数",
+    "RestartRequired": "並列設定はアプリの再起動後に適用されます。",
+    "ResumeDescription": "実行中と待機中の Vortex タスクは再起動後に再開します。一時停止・失敗タスクは停止したままです。",
+    "Retry": "再試行",
+    "AriaResume": "起動時に aria2 タスクを再開"
   }
 }

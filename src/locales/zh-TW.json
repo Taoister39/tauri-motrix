@@ -164,5 +164,15 @@
   },
   "history": {
     "Empty": "沒有下載記錄"
+  },
+  "vortex": {
+    "Engine": "HTTP(S) 下載引擎",
+    "Description": "僅影響新建 HTTP(S) 任務；既有任務和 BT 任務保持原引擎。",
+    "Tasks": "Vortex 同時下載任務數",
+    "Connections": "Vortex 每任務連線數",
+    "RestartRequired": "並行設定在重新啟動應用程式後生效。",
+    "ResumeDescription": "重新啟動後恢復執行和排隊的 Vortex 任務；暫停和失敗任務保持停止。",
+    "Retry": "重試",
+    "AriaResume": "啟動時恢復 aria2 任務"
   }
 }

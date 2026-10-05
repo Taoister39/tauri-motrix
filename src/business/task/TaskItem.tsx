@@ -21,7 +21,7 @@ import TaskDetailsDrawer from "@/business/task/TaskDetailsDrawer";
 import TaskItemAction from "@/business/task/TaskItemAction";
 import { TaskDownloadDes } from "@/client/task_compose";
 import { TASK_STATUS_ENUM } from "@/constant/task";
-import { Aria2Task } from "@/services/aria2c_api";
+import { DownloadTask } from "@/services/download";
 import { parseByteVo } from "@/utils/download";
 import {
   getTaskName,
@@ -31,7 +31,7 @@ import {
 } from "@/utils/task";
 
 export interface TaskItemProps {
-  task: Aria2Task;
+  task: DownloadTask;
   selected: boolean;
   onSelect: (taskId: string) => void;
   onPause: (taskId: string) => void;
@@ -62,13 +62,19 @@ function TaskItem({
   const totalLength = Number(task.totalLength);
   const completedLength = Number(task.completedLength) || 0;
   const downloadSpeed = Number(task.downloadSpeed) || 0;
-  const progress = (completedLength / totalLength) * 100 || 0;
+  const progress =
+    totalLength > 0
+      ? Math.min(100, (completedLength / totalLength) * 100)
+      : status === "complete"
+        ? 100
+        : 0;
 
   const speedVo = parseByteVo(downloadSpeed, "/s").join("");
 
   const [openInfo, setOpenInfo] = useState(false);
 
   const remainingVo = useMemo(() => {
+    if (task.totalKnown === false) return "";
     let result = `${timeFormat(
       timeRemaining(totalLength, completedLength, downloadSpeed),
     )}`;
@@ -77,7 +83,14 @@ function TaskItem({
       result = `${t("Remaining", { ns: "common" })} ${result}`;
     }
     return result;
-  }, [completedLength, downloadSpeed, isDownSm, t, totalLength]);
+  }, [
+    completedLength,
+    downloadSpeed,
+    isDownSm,
+    t,
+    totalLength,
+    task.totalKnown,
+  ]);
 
   const progressColor = useMemo(
     () => getTaskProgressColor(progress, status),
@@ -88,8 +101,8 @@ function TaskItem({
     const completed = parseByteVo(completedLength).join("");
     const total = parseByteVo(totalLength).join("");
 
-    return `${completed} / ${total}`;
-  }, [completedLength, totalLength]);
+    return task.totalKnown === false ? completed : `${completed} / ${total}`;
+  }, [completedLength, totalLength, task.totalKnown]);
 
   const onClose = useCallback(() => {
     setOpenInfo(false);
@@ -178,7 +191,7 @@ function TaskItem({
           marginInline: 2,
           borderRadius: 4,
         }}
-        variant="determinate"
+        variant={task.totalKnown === false ? "indeterminate" : "determinate"}
         color={progressColor}
         value={progress}
       />

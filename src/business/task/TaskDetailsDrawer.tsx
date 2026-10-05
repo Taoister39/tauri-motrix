@@ -22,7 +22,7 @@ import TaskItemAction from "@/business/task/TaskItemAction";
 import TaskSpeedPanel from "@/business/task/TaskSpeedPanel";
 import { AntTab, AntTabs } from "@/client/styled_compose";
 import BaseDrawer from "@/components/BaseDrawer";
-import { Aria2Task } from "@/services/aria2c_api";
+import { DownloadTask } from "@/services/download";
 import { checkTaskIsBT } from "@/utils/task";
 
 export interface TaskItemDrawerProps
@@ -32,7 +32,7 @@ export interface TaskItemDrawerProps
   > {
   open: boolean;
   onClose: () => void;
-  task: Aria2Task;
+  task: DownloadTask;
 }
 
 const enum TAB_TYPE {

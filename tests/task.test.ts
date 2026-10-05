@@ -18,8 +18,9 @@ import {
 
 describe("Task Store", () => {
   beforeAll(() => {
-    mockRPC(() => "OK");
+    mockRPC(() => [{ gid: "legacy", status: "active", files: [] }]);
     mockIPC((cmd) => {
+      if (cmd === "vortex_list") return [];
       if (cmd === "get_aria2_info") {
         return {
           port: 16801,
@@ -38,7 +39,16 @@ describe("Task Store", () => {
 
   it("should enable to fetch list", async () => {
     await useTaskStore.getState().fetchTasks();
-    expect(useTaskStore.getState().tasks).toEqual(["OK", "OK"]);
+    expect(useTaskStore.getState().tasks).toEqual([
+      expect.objectContaining({
+        gid: "legacy",
+        ref: { engine: "aria2c", id: "legacy" },
+      }),
+      expect.objectContaining({
+        gid: "legacy",
+        ref: { engine: "aria2c", id: "legacy" },
+      }),
+    ]);
   });
 });
 

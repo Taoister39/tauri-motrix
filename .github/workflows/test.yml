@@ -59,6 +59,7 @@ jobs:
 
       - name: Unit Test
         run: |
+          pnpm build
           pnpm test
           cargo test --manifest-path ./src-tauri/Cargo.toml
 

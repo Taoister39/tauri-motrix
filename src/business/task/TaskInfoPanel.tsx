@@ -3,12 +3,12 @@ import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
 import { TaskDrawerItem, TaskDrawerList } from "@/client/task_compose";
-import { Aria2Task } from "@/services/aria2c_api";
+import { DownloadTask } from "@/services/download";
 import { parseByteVo } from "@/utils/download";
 import { checkTaskIsBT, getTaskName } from "@/utils/task";
 
 export interface TaskInfoPanelProps {
-  task: Aria2Task;
+  task: DownloadTask;
 }
 
 function TaskInfoPanel({ task }: TaskInfoPanelProps) {
@@ -22,9 +22,19 @@ function TaskInfoPanel({ task }: TaskInfoPanelProps) {
   return (
     <TaskDrawerList>
       <TaskDrawerItem label="GID" value={task.gid} />
+      <TaskDrawerItem
+        label={t("vortex.Engine")}
+        value={task.ref?.engine ?? "aria2c"}
+      />
       <TaskDrawerItem label={t("task.TaskName")} value={taskName} />
       <TaskDrawerItem label={t("task.SaveTo")} value={task.dir} />
       <TaskDrawerItem label={t("task.Status")} value={task.status} />
+      {task.errorMessage && (
+        <TaskDrawerItem
+          label={task.errorCode ?? t("task.Status")}
+          value={task.errorMessage}
+        />
+      )}
 
       {isBt && (
         <>

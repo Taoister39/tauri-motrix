@@ -56,6 +56,9 @@ impl CoreManager {
     }
 
     pub async fn stop_engine(&self) {
+        if let Err(error) = crate::service::vortex::shutdown().await {
+            log::error!("Vortex shutdown failed: {error}");
+        }
         // TODO aria2c external control for user
         let _ = self.kill_core_by_sidecar().await;
     }
