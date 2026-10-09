@@ -18,7 +18,8 @@
   "Button-Fetch-Type": {
     "active": "下载中",
     "waiting": "等待中",
-    "complete": "已完成"
+    "complete": "已完成",
+    "error": "失败"
   },
   "setting": {
     "ThemeMode": "主题模式",
@@ -64,7 +65,7 @@
     "MaxConnectionPerServer": "每个服务器的最大连接数",
     "SeedRatio": "Bt 做种比例",
     "SeedTime": "BT 做种时间 (分钟)",
-    "TaskCompletedNotify": "下载完成后通知",
+    "TaskCompletedNotify": "下载完成或失败后通知",
     "NewTaskShowDownloading": "新增任务后自动显示下载中",
     "NoConfirmBeforeDeleteTask": "删除任务前无需确认",
     "AutoCheckUpdate": "自动检查更新",
@@ -84,6 +85,8 @@
     "Pause": "暂停任务",
     "PauseAll": "暂停选择的任务",
     "Resume": "恢复任务",
+    "Retry": "重试",
+    "Failed": "下载失败",
     "ResumeAll": "恢复所有任务",
     "Delete": "删除任务",
     "DeleteAll": "删除选中任务",

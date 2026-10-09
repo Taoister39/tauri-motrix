@@ -4,6 +4,7 @@ import { listen } from "@tauri-apps/api/event";
 import { DOWNLOAD_ENGINE } from "@/constant/task";
 import * as aria2 from "@/services/aria2c_api";
 import { getAria2Config, getMotrixConfig } from "@/services/cmd";
+import { buildMagnetLink } from "@/utils/task";
 
 export type {
   Aria2File,
@@ -11,7 +12,7 @@ export type {
   DownloadOption,
   Peer,
 } from "@/services/aria2c_api";
-export { addTorrentApi,getAria2, saveSessionApi } from "@/services/aria2c_api";
+export { addTorrentApi, getAria2, saveSessionApi } from "@/services/aria2c_api";
 
 export interface TaskRef {
   engine: DOWNLOAD_ENGINE;
@@ -196,6 +197,38 @@ export const forcePauseTaskApi = (key: string) =>
   control(key, "pause", aria2.forcePauseTaskApi);
 export const resumeTaskApi = (key: string) =>
   control(key, "resume", aria2.resumeTaskApi);
+export async function retryTaskApi(key: string) {
+  const ref = taskRef(key);
+  if (ref.engine === DOWNLOAD_ENGINE.Vortex)
+    return invoke<void>("vortex_control", { id: ref.id, action: "retry" });
+
+  const task = await aria2.taskItemApi(ref.id);
+  if (task.status !== "error")
+    throw new Error("Only failed tasks can be retried");
+  const urls =
+    task.bittorrent && task.infoHash
+      ? [buildMagnetLink(task, true)]
+      : task.files.length === 1
+        ? task.files[0].uris.map(({ uri }) => uri)
+        : [];
+  if (!urls.length) throw new Error("No download URL available for retry");
+
+  const options = await aria2.getOptionApi(ref.id);
+  // A new GID is required; keep the original destination and resume partial files.
+  delete options.gid;
+  const { call } = await aria2.getAria2();
+  const gid = await call<string>("addUri", urls, {
+    ...options,
+    dir: task.dir,
+    pause: "false",
+    continue: "true",
+    "auto-file-renaming": "false",
+  });
+  // Keep the failed result available until aria2 accepts the replacement.
+  await aria2.removeDownloadResultTaskApi(ref.id);
+  await aria2.saveSessionApi();
+  return gid;
+}
 export const removeTaskApi = (key: string) =>
   control(key, "remove", aria2.removeTaskApi);
 export const removeDownloadResultTaskApi = (key: string) =>

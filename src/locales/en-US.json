@@ -18,7 +18,8 @@
   "Button-Fetch-Type": {
     "active": "Pending",
     "waiting": "Paused",
-    "complete": "Stopped"
+    "complete": "Stopped",
+    "error": "Failed"
   },
   "setting": {
     "ThemeMode": "Theme Mode",
@@ -64,7 +65,7 @@
     "MaxConnectionPerServer": "Maximum connections per server",
     "SeedRatio": "Bt Seed Ratio",
     "SeedTime": "BT Seed Time (minutes)",
-    "TaskCompletedNotify": "Notify after download is complete",
+    "TaskCompletedNotify": "Notify when downloads complete or fail",
     "NewTaskShowDownloading": "Automatically show downloading after adding task",
     "NoConfirmBeforeDeleteTask": "No confirmation is required before deleting task",
     "AutoCheckUpdate": "Auto Check Update",
@@ -84,6 +85,8 @@
     "Pause": "Pause Task",
     "PauseAll": "Pause All Tasks",
     "Resume": "Resume Task",
+    "Retry": "Retry",
+    "Failed": "Download failed",
     "ResumeAll": "Resume All Task",
     "Delete": "Delete Task",
     "DeleteAll": "Delete All Tasks",

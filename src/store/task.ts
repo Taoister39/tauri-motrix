@@ -23,6 +23,7 @@ import {
   removeDownloadResultTaskApi,
   removeTaskApi,
   resumeTaskApi,
+  retryTaskApi,
   saveSessionApi,
   stoppedTasksApi,
   taskItemApi,
@@ -96,7 +97,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         break;
 
       case TASK_STATUS_ENUM.Done:
-        tasks = await stoppedTasksApi();
+        tasks = (await stoppedTasksApi()).filter(
+          (task) => task.status !== TASK_STATUS_ENUM.Error,
+        );
+        break;
+      case TASK_STATUS_ENUM.Error:
+        tasks = (await stoppedTasksApi()).filter(
+          (task) => task.status === TASK_STATUS_ENUM.Error,
+        );
         break;
     }
 
@@ -157,6 +165,22 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     await get().fetchTasks();
   },
   async handleTaskResume(taskId) {
+    if (
+      taskId &&
+      get().getTaskByGid(taskId).status === TASK_STATUS_ENUM.Error
+    ) {
+      try {
+        await retryTaskApi(taskId);
+        set({
+          selectedTaskIds: get().selectedTaskIds.filter((id) => id !== taskId),
+        });
+      } catch (error) {
+        Notice.error(String(error));
+      } finally {
+        await get().fetchTasks();
+      }
+      return;
+    }
     if (taskId) {
       await resumeTaskApi(taskId);
     } else {
@@ -294,7 +318,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
     Notice.error(t("task.DownloadErrorMessage", { taskName }));
 
-    get().syncToDownloadHistory(task);
+    if (get().enableNotify) {
+      sendNotification({
+        title: taskName,
+        body: t("task.DownloadErrorMessage", { taskName }),
+      });
+    }
+
+    await Promise.all([get().syncToDownloadHistory(task), get().fetchTasks()]);
   },
   async registerEvent() {
     void registerVortexEvents(async (task, previous, initial) => {
@@ -317,6 +348,10 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           });
         } else if (task.status === TASK_STATUS_ENUM.Error) {
           Notice.error(`${taskName}: ${task.errorMessage ?? task.errorCode}`);
+          sendNotification({
+            title: taskName,
+            body: t("task.DownloadErrorMessage", { taskName }),
+          });
         }
       }
     }).catch((error) => Notice.error(String(error)));

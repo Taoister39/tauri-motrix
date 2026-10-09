@@ -11,6 +11,7 @@ export const NORMAL_STATUS = [
   TASK_STATUS_ENUM.Active,
   TASK_STATUS_ENUM.Waiting,
   TASK_STATUS_ENUM.Done,
+  TASK_STATUS_ENUM.Error,
 ] as const;
 
 export const enum DOWNLOAD_ENGINE {

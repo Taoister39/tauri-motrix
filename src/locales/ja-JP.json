@@ -18,7 +18,8 @@
   "Button-Fetch-Type": {
     "active": "保留中",
     "waiting": "一時停止",
-    "complete": "停止済み"
+    "complete": "停止済み",
+    "error": "失敗"
   },
   "setting": {
     "ThemeMode": "テーマモード",
@@ -64,7 +65,7 @@
     "MaxConnectionPerServer": "サーバーあたりの最大接続数",
     "SeedRatio": "Bt シード比率",
     "SeedTime": "BT シード時間 (分)",
-    "TaskCompletedNotify": "ダウンロード完了後に通知する",
+    "TaskCompletedNotify": "ダウンロードの完了または失敗を通知する",
     "NewTaskShowDownloading": "タスク追加後に自動的にダウンロード中を表示する",
     "NoConfirmBeforeDeleteTask": "タスク削除前に確認は不要です",
     "AutoCheckUpdate": "アップデートを自動で確認する",
@@ -84,6 +85,8 @@
     "Pause": "タスクを一時停止",
     "PauseAll": "すべてのタスクを一時停止",
     "Resume": "タスクを再開",
+    "Retry": "再試行",
+    "Failed": "ダウンロード失敗",
     "ResumeAll": "すべてのタスクを再開",
     "Delete": "タスクを削除",
     "DeleteAll": "すべてのタスクを削除",

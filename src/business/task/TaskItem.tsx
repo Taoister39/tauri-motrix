@@ -153,6 +153,12 @@ function TaskItem({
                   remaining={remainingVo}
                 />
               )}
+              {TASK_STATUS_ENUM.Error === status && (
+                <Typography variant="body2" color="error">
+                  {t("Failed")}
+                  {task.errorMessage && `: ${task.errorMessage}`}
+                </Typography>
+              )}
             </Fragment>
           }
         />

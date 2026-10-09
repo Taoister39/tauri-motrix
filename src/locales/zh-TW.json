@@ -18,7 +18,8 @@
   "Button-Fetch-Type": {
     "active": "下載中",
     "waiting": "等待中",
-    "complete": "已完成"
+    "complete": "已完成",
+    "error": "失敗"
   },
   "setting": {
     "ThemeMode": "主題模式",
@@ -64,7 +65,7 @@
     "MaxConnectionPerServer": "每個伺服器的最大連線數",
     "SeedRatio": "Bt 做種比例",
     "SeedTime": "BT 做種時間 (分鐘)",
-    "TaskCompletedNotify": "下載完成後通知",
+    "TaskCompletedNotify": "下載完成或失敗後通知",
     "NewTaskShowDownloading": "新增任務後自動顯示下載中",
     "NoConfirmBeforeDeleteTask": "刪除任務前無需確認",
     "AutoCheckUpdate": "自動檢查更新",
@@ -84,6 +85,8 @@
     "Pause": "暫停任務",
     "PauseAll": "暫停選擇的任務",
     "Resume": "恢復任務",
+    "Retry": "重試",
+    "Failed": "下載失敗",
     "ResumeAll": "恢復所有任務",
     "Delete": "刪除任務",
     "DeleteAll": "刪除選中任務",

@@ -5,6 +5,7 @@ import {
   LinkOutlined,
   PauseOutlined,
   PlayArrowOutlined,
+  RefreshOutlined,
 } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useMemo } from "react";
@@ -56,17 +57,13 @@ function TaskItemAction({
           />
         );
       case TASK_STATUS_ENUM.Error:
-        return gid.startsWith("vortex:") ? (
+        return (
           <TaskActionButton
-            title={t("vortex.Retry")}
-            icon={<PlayArrowOutlined />}
+            title={t("task.Retry")}
+            icon={<RefreshOutlined />}
             onClick={() => onResume(gid)}
           />
-        ) : null;
-      // case TASK_STATUS_ENUM.Done:
-      //   return (
-      //     <TaskActionButton title={t("Resume")} icon={<RefreshOutlined />} />
-      //   );
+        );
     }
   }, [onPause, onResume, status, t, gid]);
 

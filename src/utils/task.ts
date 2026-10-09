@@ -211,6 +211,7 @@ export const getTaskProgressColor = (
   progress: number,
   status: string,
 ): LinearProgressProps["color"] => {
+  if (status === TASK_STATUS_ENUM.Error) return "error";
   if (progress === 100) {
     return "success";
   }
@@ -218,8 +219,6 @@ export const getTaskProgressColor = (
   switch (status) {
     case TASK_STATUS_ENUM.Pause:
       return "secondary";
-    case TASK_STATUS_ENUM.Error:
-      return "error";
     default:
       return "primary";
   }

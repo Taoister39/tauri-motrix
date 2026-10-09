@@ -273,7 +273,7 @@ export const getVersionApi = async () => {
 
 export const getOptionApi = async (gid: string) => {
   const { call } = await getAria2();
-  return call<Aria2Option>("getGlobalOption", gid);
+  return call<Record<string, string>>("getOption", gid);
 };
 
 export const saveSessionApi = async () => {
