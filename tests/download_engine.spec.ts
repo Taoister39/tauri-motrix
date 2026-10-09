@@ -71,6 +71,27 @@ it("rejects unsupported options instead of silently discarding them", async () =
   );
   expect(invoke).not.toHaveBeenCalled();
 });
+it("sends a custom User-Agent as one Vortex header, overriding a case-insensitive header", async () => {
+  await addTaskApi(snapshot.url, {
+    "user-agent": " Custom/1.0 ",
+    header: ["user-agent: Old/1.0", "Accept: */*"],
+  });
+  expect(invoke).toHaveBeenCalledWith("vortex_add", {
+    request: expect.objectContaining({
+      headers: { "User-Agent": "Custom/1.0", Accept: "*/*" },
+    }),
+  });
+});
+
+it("passes User-Agent through to aria2 for URL downloads", async () => {
+  jest
+    .mocked(getMotrixConfig)
+    .mockResolvedValue({ http_engine: "aria2c" } as MotrixConfig);
+  await addTaskApi(snapshot.url, { "user-agent": "Custom/1.0" });
+  expect(aria2.addTaskApi).toHaveBeenCalledWith(snapshot.url, {
+    "user-agent": "Custom/1.0",
+  });
+});
 it("keeps engine identity when native task IDs coincide", async () => {
   jest
     .mocked(aria2.stoppedTasksApi)

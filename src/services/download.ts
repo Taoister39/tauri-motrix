@@ -155,7 +155,7 @@ export async function addTaskApi(
   const unsupported = Object.keys(option).filter(
     (key) =>
       option[key as keyof typeof option] !== undefined &&
-      !["dir", "out", "header", "referer"].includes(key),
+      !["dir", "out", "header", "referer", "user-agent"].includes(key),
   );
   if (unsupported.length)
     throw new Error(
@@ -170,6 +170,12 @@ export async function addTaskApi(
       .trim();
   }
   const directory = option.dir || (await getAria2Config())?.dir || "";
+  if (option["user-agent"]?.trim()) {
+    for (const key of Object.keys(headers)) {
+      if (key.toLowerCase() === "user-agent") delete headers[key];
+    }
+    headers["User-Agent"] = option["user-agent"].trim();
+  }
   const id = await invoke<string>("vortex_add", {
     request: {
       url: list[0],

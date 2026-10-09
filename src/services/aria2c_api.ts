@@ -154,6 +154,7 @@ export interface DownloadOption {
   out?: string;
   referer?: string;
   header?: string[];
+  "user-agent"?: string;
   maxConnection?: number;
   maxSplit?: number;
   split?: number;

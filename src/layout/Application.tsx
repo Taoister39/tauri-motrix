@@ -20,9 +20,8 @@ import { useRoutes } from "react-router";
 import { SWRConfig } from "swr";
 
 import logoIcon from "@/assets/logo.svg?react";
-import AddTaskDialog from "@/business/task/AddTaskDialog";
+import AddTaskDialog, { AddTaskDialogRef } from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
-import { DialogRef } from "@/components/BaseDialog";
 import { isWin } from "@/constant/environment";
 import { ADD_DIALOG, APP_WEBSITE_ORIGIN } from "@/constant/url";
 import { useRootAction } from "@/hooks/root_action";
@@ -72,16 +71,19 @@ function Application() {
   const polling = usePollingStore((store) => store.polling);
   const stop = usePollingStore((store) => store.stop);
 
-  const addRef = useRef<DialogRef>(null);
+  const addRef = useRef<AddTaskDialogRef>(null);
 
   const routerElements = useRoutes(routers);
 
   useRootAction();
 
   useEffect(() => {
-    const unlisten = listen(ADD_DIALOG, () => {
-      addRef.current?.open();
-    });
+    const unlisten = listen<{ source?: "url" | "torrent" } | null>(
+      ADD_DIALOG,
+      ({ payload }) => {
+        addRef.current?.open(payload?.source === "torrent" ? "torrent" : "url");
+      },
+    );
 
     return () => {
       unlisten.then((unlisten) => unlisten());

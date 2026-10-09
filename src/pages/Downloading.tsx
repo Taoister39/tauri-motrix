@@ -20,12 +20,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mutate } from "swr";
 
-import AddTorrentDialog from "@/business/task/AddTorrentDialog";
 import TaskBanner from "@/business/task/TaskBanner";
 import TaskItem from "@/business/task/TaskItem";
 import { BasePageColumn, Column } from "@/client/styled_compose";
 import { TaskList } from "@/client/task_compose";
-import { BaseDialog, DialogRef } from "@/components/BaseDialog";
+import { BaseDialog } from "@/components/BaseDialog";
 import BasePage from "@/components/BasePage";
 import { Notice } from "@/components/Notice";
 import { DOWNLOAD_ENGINE, NORMAL_STATUS } from "@/constant/task";
@@ -55,7 +54,6 @@ function DownloadingPage() {
     fetchTasks,
   } = useTaskStore();
 
-  const torrentRef = useRef<DialogRef>(null);
   const searchRef = useRef<string>("");
   const [dragOver, setDragOver] = useState(false);
   /** Paths from Tauri file drop (native drag-drop gives paths, not File objects) */
@@ -194,7 +192,7 @@ function DownloadingPage() {
           <SpeedDialAction
             icon={<FilePresentIcon />}
             title={t("common.FromTorrentFile")}
-            onClick={() => torrentRef.current?.open()}
+            onClick={() => emit(ADD_DIALOG, { source: "torrent" })}
           />
           <SpeedDialAction
             icon={<ContentPasteIcon />}
@@ -314,7 +312,6 @@ function DownloadingPage() {
           {t("task.DragTorrentHint")}
         </Typography>
       </BasePageColumn>
-      <AddTorrentDialog ref={torrentRef} />
       <BaseDialog
         open={confirmDialogOpen}
         title={t("task.ConfirmAddTorrentsTitle")}
