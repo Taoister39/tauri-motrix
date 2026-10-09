@@ -6,7 +6,10 @@ use utils::resolve;
 
 use crate::{process::AsyncHandler, utils::logging::Type};
 
-use crate::utils::window::create_window;
+use crate::utils::{
+    startup::{is_autostart, AUTOSTART_ARG},
+    window::create_window,
+};
 
 mod cmd;
 mod config;
@@ -19,13 +22,18 @@ mod utils;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {
-            create_window(true);
+        .plugin(tauri_plugin_single_instance::init(|_app, args, _cwd| {
+            let minimize = config::Config::motrix()
+                .latest()
+                .should_minimize_on_launch(is_autostart(args.iter().skip(1)));
+            if !minimize {
+                create_window(true);
+            }
         }))
         .plugin(tauri_plugin_sql::Builder::default().build())
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
-            None,
+            Some(vec![AUTOSTART_ARG]),
         ))
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_notification::init())

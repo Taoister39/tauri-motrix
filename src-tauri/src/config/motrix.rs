@@ -31,6 +31,7 @@ pub struct IMotrix {
     pub auto_log_clean: Option<i32>,
 
     pub enable_auto_launch: Option<bool>,
+    pub minimize_to_tray_on_auto_launch: Option<bool>,
 
     pub auto_check_update: Option<bool>,
 
@@ -104,6 +105,7 @@ impl IMotrix {
             theme_mode: Some("system".into()),
             app_log_level: Some("info".into()),
             enable_auto_launch: Some(false),
+            minimize_to_tray_on_auto_launch: Some(false),
             auto_log_clean: Some(3),
             auto_check_update: Some(true),
             auto_resume_all: Some(false),
@@ -121,6 +123,10 @@ impl IMotrix {
     /// Save IMotrix App Config
     pub fn save_file(&self) -> Result<()> {
         help::save_yaml(&dirs::motrix_path()?, &self, Some("# tauri-motrix Config"))
+    }
+
+    pub fn should_minimize_on_launch(&self, is_autostart: bool) -> bool {
+        is_autostart && self.minimize_to_tray_on_auto_launch.unwrap_or(false)
     }
 
     /// patch motrix config
@@ -143,6 +149,7 @@ impl IMotrix {
         patch!(vortex_connections);
         patch!(language);
         patch!(enable_auto_launch);
+        patch!(minimize_to_tray_on_auto_launch);
         patch!(auto_log_clean);
         patch!(auto_check_update);
         patch!(auto_resume_all);
@@ -160,6 +167,41 @@ impl IMotrix {
 #[cfg(test)]
 mod tests {
     use super::IMotrix;
+
+    #[test]
+    fn minimizes_only_autostart_launches_when_enabled() {
+        for setting in [None, Some(false), Some(true)] {
+            let motrix = IMotrix {
+                minimize_to_tray_on_auto_launch: setting,
+                ..Default::default()
+            };
+            assert!(!motrix.should_minimize_on_launch(false));
+            assert_eq!(
+                motrix.should_minimize_on_launch(true),
+                setting == Some(true)
+            );
+        }
+    }
+
+    #[test]
+    fn minimize_preference_defaults_off_and_round_trips_independently() {
+        let mut motrix: IMotrix = serde_yaml::from_str("enable_auto_launch: false").unwrap();
+        assert!(!motrix.should_minimize_on_launch(true));
+
+        for enabled in [true, false] {
+            motrix.patch_config(IMotrix {
+                minimize_to_tray_on_auto_launch: Some(enabled),
+                ..Default::default()
+            });
+            motrix.patch_config(IMotrix {
+                theme_mode: Some("light".into()),
+                ..Default::default()
+            });
+            motrix = serde_yaml::from_str(&serde_yaml::to_string(&motrix).unwrap()).unwrap();
+            assert_eq!(motrix.minimize_to_tray_on_auto_launch, Some(enabled));
+            assert_eq!(motrix.enable_auto_launch, Some(false));
+        }
+    }
 
     #[test]
     fn test_patch_config() {

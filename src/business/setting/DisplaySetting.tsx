@@ -26,7 +26,7 @@ function AppearanceSetting() {
     if (
       autoLaunchEnabled !== undefined &&
       motrix &&
-      motrix?.app_hide_window !== autoLaunchEnabled
+      motrix.enable_auto_launch !== autoLaunchEnabled
     ) {
       mutateMotrix({ ...motrix, enable_auto_launch: autoLaunchEnabled }, false);
     }
@@ -45,6 +45,23 @@ function AppearanceSetting() {
           onChange={async (e) => {
             await patchMotrix({ enable_auto_launch: e.target.checked });
             await mutateAutoLaunchEnabled();
+          }}
+        />
+      </SettingItem>
+
+      <SettingItem
+        label={t("setting.MinimizeToTrayOnAutoLaunch")}
+        secondary={t("setting.MinimizeToTrayOnAutoLaunchDescription")}
+      >
+        <Android12Switch
+          checked={!!motrix?.minimize_to_tray_on_auto_launch}
+          slotProps={{
+            input: { "aria-label": t("setting.MinimizeToTrayOnAutoLaunch") },
+          }}
+          onChange={async (e) => {
+            await patchMotrix({
+              minimize_to_tray_on_auto_launch: e.target.checked,
+            });
           }}
         />
       </SettingItem>

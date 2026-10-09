@@ -1,4 +1,5 @@
 use tauri::AppHandle;
+use tauri_plugin_autostart::ManagerExt;
 
 use crate::{
     config::Config,
@@ -6,7 +7,7 @@ use crate::{
     feat::run_upnp_mapping,
     log_err,
     service::{aria2c, tray},
-    utils::{init, window::create_window},
+    utils::{init, startup::is_autostart, window::create_window},
 };
 
 pub async fn resolve_setup(app_handle: &AppHandle) {
@@ -20,6 +21,15 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     // core start engine
     log::trace!(target:"app", "init config");
     log_err!(Config::init_config().await);
+
+    // Refresh existing registrations so upgrades also receive the startup flag.
+    // Use the OS status to respect autostart disabled outside the app.
+    let autolaunch = app_handle.autolaunch();
+    match autolaunch.is_enabled() {
+        Ok(true) => log_err!(autolaunch.enable()),
+        Ok(false) => {}
+        Err(error) => log::error!(target: "app", "Failed to read auto launch status: {error}"),
+    }
     if let Err(error) = crate::service::vortex::engine().await {
         log::error!(target: "app", "Vortex initialization failed: {error}");
     }
@@ -37,10 +47,20 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     }
     log_err!(run_upnp_mapping());
 
-    log_err!(tray::create_tray(app_handle));
-    log_err!(tray::update_tray_menu());
+    let tray_available = match tray::create_tray(app_handle) {
+        Ok(()) => {
+            log_err!(tray::update_tray_menu());
+            true
+        }
+        Err(error) => {
+            log::error!(target: "app", "Failed to create tray: {error}");
+            false
+        }
+    };
 
-    // create main window
-    // TODO: silent startup in feature
-    create_window(true);
+    // Keep the app accessible if this desktop cannot create a tray icon.
+    let minimize = Config::motrix()
+        .latest()
+        .should_minimize_on_launch(is_autostart(std::env::args_os().skip(1)));
+    create_window(!minimize || !tray_available);
 }

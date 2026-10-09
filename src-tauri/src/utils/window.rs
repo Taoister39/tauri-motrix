@@ -1,13 +1,17 @@
 use crate::{core::handle, logging, utils::logging::Type};
 
 /// create main window
-/// return true if window is minimized
+/// return true if the window already exists
 pub fn create_window(is_showup: bool) -> bool {
     logging!(info, Type::Window, true, "Creating window");
 
     let app_handle = handle::Handle::global().app_handle().unwrap();
 
     if let Some(window) = handle::Handle::global().get_window() {
+        // A manual launch may have already opened the window during setup.
+        if !is_showup {
+            return true;
+        }
         logging!(
             info,
             Type::Window,
@@ -40,6 +44,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .min_inner_size(500.0, 550.0)
     .decorations(false)
     .maximizable(true)
+    .visible(false)
     .build();
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
@@ -52,6 +57,7 @@ pub fn create_window(is_showup: bool) -> bool {
     .inner_size(800.0, 600.0)
     .min_inner_size(650.0, 550.0)
     .decorations(true)
+    .visible(false)
     .build();
 
     match window {
@@ -59,11 +65,8 @@ pub fn create_window(is_showup: bool) -> bool {
             logging!(info, Type::Window, true, "Window created successfully");
 
             if is_showup {
-                println!("is showup");
                 let _ = window.show();
                 let _ = window.set_focus();
-            } else {
-                let _ = window.hide();
             }
         }
         Err(e) => {

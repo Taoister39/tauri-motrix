@@ -23,6 +23,7 @@ Supports Windows (x64 / arm64).
 - 📦 Lightweight, small package size
 - 🚥 Supports speed limit
 - 🔌 Configurable aria2 RPC port and secret for third-party download tools
+- 🖥️ Optional minimize to tray on auto launch, configurable in Settings → Display (off by default). Manual launches still show the window.
 
 ## RPC downloads
 

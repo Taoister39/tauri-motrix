@@ -26,6 +26,8 @@
     "Display": "显示",
     "Aria2": "Aria2 引擎",
     "AutoLaunch": "自动启动",
+    "MinimizeToTrayOnAutoLaunch": "开机自启动时最小化到托盘",
+    "MinimizeToTrayOnAutoLaunchDescription": "开机自启动时不显示窗口，手动打开应用仍正常显示。",
     "CheckForUpdates": "检查更新",
     "DownloadSpeedLimit": "下载速度限制",
     "External": "RPC 设置",

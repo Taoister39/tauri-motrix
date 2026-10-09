@@ -49,6 +49,8 @@
     "UploadSpeedLimit": "Upload Speed Limit",
     "DownloadSpeedLimit": "Download Speed Limit",
     "AutoLaunch": "Auto Launch",
+    "MinimizeToTrayOnAutoLaunch": "Minimize to tray on auto launch",
+    "MinimizeToTrayOnAutoLaunchDescription": "Keep the window hidden at login. Opening the app manually still shows the window.",
     "TaskManagement": "Task Management",
     "DefaultPath": "Default Path",
     "AutoResumeAll": "Automatically resume all unfinished tasks",
