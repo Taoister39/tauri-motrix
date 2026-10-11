@@ -68,10 +68,13 @@ export function createAria2BinInfo(latestTag) {
   const name = ARIA2_MAP[TARGET_KEY];
 
   const urlExt = "zip";
-  const tagCompositions = latestTag.split("-");
-  // assume the version is the last part of the tag
-  // aria2c-release-1.xx.x
-  const version = tagCompositions[tagCompositions.length - 1];
+  // Revision suffixes belong to the release tag, not the archive version.
+  const version = latestTag.match(
+    /^aria2c-release-(\d+\.\d+\.\d+)(?:-[\w.-]+)?$/,
+  )?.[1];
+  if (!version) {
+    throw new Error(`Invalid aria2 release tag: ${latestTag}`);
+  }
 
   const downloadName = `aria2-${version}-${name}`;
 
