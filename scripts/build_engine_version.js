@@ -6,6 +6,7 @@ import fsp from "fs/promises";
 import path from "path";
 import process from "process";
 
+import { uploadBuildEngineVersion } from "./build_engine_assets.mjs";
 import { cwd } from "./environment.mjs";
 import { getAllTags } from "./github_wrapper.js";
 import { log_error, log_success } from "./utils.mjs";
@@ -62,7 +63,7 @@ async function resolveBuildEngineVersion() {
     }
   }
 
-  releaseBuildEngine(tagMap);
+  await releaseBuildEngine(tagMap);
 }
 /**
  *
@@ -110,43 +111,14 @@ async function releaseBuildEngine(tagMap) {
     await uploadBuildEngineVersion(
       github,
       options,
-      updateRelease.id,
+      updateRelease,
       fileName,
       version,
     );
   }
 }
 
-/**
- * @typedef {import("@actions/github")["context"]} Context
- * @typedef {Context["repo"]["repo"]} Repo
- * @typedef {Context["repo"]["owner"]} Owner
- *
- * @param {ReturnType<import("@actions/github")["getOctokit"]>} github
- * @param {{owner:Owner;repo:Repo}} options
- * @param {number} release_id
- * @param {string} engine
- * @param {string} version
- * @returns
- */
-
-function uploadBuildEngineVersion(
-  github,
-  options,
-  release_id,
-  engine,
-  version,
-) {
-  return github.rest.repos
-    .uploadReleaseAsset({
-      ...options,
-      release_id,
-      name: engine,
-      data: version,
-    })
-    .catch((error) => {
-      log_error(`Failed to update engine version: ${error.message}`);
-    });
-}
-
-resolveBuildEngineVersion().catch(console.error);
+resolveBuildEngineVersion().catch((error) => {
+  log_error(`Failed to update engine version: ${error.message}`);
+  process.exitCode = 1;
+});
