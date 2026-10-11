@@ -62,7 +62,7 @@ fi
 make -j"$(sysctl -n hw.ncpu)"
 pushd src
 strip aria2c
-lipo -verify_arch "$arch" aria2c
+lipo aria2c -verify_arch "$arch"
 ./aria2c --version
 
 # Code signing and notarization

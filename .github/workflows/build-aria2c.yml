@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       llvm_path: "${{ github.workspace }}/llvm-mingw"
+      vcpkg_ref: e456309491fd875487bf02b8a0dca76c1b1b00cc
       # libssh2_path: "${{ github.workspace }}/libssh2-windows-arm64"
       # VCPKG_DEFAULT_TRIPLET: "${{ matrix.arch }}-windows-static"
 
@@ -36,13 +37,13 @@ jobs:
           mv llvm-mingw-20220906-ucrt-ubuntu-18.04-x86_64 llvm-mingw
           git clone https://github.com/microsoft/vcpkg.git
           cd vcpkg
+          git checkout "$vcpkg_ref"
           ./bootstrap-vcpkg.sh
 
       - name: Install libraries from vcpkg
         run: |
           PATH=$PATH:${{ env.llvm_path }}/bin
           cd vcpkg
-          git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
           cp triplets/community/${{ matrix.arch }}-mingw-static.cmake triplets_overlay/${{ matrix.arch }}-mingw-static-release.cmake
