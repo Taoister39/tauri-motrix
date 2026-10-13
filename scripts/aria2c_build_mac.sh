@@ -55,7 +55,8 @@ export LDFLAGS="-L$(brew --prefix)/opt/gettext/lib -L$(brew --prefix)/opt/libssh
 export ARIA2_STATIC=no
 ZLIB_LIBS="$(static_pkg_config zlib)"
 EXPAT_LIBS="$(static_pkg_config expat)"
-SQLITE3_LIBS="$(static_pkg_config sqlite3)"
+# SQLite's private -lz flag does not include Homebrew's zlib search path.
+SQLITE3_LIBS="$(static_pkg_config sqlite3 zlib)"
 LIBSSH2_LIBS="$(static_pkg_config libssh2 zlib)"
 LIBCARES_LIBS="$(static_pkg_config libcares)"
 export ZLIB_LIBS EXPAT_LIBS SQLITE3_LIBS LIBSSH2_LIBS LIBCARES_LIBS

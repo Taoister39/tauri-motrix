@@ -20,18 +20,22 @@ function run(command, env) {
   );
 }
 
-test("links third-party archives and preserves system libraries and frameworks", (t) => {
+function createArchives(t, ...libraries) {
   const directory = mkdtempSync(path.join(tmpdir(), "macos-static-libs-"));
   t.after(() => {
     assert.equal(path.dirname(directory), path.resolve(tmpdir()));
     rmSync(directory, { recursive: true, force: true });
   });
-  const first = path.join(directory, "first").replaceAll("\\", "/");
-  const second = path.join(directory, "second").replaceAll("\\", "/");
-  mkdirSync(first);
-  mkdirSync(second);
-  writeFileSync(`${first}/libssh2.a`, "");
-  writeFileSync(`${second}/libcrypto.a`, "");
+  return libraries.map((library) => {
+    const libDir = path.join(directory, library).replaceAll("\\", "/");
+    mkdirSync(libDir);
+    writeFileSync(`${libDir}/lib${library}.a`, "");
+    return libDir;
+  });
+}
+
+test("links third-party archives and preserves system libraries and frameworks", (t) => {
+  const [first, second] = createArchives(t, "ssh2", "crypto");
 
   const result = run(
     'pkg-config() { printf "%s\\n" "$FLAGS"; }\nstatic_pkg_config libssh2',
@@ -44,6 +48,30 @@ test("links third-party archives and preserves system libraries and frameworks",
   assert.equal(
     result.stdout.trim(),
     `${first}/libssh2.a ${second}/libcrypto.a -lresolv -framework Security`,
+  );
+});
+
+test("resolves SQLite's private zlib dependency using zlib's package search path", (t) => {
+  const [sqlite, zlib] = createArchives(t, "sqlite3", "z");
+  const result = run(
+    `pkg-config() {
+      printf '%s ' "$SQLITE_FLAGS"
+      if [[ " $* " == *" zlib "* ]]; then
+        printf '%s ' "$ZLIB_FLAGS"
+      fi
+      printf '\\n'
+    }
+    static_pkg_config sqlite3 zlib`,
+    {
+      SQLITE_FLAGS: `-L${sqlite} -lsqlite3 -lz`,
+      ZLIB_FLAGS: `-L${zlib} -lz`,
+    },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(
+    result.stdout.trim(),
+    `${sqlite}/libsqlite3.a ${zlib}/libz.a ${zlib}/libz.a`,
   );
 });
 
