@@ -45,4 +45,5 @@ jobs:
       - name: Unit Test
         run: |
           pnpm build
+          node --test scripts/*.test.mjs
           pnpm test
