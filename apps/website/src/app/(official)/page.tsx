@@ -3,18 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-import ElegantDarkButton from "@/components/ElegantDarkButton";
 import NewVersion from "@/components/NewVersion";
+import ReleaseUnavailable from "@/components/ReleaseUnavailable";
 import ViewFeatures from "@/components/ViewFeatures";
 import WithPosterLayout from "@/components/WithPosterLayout";
-import { APP_REPO, LATEST_RELEASE } from "@/constants/base_link";
+import { APP_REPO } from "@/constants/base_link";
+import { getLatestRelease } from "@/lib/release";
 
 export default async function Home() {
-  const latest = await fetch(LATEST_RELEASE, {
-    next: {
-      revalidate: 60 * 60, // github api limit
-    },
-  }).then((res) => res.json());
+  const latest = await getLatestRelease();
 
   return (
     <WithPosterLayout>
@@ -30,20 +27,33 @@ export default async function Home() {
       <h1 className="text-3xl font-bold mb-2">
         A full-featured download manager
       </h1>
-      <p className="mb-4 text-sm">
-        Support downloading HTTP, FTP, BitTorrent, Magnet, etc.
+      <p className="mb-2 text-sm max-w-md">
+        Available for Windows, macOS, and Linux, with x64 and ARM64 builds on
+        every platform.
+      </p>
+      <p className="mb-4 text-sm max-w-md">
+        Download HTTP, FTP, BitTorrent, and magnet links with aria2. Try Vortex
+        (Beta), our native Rust engine for HTTP(S) downloads, alongside aria2 in
+        one task list.
       </p>
 
       <section className="flex gap-4 items-center flex-col sm:flex-row">
-        <Link href="/download">
-          <ElegantDarkButton>Download</ElegantDarkButton>
-        </Link>
-        <NewVersion
-          className="ml-2 hover:text-[#5c5edc]"
-          href={latest.html_url}
+        <Link
+          href="/download"
+          className="py-3 px-8 bg-[#2b2b2b] font-bold text-white rounded-full inline-flex justify-center focus-visible:outline-2 focus-visible:outline-offset-4"
         >
-          {latest.tag_name}
-        </NewVersion>
+          Download
+        </Link>
+        {latest ? (
+          <NewVersion
+            className="ml-2 hover:text-[#5c5edc]"
+            href={latest.html_url}
+          >
+            {latest.tag_name} release notes
+          </NewVersion>
+        ) : (
+          <ReleaseUnavailable />
+        )}
       </section>
 
       <section className="mt-4">

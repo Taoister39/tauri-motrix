@@ -18,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Tauri Motrix",
-  description: "A full-featured download manager.",
+  description:
+    "A free, open-source download manager for Windows, macOS, and Linux on x64 and ARM64. Download with aria2 or try Vortex (Beta) for HTTP(S) files.",
 };
 
 import "@fortawesome/fontawesome-svg-core/styles.css";

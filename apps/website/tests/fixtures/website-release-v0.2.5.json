@@ -1,0 +1,83 @@
+{
+  "tag_name": "v0.2.5",
+  "published_at": "2026-10-13T10:46:24Z",
+  "html_url": "https://github.com/Taoister39/tauri-motrix/releases/tag/v0.2.5",
+  "assets": [
+    {
+      "name": "latest.json",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/latest.json"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_aarch64.AppImage",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_aarch64.AppImage"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_aarch64.AppImage.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_aarch64.AppImage.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_aarch64.dmg",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_aarch64.dmg"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_amd64.AppImage",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_amd64.AppImage"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_amd64.AppImage.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_amd64.AppImage.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_amd64.deb",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_amd64.deb"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_amd64.deb.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_amd64.deb.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_arm64-setup.exe",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_arm64-setup.exe"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_arm64-setup.exe.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_arm64-setup.exe.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_arm64.deb",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_arm64.deb"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_arm64.deb.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_arm64.deb.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_x64-setup.exe",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_x64-setup.exe"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_x64-setup.exe.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_x64-setup.exe.sig"
+    },
+    {
+      "name": "Tauri.Motrix_0.2.5_x64.dmg",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_0.2.5_x64.dmg"
+    },
+    {
+      "name": "Tauri.Motrix_aarch64.app.tar.gz",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_aarch64.app.tar.gz"
+    },
+    {
+      "name": "Tauri.Motrix_aarch64.app.tar.gz.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_aarch64.app.tar.gz.sig"
+    },
+    {
+      "name": "Tauri.Motrix_x64.app.tar.gz",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_x64.app.tar.gz"
+    },
+    {
+      "name": "Tauri.Motrix_x64.app.tar.gz.sig",
+      "browser_download_url": "https://github.com/Taoister39/tauri-motrix/releases/download/v0.2.5/Tauri.Motrix_x64.app.tar.gz.sig"
+    }
+  ]
+}

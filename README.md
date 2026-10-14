@@ -14,7 +14,7 @@ Tauri Motrix is a full-featured download manager written in Tauri.The purpose is
 ## Install
 
 Go to the [release page](https://github.com/Taoister39/tauri-motrix/releases) to download the corresponding installation package
-Supports Windows (x64 / arm64).
+Supports Windows, macOS, and Linux, with x64 and ARM64 builds on all three platforms. Choose an EXE installer for Windows, a DMG for Intel or Apple Silicon Macs, or a DEB or AppImage for Linux.
 
 ## Features
 

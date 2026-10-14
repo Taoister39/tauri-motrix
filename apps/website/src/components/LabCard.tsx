@@ -22,7 +22,7 @@ function LabCard({
 }: LabCardProps) {
   return (
     <InteractiveLink
-      className="rounded overflow-hidden cursor-pointer shadow-xl w-full sm:w-[288px] dark:bg-[#2d2d2d]"
+      className="rounded overflow-hidden cursor-pointer shadow-xl w-full sm:w-[288px] dark:bg-[#2d2d2d] dark:text-[#ededed]"
       href={repository}
       onOpen={onOpen}
     >

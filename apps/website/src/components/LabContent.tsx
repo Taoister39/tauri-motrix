@@ -48,6 +48,29 @@ function LabContent({ onOpen, className }: LabContentProps) {
   return (
     <div className={clsx("sm:px-9 px-5 sm:pb-4 pt-4 pb-3", className)}>
       <h1 className="text-3xl font-bold mb-2">Featured Extensions</h1>
+      <section className="my-6 max-w-3xl">
+        <h2 className="text-xl font-bold mb-3">Connect to Tauri Motrix</h2>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>
+            Keep Tauri Motrix running and open Settings → Aria2 Engine → RPC
+            Settings.
+          </li>
+          <li>
+            Copy the RPC address into your extension or download tool. The
+            default address is{" "}
+            <code className="break-all">http://127.0.0.1:16801/jsonrpc</code>.
+          </li>
+          <li>
+            Use the same port and RPC secret in both applications. If you change
+            the port or secret in Tauri Motrix, update your extension as well.
+          </li>
+        </ol>
+        <p className="mt-3">
+          Saving RPC settings restarts aria2 and restores its saved task
+          session. External controllers always use aria2, even when Vortex
+          (Beta) is selected for new HTTP(S) tasks in the app.
+        </p>
+      </section>
       <section className="flex gap-12 flex-wrap">
         {LAB_LIST.map((item) => (
           <LabCard {...item} key={item.repository} onOpen={onOpen} />

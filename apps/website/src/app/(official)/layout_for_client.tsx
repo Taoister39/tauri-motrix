@@ -41,6 +41,7 @@ export default function OfficialLayoutClient({
     <UxTheme
       mode="light"
       className={clsx("min-h-screen", {
+        "bg-white": !open,
         "bg-[#ebecf0] overflow-hidden": open,
       })}
     >
@@ -52,7 +53,6 @@ export default function OfficialLayoutClient({
       >
         <Link href="/" className="cursor-pointer" onNavigate={() => setFalse()}>
           <Image
-            className="dark:invert"
             width={62}
             height={14}
             alt="Tauri Motrix logo"
@@ -111,7 +111,7 @@ export default function OfficialLayoutClient({
           )}
           onClick={setFalse}
         >
-          <main className="pt-20 flex-1">{children}</main>
+          <main className="pt-20 flex-1 [&_h1]:scroll-mt-24">{children}</main>
           <footer className="px-12 pb-6 flex gap-[24px] flex-wrap items-center justify-center lg:justify-start">
             <BaseCopyright />
           </footer>

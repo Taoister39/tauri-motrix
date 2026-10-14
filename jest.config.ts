@@ -3,9 +3,14 @@ import { join } from "path";
 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const watchPathIgnorePatterns = [
+  "[/\\\\]node_modules[/\\\\]\\.cache(?:[/\\\\]|$)",
+];
+
 const config: Config = {
   projects: [
     {
+      watchPathIgnorePatterns,
       testEnvironment: "jest-environment-jsdom",
       globals: {
         OS_PLATFORM: process.platform,
@@ -56,6 +61,7 @@ const config: Config = {
       },
     },
     {
+      watchPathIgnorePatterns,
       testEnvironment: "jest-environment-jsdom",
       setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
       displayName: "ux-base",

@@ -25,7 +25,8 @@ function ViewFeatures() {
     await uni_utils.sleep(600);
 
     setOpen(false);
-    router.push("/features");
+    router.push("/features", { scroll: false });
+    window.scrollTo(0, 0);
 
     lockRef.current = false;
   };
