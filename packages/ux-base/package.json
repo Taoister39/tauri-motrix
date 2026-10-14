@@ -37,12 +37,12 @@
     "docs:build": "storybook build"
   },
   "devDependencies": {
-    "@stylexjs/babel-plugin": "catalog:",
-    "@stylexswc/rs-compiler": "catalog:",
+    "@stylexjs/babel-plugin": "catalog:stylex",
+    "@stylexswc/rs-compiler": "catalog:stylex",
     "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-react": "catalog:",
     "@rslib/core": "catalog:",
-    "@stylexswc/unplugin": "catalog:",
+    "@stylexswc/unplugin": "catalog:stylex",
     "@types/react": "catalog:",
     "react": "catalog:",
     "storybook": "^10.6.2",
@@ -55,7 +55,7 @@
     "react-dom": "catalog:"
   },
   "dependencies": {
-    "@stylexjs/stylex": "catalog:",
+    "@stylexjs/stylex": "catalog:stylex",
     "@tauri-motrix/unified-base": "workspace:*"
   }
 }
