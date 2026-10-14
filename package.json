@@ -29,7 +29,7 @@
     "tauri-version": "node ./scripts/tauri_version.js"
   },
   "dependencies": {
-    "@changesets/cli": "^2.29.5",
+    "@changesets/cli": "^3.0.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.2.0",
@@ -59,7 +59,7 @@
     "react-i18next": "^15.4.0",
     "react-markdown": "^10.1.0",
     "react-monaco-editor": "^0.59.0",
-    "react-router": "^7.9.1",
+    "react-router": "^8.4.0",
     "swr": "^2.3.0",
     "zustand": "^5.0.3"
   },
@@ -97,7 +97,7 @@
     "jest-environment-jsdom": "^30.1.0",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
-    "syncpack": "14.0.0-alpha.19",
+    "syncpack": "^15.3.3",
     "tar": "^7.4.3",
     "ts-node": "^10.9.2",
     "typescript": "catalog:",

@@ -50,6 +50,9 @@
       "dependencies": [
         "@tauri-motrix/**"
       ],
+      "dependencyTypes": [
+        "!local"
+      ],
       "pinVersion": "workspace:*"
     },
     {
@@ -65,7 +68,7 @@
         "@rslib/core",
         "typescript"
       ],
-      "pinVersion": "catalog:"
+      "policy": "catalog"
     }
   ]
 }
