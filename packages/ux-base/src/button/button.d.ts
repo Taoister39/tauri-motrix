@@ -1,3 +1,0 @@
-interface IButtonProps {
-  className?: string;
-}

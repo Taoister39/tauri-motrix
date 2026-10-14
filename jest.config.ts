@@ -50,6 +50,9 @@ const config: Config = {
           "<rootDir>/node_modules/@tauri-motrix/aria2/dist/mocks.js",
         "^@tauri-motrix/aria2$":
           "<rootDir>/node_modules/@tauri-motrix/aria2/dist/index.js",
+        "^@tauri-motrix/ux-base/(theme|components|tokens)$":
+          "<rootDir>/packages/ux-base/dist/$1.js",
+        "^@tauri-motrix/ux-base$": "<rootDir>/packages/ux-base/dist/index.js",
       },
     },
     {

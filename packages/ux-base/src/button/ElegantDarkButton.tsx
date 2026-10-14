@@ -1,6 +1,9 @@
+"use client";
+
 import stylex from "@stylexjs/stylex";
-import { uni_utils } from "@tauri-motrix/unified-base";
-import { ReactNode } from "react";
+import { ComponentPropsWithRef, ReactNode } from "react";
+
+import { controlStyles } from "../styles";
 
 const styles = stylex.create({
   root: {
@@ -12,18 +15,34 @@ const styles = stylex.create({
   },
 });
 
-export interface ElegantDarkButtonProps extends IButtonProps {
+export interface ElegantDarkButtonProps
+  extends ComponentPropsWithRef<"button"> {
   children: ReactNode;
 }
 
-function ElegantDarkButton(inProps: ElegantDarkButtonProps) {
-  const resolvedProps = uni_utils.resolveProps(
-    stylex.props(styles.root),
-    inProps,
-    true,
+function ElegantDarkButton({
+  className,
+  style,
+  children,
+  ...props
+}: ElegantDarkButtonProps) {
+  const resolvedProps = stylex.props(
+    styles.root,
+    controlStyles.focus,
+    props.disabled && controlStyles.disabled,
   );
 
-  return <button {...resolvedProps}>{inProps.children}</button>;
+  return (
+    <button
+      type="button"
+      {...props}
+      {...resolvedProps}
+      className={[resolvedProps.className, className].filter(Boolean).join(" ")}
+      style={{ ...resolvedProps.style, ...style }}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default ElegantDarkButton;

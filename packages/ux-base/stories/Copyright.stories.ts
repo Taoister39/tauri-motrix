@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
 
-import Copyright from "../src/base/Copyright";
+import Copyright from "../dist/base/Copyright";
 
 const meta = {
   title: "Base/Copyright",

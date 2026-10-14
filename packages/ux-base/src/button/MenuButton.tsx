@@ -1,5 +1,10 @@
+"use client";
+
 import * as stylex from "@stylexjs/stylex";
-import { uni_utils } from "@tauri-motrix/unified-base";
+import type { ComponentPropsWithRef } from "react";
+
+import { colors } from "../generated/tokens.stylex";
+import { controlStyles } from "../styles";
 
 const styles = stylex.create({
   root: {
@@ -18,9 +23,12 @@ const styles = stylex.create({
       left: 0,
       right: 0,
       height: "0.125rem",
-      backgroundColor: "#5f656f",
+      backgroundColor: colors.textSecondary,
       transitionProperty: "all",
-      transitionDuration: "0.25s",
+      transitionDuration: {
+        default: "0.25s",
+        "@media (prefers-reduced-motion: reduce)": "0s",
+      },
     },
     "::after": {
       transform: "scaleX(0.8)",
@@ -30,9 +38,12 @@ const styles = stylex.create({
       left: 0,
       right: 0,
       height: "0.125rem",
-      backgroundColor: "#5f656f",
+      backgroundColor: colors.textSecondary,
       transitionProperty: "all",
-      transitionDuration: "0.25s",
+      transitionDuration: {
+        default: "0.25s",
+        "@media (prefers-reduced-motion: reduce)": "0s",
+      },
     },
   },
   open: {
@@ -51,35 +62,57 @@ const styles = stylex.create({
     position: "absolute",
     left: 0,
     right: 0,
-    backgroundColor: "#5f656f",
+    backgroundColor: colors.textSecondary,
     overflow: "hidden",
+    color: "transparent",
     transitionProperty: "opacity",
-    transitionDuration: "0.25s",
+    transitionDuration: {
+      default: "0.25s",
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
   },
   menuSpanOpen: {
     opacity: 0,
   },
 });
 
-export interface MenuButtonProps extends IButtonProps {
+export interface MenuButtonProps extends ComponentPropsWithRef<"button"> {
   open?: boolean;
-  onClick?: () => void;
 }
 
-function MenuButton(inProps: MenuButtonProps) {
-  const resolvedProps = uni_utils.resolveProps(
-    stylex.props(styles.root, inProps.open && styles.open),
-    inProps,
-    true,
+function MenuButton({
+  open = false,
+  type = "button",
+  className,
+  style,
+  children,
+  "aria-label": label = "Menu",
+  ...props
+}: MenuButtonProps) {
+  const resolvedProps = stylex.props(
+    styles.root,
+    open && styles.open,
+    controlStyles.focus,
+    props.disabled && controlStyles.disabled,
   );
 
   return (
-    <button {...resolvedProps}>
+    <button
+      {...props}
+      {...resolvedProps}
+      className={[resolvedProps.className, className].filter(Boolean).join(" ")}
+      style={{ ...resolvedProps.style, ...style }}
+      type={type}
+      aria-label={label}
+      aria-expanded={open}
+    >
       <span
-        {...stylex.props(styles.menuSpan, inProps.open && styles.menuSpanOpen)}
+        aria-hidden="true"
+        {...stylex.props(styles.menuSpan, open && styles.menuSpanOpen)}
       >
         Menu
       </span>
+      {children}
     </button>
   );
 }

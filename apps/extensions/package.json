@@ -4,10 +4,22 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:edge": "cross-env NODE_ENV=production node ./edge/build"
+    "build:edge": "cross-env NODE_ENV=production node ./edge/build.js",
+    "build": "rsbuild build",
+    "dev": "rsbuild dev --port 2542",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tauri-motrix/ux-base": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
-    "chalk": "^5.4.1",
+    "@rsbuild/core": "catalog:",
+    "@rsbuild/plugin-react": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:",
     "cross-env": "^7.0.3",
     "crx": "^5.0.1",
     "yargs": "^18.0.0"

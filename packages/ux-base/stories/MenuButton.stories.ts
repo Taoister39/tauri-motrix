@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
 
-import MenuButton from "../src/button/MenuButton";
+import { MenuButton } from "../dist/components";
 
 const meta = {
   title: "Button/MenuButton",
@@ -17,3 +17,7 @@ export const Basic: Story = {
     },
   },
 };
+export const Expanded: Story = {
+  args: { open: true, "aria-label": "Close navigation" },
+};
+export const Disabled: Story = { args: { disabled: true } };

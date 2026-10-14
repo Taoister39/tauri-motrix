@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as stylex from "@stylexjs/stylex";
+import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
 
 import VirtualListDemo, {
   DefaultItemRenderer,
   useVirtualList,
   VirtualListComponent,
-} from "../src/template/VirtualListDemo";
+} from "../dist/template/VirtualListDemo";
 
-const storyStyles = stylex.create({
+const storyStyles: Record<string, CSSProperties> = {
   storyContainer: {
     padding: "20px",
     fontFamily: "system-ui, sans-serif",
@@ -22,13 +22,10 @@ const storyStyles = stylex.create({
     padding: "8px 16px",
     backgroundColor: "#3b82f6",
     color: "#ffffff",
-    border: "none",
+    borderWidth: 0,
     borderRadius: "6px",
     cursor: "pointer",
     fontSize: "14px",
-    ":hover": {
-      backgroundColor: "#2563eb",
-    },
   },
   info: {
     fontSize: "14px",
@@ -41,9 +38,6 @@ const storyStyles = stylex.create({
     padding: "8px 12px",
     borderBottom: "1px solid #f3f4f6",
     fontSize: "13px",
-    ":hover": {
-      backgroundColor: "#f9fafb",
-    },
   },
   avatar: {
     width: "24px",
@@ -57,7 +51,7 @@ const storyStyles = stylex.create({
     fontSize: "10px",
     fontWeight: "bold",
   },
-});
+};
 
 interface DemoUser {
   id: number;
@@ -86,8 +80,8 @@ const generateUsers = (count: number): DemoUser[] => {
 };
 
 const CompactRenderer = ({ item, style }: any) => (
-  <div {...stylex.props(storyStyles.compactItem)} style={style}>
-    <div {...stylex.props(storyStyles.avatar)}>{item.name.charAt(0)}</div>
+  <div style={{ ...storyStyles.compactItem, ...style }}>
+    <div style={storyStyles.avatar}>{item.name.charAt(0)}</div>
     <div style={{ flex: 1 }}>{item.name}</div>
     <div style={{ color: "#9ca3af", fontSize: "12px" }}>{item.email}</div>
   </div>
@@ -139,7 +133,7 @@ export const Default: Story = {
     overscan: 5,
   },
   render: (args) => (
-    <div {...stylex.props(storyStyles.storyContainer)}>
+    <div style={storyStyles.storyContainer}>
       <VirtualListComponent {...args} />
     </div>
   ),
@@ -155,7 +149,7 @@ export const CompactLayout: Story = {
     overscan: 3,
   },
   render: (args) => (
-    <div {...stylex.props(storyStyles.storyContainer)}>
+    <div style={storyStyles.storyContainer}>
       <VirtualListComponent {...args} />
     </div>
   ),
@@ -171,16 +165,16 @@ export const WithNavigation: Story = {
       });
 
       return (
-        <div {...stylex.props(storyStyles.storyContainer)}>
-          <div {...stylex.props(storyStyles.buttonGroup)}>
+        <div style={storyStyles.storyContainer}>
+          <div style={storyStyles.buttonGroup}>
             <button
-              {...stylex.props(storyStyles.button)}
+              style={storyStyles.button}
               onClick={() => virtualList.scrollToIndex(0)}
             >
               Go to Top
             </button>
             <button
-              {...stylex.props(storyStyles.button)}
+              style={storyStyles.button}
               onClick={() =>
                 virtualList.scrollToIndex(Math.floor(args.items.length / 2))
               }
@@ -188,14 +182,14 @@ export const WithNavigation: Story = {
               Go to Middle
             </button>
             <button
-              {...stylex.props(storyStyles.button)}
+              style={storyStyles.button}
               onClick={() => virtualList.scrollToIndex(args.items.length - 1)}
             >
               Go to End
             </button>
           </div>
 
-          <div {...stylex.props(storyStyles.info)}>
+          <div style={storyStyles.info}>
             Showing items {virtualList.startIndex}-{virtualList.endIndex} of{" "}
             {args.items.length}
           </div>
@@ -252,8 +246,8 @@ export const PerformanceTest: Story = {
     getItemKey: (item: any) => item.id,
   },
   render: (args) => (
-    <div {...stylex.props(storyStyles.storyContainer)}>
-      <div {...stylex.props(storyStyles.info)}>
+    <div style={storyStyles.storyContainer}>
+      <div style={storyStyles.info}>
         📊 Performance Test: {args.items.length.toLocaleString()} items
       </div>
       <VirtualListComponent {...args} />

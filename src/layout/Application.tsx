@@ -22,6 +22,7 @@ import { SWRConfig } from "swr";
 import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog, { AddTaskDialogRef } from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
+import { UxThemeBridge } from "@/components/UxThemeBridge";
 import { isWin } from "@/constant/environment";
 import { ADD_DIALOG, APP_WEBSITE_ORIGIN } from "@/constant/url";
 import { useRootAction } from "@/hooks/root_action";
@@ -112,99 +113,101 @@ function Application() {
   return (
     <SWRConfig value={{ errorRetryCount: 3 }}>
       <ThemeProvider theme={theme}>
-        <AddTaskDialog ref={addRef} />
-        <Paper
-          onContextMenu={(e) => {
-            e.preventDefault();
-          }}
-          sx={({ palette }) => ({
-            bgcolor: palette.background.paper,
-            height: "100vh",
-            display: "grid",
-            gridTemplateRows: "auto 1fr",
-            gridAutoColumns: "auto 1fr",
-            [`& > .${boxClasses.root}`]: {
-              gridColumn: "1 / 3",
-              gridRow: "1",
-            },
-            [`& > .${drawerClasses.root}`]: {
-              gridColumn: "1",
-              gridRow: "2",
-            },
-            [`& > main`]: {
-              gridColumn: "2",
-              gridRow: "2",
-            },
-          })}
-        >
-          {isWin && <TitleBar toggleOpenAside={toggleOpenAside} />}
-
-          <Drawer
-            sx={(theme) => ({
-              [`.${drawerClasses.paper}`]: {
-                position: "unset",
-                width: "200px",
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: theme.palette.background.paper,
-                border: "none",
+        <UxThemeBridge>
+          <AddTaskDialog ref={addRef} />
+          <Paper
+            onContextMenu={(e) => {
+              e.preventDefault();
+            }}
+            sx={({ palette }) => ({
+              bgcolor: palette.background.paper,
+              height: "100vh",
+              display: "grid",
+              gridTemplateRows: "auto 1fr",
+              gridAutoColumns: "auto 1fr",
+              [`& > .${boxClasses.root}`]: {
+                gridColumn: "1 / 3",
+                gridRow: "1",
+              },
+              [`& > .${drawerClasses.root}`]: {
+                gridColumn: "1",
+                gridRow: "2",
+              },
+              [`& > main`]: {
+                gridColumn: "2",
+                gridRow: "2",
               },
             })}
-            open={!isDownSm || isOpenAside}
-            onClose={setFalseOpenAside}
-            variant={isDownSm ? "temporary" : "permanent"}
           >
-            <IconButton
-              onClick={toggleOpenAside}
-              color="inherit"
-              aria-label="open aside menu"
-              edge="end"
-              size="large"
-              sx={[
-                {
-                  marginLeft: 1,
-                  cursor: "pointer",
-                  alignSelf: "start",
+            {isWin && <TitleBar toggleOpenAside={toggleOpenAside} />}
+
+            <Drawer
+              sx={(theme) => ({
+                [`.${drawerClasses.paper}`]: {
+                  position: "unset",
+                  width: "200px",
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: theme.palette.background.paper,
+                  border: "none",
                 },
-                !isDownSm && { display: "none" },
-              ]}
+              })}
+              open={!isDownSm || isOpenAside}
+              onClose={setFalseOpenAside}
+              variant={isDownSm ? "temporary" : "permanent"}
             >
-              <MenuIcon />
-            </IconButton>
+              <IconButton
+                onClick={toggleOpenAside}
+                color="inherit"
+                aria-label="open aside menu"
+                edge="end"
+                size="large"
+                sx={[
+                  {
+                    marginLeft: 1,
+                    cursor: "pointer",
+                    alignSelf: "start",
+                  },
+                  !isDownSm && { display: "none" },
+                ]}
+              >
+                <MenuIcon />
+              </IconButton>
 
-            <TheLogo data-tauri-drag-regio>
-              <SvgIcon
-                sx={{ width: 62, cursor: "pointer" }}
-                component={logoIcon}
-                inheritViewBox
-                onClick={() => openUrl(APP_WEBSITE_ORIGIN)}
-              />
-              <UpdateButton className="the-newbtn" />
-            </TheLogo>
+              <TheLogo data-tauri-drag-regio>
+                <SvgIcon
+                  sx={{ width: 62, cursor: "pointer" }}
+                  component={logoIcon}
+                  inheritViewBox
+                  onClick={() => openUrl(APP_WEBSITE_ORIGIN)}
+                />
+                <UpdateButton className="the-newbtn" />
+              </TheLogo>
 
-            <TheMenu>
-              {routers.map(
-                (router) =>
-                  router.path &&
-                  router.label && (
-                    <LayoutItem
-                      icon={router.icon}
-                      to={router.path}
-                      key={router.label}
-                    >
-                      {t(router.label)}
-                    </LayoutItem>
-                  ),
-              )}
-            </TheMenu>
+              <TheMenu>
+                {routers.map(
+                  (router) =>
+                    router.path &&
+                    router.label && (
+                      <LayoutItem
+                        icon={router.icon}
+                        to={router.path}
+                        key={router.label}
+                      >
+                        {t(router.label)}
+                      </LayoutItem>
+                    ),
+                )}
+              </TheMenu>
 
-            <TheTraffic>
-              <LayoutTraffic />
-            </TheTraffic>
-          </Drawer>
+              <TheTraffic>
+                <LayoutTraffic />
+              </TheTraffic>
+            </Drawer>
 
-          <Main>{routerElements}</Main>
-        </Paper>
+            <Main>{routerElements}</Main>
+          </Paper>
+        </UxThemeBridge>
       </ThemeProvider>
     </SWRConfig>
   );

@@ -6,9 +6,25 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js"
+    },
+    "./components": {
+      "types": "./dist/components.d.ts",
+      "import": "./dist/components.js"
+    },
+    "./styles.css": "./dist/styles.css"
   },
   "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
@@ -16,19 +32,22 @@
     "build": "rslib build",
     "dev": "rslib build --watch",
     "prepare": "pnpm build",
+    "typecheck": "tsc --noEmit",
     "docs:dev": "storybook dev -p 6006",
     "docs:build": "storybook build"
   },
   "devDependencies": {
+    "@stylexjs/babel-plugin": "catalog:",
+    "@stylexswc/rs-compiler": "catalog:",
     "@rsbuild/core": "catalog:",
-    "@rsbuild/plugin-react": "^2.1.0",
+    "@rsbuild/plugin-react": "catalog:",
     "@rslib/core": "catalog:",
-    "@stylexswc/unplugin": "^0.10.6",
+    "@stylexswc/unplugin": "catalog:",
     "@types/react": "catalog:",
     "react": "catalog:",
-    "storybook": "^9.1.17",
-    "storybook-addon-rslib": "^2.1.0",
-    "storybook-react-rsbuild": "^2.1.0",
+    "storybook": "^10.6.2",
+    "storybook-addon-rslib": "^3.6.1",
+    "storybook-react-rsbuild": "^3.6.1",
     "typescript": "catalog:"
   },
   "peerDependencies": {
@@ -36,7 +55,7 @@
     "react-dom": "catalog:"
   },
   "dependencies": {
-    "@stylexjs/stylex": "^0.15.3",
+    "@stylexjs/stylex": "catalog:",
     "@tauri-motrix/unified-base": "workspace:*"
   }
 }

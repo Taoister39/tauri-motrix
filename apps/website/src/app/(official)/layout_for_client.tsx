@@ -1,6 +1,8 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BaseCopyright, MenuButton } from "@tauri-motrix/ux-base";
+import { BaseCopyright } from "@tauri-motrix/ux-base";
+import { MenuButton } from "@tauri-motrix/ux-base/components";
+import { UxTheme } from "@tauri-motrix/ux-base/theme";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +38,8 @@ export default function OfficialLayoutClient({
   };
 
   return (
-    <div
+    <UxTheme
+      mode="light"
       className={clsx("min-h-screen", {
         "bg-[#ebecf0] overflow-hidden": open,
       })}
@@ -57,9 +60,15 @@ export default function OfficialLayoutClient({
             priority
           />
         </Link>
-        <MenuButton open={open} onClick={() => toggle()} />
+        <MenuButton
+          open={open}
+          onClick={() => toggle()}
+          aria-label="Toggle navigation"
+          aria-controls="official-navigation"
+        />
       </header>
       <nav
+        id="official-navigation"
         className={clsx(
           { hidden: !open },
           "absolute md:top-20 top-15 left-0 right-0 z-1000 px-5 md:px-0",
@@ -110,6 +119,6 @@ export default function OfficialLayoutClient({
         {createPaper(1)}
         {createPaper(2)}
       </div>
-    </div>
+    </UxTheme>
   );
 }

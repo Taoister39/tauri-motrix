@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Motrix UI Verification",
+  "description": "Verify Motrix shared components in a browser extension popup.",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Motrix UI verification"
+  }
+}

@@ -2,6 +2,11 @@ import { pluginReact } from "@rsbuild/plugin-react";
 import { defineConfig } from "@rslib/core";
 import stylexPlugin from "@stylexswc/unplugin/rspack";
 
+import { generateTokens } from "./scripts/generate-tokens.mjs";
+import { staticStylexPlugin, stylexOptions } from "./scripts/static-stylex.mjs";
+
+await generateTokens();
+
 export default defineConfig({
   source: {
     entry: {
@@ -23,14 +28,11 @@ export default defineConfig({
     rspack: {
       plugins: [
         stylexPlugin({
-          rsOptions: {
-            dev: true,
-            treeshakeCompensation: true,
-            runtimeInjection: true,
-          },
+          rsOptions: stylexOptions,
           useCSSLayers: true,
           extractCSS: false,
         }),
+        staticStylexPlugin(),
       ],
     },
   },

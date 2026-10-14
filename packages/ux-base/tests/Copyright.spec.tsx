@@ -5,6 +5,6 @@ import BaseCopyright from "../src/base/Copyright";
 describe("Copyright", () => {
   it("renders the correct text", () => {
     const { getByText } = render(<BaseCopyright />);
-    expect(getByText("©2025 Tauri Motrix")).toBeInTheDocument();
+    expect(getByText("©2026 Tauri Motrix")).toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@tauri-motrix/ux-base/styles.css";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { SpeedInsights } from "@vercel/speed-insights/next";

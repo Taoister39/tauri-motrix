@@ -1,5 +1,6 @@
-import { Button, ButtonGroup, useColorScheme } from "@mui/material";
+import { useColorScheme } from "@mui/material";
 import { app } from "@tauri-apps/api";
+import { Button } from "@tauri-motrix/ux-base/components";
 import { useTranslation } from "react-i18next";
 
 import { THEME_MODES } from "@/constant/theme";
@@ -18,19 +19,25 @@ function ThemeModeSwitch() {
   };
 
   return (
-    <ButtonGroup size="small" sx={{ my: "4px" }}>
+    <div
+      role="group"
+      aria-label={t("setting.ThemeMode")}
+      style={{ display: "flex", gap: 4, marginBlock: 4 }}
+    >
       {THEME_MODES.map((value) => (
         <Button
           key={value}
           onClick={() => {
             void onChangeMode(value);
           }}
-          variant={value === mode ? "contained" : "outlined"}
+          size="sm"
+          variant={value === mode ? "primary" : "secondary"}
+          aria-pressed={value === mode}
         >
           {t(`ThemeMode.${value}`)}
         </Button>
       ))}
-    </ButtonGroup>
+    </div>
   );
 }
 

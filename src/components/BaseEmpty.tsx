@@ -1,33 +1,24 @@
 import { InboxRounded } from "@mui/icons-material";
-import { alpha, Box, Typography } from "@mui/material";
+import { EmptyState } from "@tauri-motrix/ux-base/components";
 import { useTranslation } from "react-i18next";
+
+import { UxThemeBridge } from "./UxThemeBridge";
 
 interface Props {
   text?: string;
   extra?: React.ReactNode;
 }
 
-// code from clash verge
 export function BaseEmpty({ text, extra }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Box
-      sx={({ palette }) => ({
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        color: alpha(palette.text.secondary, 0.75),
-      })}
-    >
-      <InboxRounded sx={{ fontSize: "4em" }} />
-      <Typography sx={{ fontSize: "1.25em" }}>
-        {t(text ?? "common.Empty")}
-      </Typography>
-      {extra}
-    </Box>
+    <UxThemeBridge style={{ width: "100%", height: "100%" }}>
+      <EmptyState
+        text={t(text ?? "common.Empty")}
+        icon={<InboxRounded fontSize="inherit" />}
+        action={extra}
+      />
+    </UxThemeBridge>
   );
 }

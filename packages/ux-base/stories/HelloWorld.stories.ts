@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
 
-import HelloWorld from "../src/template/HelloWorld";
+import { HelloWorld } from "../dist/index";
 
 const meta = {
   title: "Template/HelloWorld",

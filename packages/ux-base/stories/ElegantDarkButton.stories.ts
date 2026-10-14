@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
 
-import ElegantDarkButton from "../src/button/ElegantDarkButton";
+import { ElegantDarkButton } from "../dist/index";
 
 const meta = {
   title: "Button/ElegantDarkButton",

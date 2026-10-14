@@ -1,5 +1,6 @@
 import "@/services/i18n";
 import "./index.css";
+import "@tauri-motrix/ux-base/styles.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";

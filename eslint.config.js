@@ -18,6 +18,9 @@ export default tseslint.config(
       "**/target/**",
       "**/*.min.js",
       "**/coverage/**",
+      "packages/ux-base/src/generated/**",
+      "**/storybook-static/**",
+      "apps/extensions/unpacked/**",
     ],
   },
   {
@@ -35,9 +38,13 @@ export default tseslint.config(
   pluginReact.configs.flat["jsx-runtime"],
   reactHooks.configs["recommended-latest"],
   reactRefresh.configs.recommended,
-  // Disable react-refresh rules in Next.js projects
   {
-    files: ["apps/website/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    files: [
+      // Disable react-refresh rules in Next.js projects
+      "apps/website/**/*.{js,mjs,cjs,ts,jsx,tsx}",
+      // A library entry deliberately re-exports both components and pure tokens.
+      "packages/ux-base/**/*.{js,mjs,cjs,ts,jsx,tsx}",
+    ],
     rules: {
       "react-refresh/only-export-components": "off",
     },

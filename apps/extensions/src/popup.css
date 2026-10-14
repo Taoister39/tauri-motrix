@@ -1,0 +1,34 @@
+html,
+body {
+  margin: 0;
+  width: 360px;
+}
+.popup {
+  padding: 16px;
+  box-sizing: border-box;
+  background: Canvas;
+}
+.popup header,
+.popup .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.popup header {
+  justify-content: space-between;
+}
+.popup h1 {
+  font-size: 18px;
+  margin: 0;
+}
+.popup form,
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.popup p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

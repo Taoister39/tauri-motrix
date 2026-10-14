@@ -3,3 +3,6 @@ pnpm-lock.yaml
 src-tauri/target/
 target
 .next
+packages/ux-base/src/generated/
+**/storybook-static/
+apps/extensions/unpacked/
