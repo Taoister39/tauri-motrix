@@ -66,7 +66,22 @@
         "@types/react",
         "@types/react-dom",
         "@rslib/core",
-        "typescript"
+        "typescript",
+        "@rsbuild/plugin-react"
+      ],
+      "policy": "catalog"
+    },
+    {
+      "label": "Unify stylex",
+      "packages": [
+        "*"
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "@stylexjs/babel-plugin",
+        "@stylexswc/rs-compiler",
+        "@stylexswc/unplugin",
+        "@stylexswc/jest"
       ],
       "policy": "catalog"
     }
