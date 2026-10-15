@@ -4,6 +4,8 @@
   "description": "Capability for the main window",
   "windows": ["main"],
   "permissions": [
+    "allow-task-deletion",
+    "allow-desktop-commands",
     "core:default",
     "opener:default",
     "core:window:allow-start-dragging",

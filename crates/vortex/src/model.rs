@@ -108,6 +108,12 @@ pub struct TaskEvent {
     pub task: TaskSnapshot,
 }
 
+#[derive(Clone, Debug)]
+pub struct RemovalAssets {
+    pub directory: PathBuf,
+    pub files: Vec<PathBuf>,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub(crate) struct Record {
     pub version: u8,
@@ -116,4 +122,6 @@ pub(crate) struct Record {
     pub validator: Option<String>,
     pub chunks: Vec<bool>,
     pub final_hash: Option<String>,
+    #[serde(default)]
+    pub preserve_files: bool,
 }

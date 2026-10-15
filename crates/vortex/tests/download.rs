@@ -1,8 +1,8 @@
 use std::{
     collections::BTreeMap,
     sync::{
-        atomic::{AtomicUsize, Ordering},
         Arc,
+        atomic::{AtomicUsize, Ordering},
     },
     time::Duration,
 };
@@ -217,6 +217,77 @@ async fn http_variants_produce_identical_files_without_overwriting() {
         );
         engine.shutdown().await.unwrap();
     }
+}
+
+#[tokio::test]
+async fn removal_can_preserve_partial_files_across_restart_without_claiming_existing_files() {
+    let server = Server::new("slow", BLOCK * 3).await;
+    let directory = tempfile::tempdir().unwrap();
+    let state = directory.path().join("state");
+    let protected = directory.path().join("existing.bin");
+    tokio::fs::write(&protected, b"keep existing file")
+        .await
+        .unwrap();
+    let engine = Engine::open(&state, EngineConfig::default()).await.unwrap();
+    let mut download = request(&server, directory.path());
+    download.filename = Some("existing.bin".into());
+    let id = engine.add(download).await.unwrap();
+    engine.pause(&id).await.unwrap();
+    let partial = directory.path().join(format!(".vortex-{id}.part"));
+    tokio::fs::write(&partial, b"unfinished download")
+        .await
+        .unwrap();
+    let assets = engine.removal_assets(&id).await.unwrap();
+    assert_eq!(
+        assets.files,
+        vec![tokio::fs::canonicalize(&partial).await.unwrap()]
+    );
+    assert!(!assets.files.contains(&protected));
+    engine.remove_with_file_retention(&id, true).await.unwrap();
+    engine.shutdown().await.unwrap();
+    let reopened = Engine::open(&state, EngineConfig::default()).await.unwrap();
+    assert!(reopened.list().await.is_empty());
+    assert_eq!(reopened.get(&id).await.unwrap().state, TaskState::Removed);
+    assert_eq!(
+        tokio::fs::read(&partial).await.unwrap(),
+        b"unfinished download"
+    );
+    assert_eq!(
+        tokio::fs::read(&protected).await.unwrap(),
+        b"keep existing file"
+    );
+    reopened.shutdown().await.unwrap();
+}
+
+#[tokio::test]
+async fn removal_assets_include_completed_output_and_legacy_removal_still_cleans_partial_data() {
+    let server = Server::new("range", 1024).await;
+    let directory = tempfile::tempdir().unwrap();
+    let engine = Engine::open(directory.path().join("state"), EngineConfig::default())
+        .await
+        .unwrap();
+    let id = engine
+        .add(request(&server, directory.path()))
+        .await
+        .unwrap();
+    let completed = wait(&engine, &id, |task| task.state == TaskState::Complete).await;
+    let assets = engine.removal_assets(&id).await.unwrap();
+    assert!(assets.files.contains(&completed.path));
+    engine.remove_with_file_retention(&id, true).await.unwrap();
+    assert_eq!(
+        tokio::fs::read(&completed.path).await.unwrap(),
+        *server.body
+    );
+    let id = engine
+        .add(request(&server, directory.path()))
+        .await
+        .unwrap();
+    engine.pause(&id).await.unwrap();
+    let partial = directory.path().join(format!(".vortex-{id}.part"));
+    tokio::fs::write(&partial, b"temporary").await.unwrap();
+    engine.remove(&id).await.unwrap();
+    assert!(!partial.exists());
+    engine.shutdown().await.unwrap();
 }
 
 #[tokio::test]

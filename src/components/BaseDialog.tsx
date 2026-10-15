@@ -7,8 +7,9 @@ import {
   DialogTitle,
   type SxProps,
   type Theme,
+  useMediaQuery,
 } from "@mui/material";
-import { FormEvent, ReactNode, useMemo } from "react";
+import { FormEvent, ReactNode, useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 // original code from clash verge
@@ -31,6 +32,8 @@ export interface BaseDialogProps {
   enableForm?: boolean;
   fullWidth?: boolean;
   maxWidth?: DialogProps["maxWidth"];
+  actions?: ReactNode;
+  descriptionId?: string;
 }
 
 export interface DialogRef {
@@ -58,7 +61,11 @@ export function BaseDialog(props: BaseDialogProps) {
     enableForm,
     fullWidth,
     maxWidth,
+    actions,
+    descriptionId,
   } = props;
+  const titleId = useId();
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   const rootSlotProps = useMemo<DialogProps["slotProps"]>(
     () =>
@@ -85,27 +92,34 @@ export function BaseDialog(props: BaseDialogProps) {
       slotProps={rootSlotProps}
       fullWidth={fullWidth}
       maxWidth={maxWidth}
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      transitionDuration={reduceMotion ? 0 : undefined}
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle id={titleId}>{title}</DialogTitle>
 
       <DialogContent sx={contentSx}>{children}</DialogContent>
 
       {!disableFooter && (
         <DialogActions>
-          {!disableCancel && (
-            <Button variant="outlined" onClick={onCancel}>
-              {cancelBtn || t("common.Cancel")}
-            </Button>
-          )}
-          {!disableOk && (
-            <Button
-              loading={loading}
-              variant="contained"
-              onClick={handleOkBtnSubmit}
-              type={enableForm ? "submit" : "button"}
-            >
-              {okBtn || t("common.Ok")}
-            </Button>
+          {actions ?? (
+            <>
+              {!disableCancel && (
+                <Button variant="outlined" onClick={onCancel}>
+                  {cancelBtn || t("common.Cancel")}
+                </Button>
+              )}
+              {!disableOk && (
+                <Button
+                  loading={loading}
+                  variant="contained"
+                  onClick={handleOkBtnSubmit}
+                  type={enableForm ? "submit" : "button"}
+                >
+                  {okBtn || t("common.Ok")}
+                </Button>
+              )}
+            </>
           )}
         </DialogActions>
       )}

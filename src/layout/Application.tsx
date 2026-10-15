@@ -22,6 +22,7 @@ import { SWRConfig } from "swr";
 import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog, { AddTaskDialogRef } from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
+import { DialogHost } from "@/components/DialogHost";
 import { UxThemeBridge } from "@/components/UxThemeBridge";
 import { isWin } from "@/constant/environment";
 import { ADD_DIALOG, APP_WEBSITE_ORIGIN } from "@/constant/url";
@@ -114,6 +115,7 @@ function Application() {
     <SWRConfig value={{ errorRetryCount: 3 }}>
       <ThemeProvider theme={theme}>
         <UxThemeBridge>
+          <DialogHost />
           <AddTaskDialog ref={addRef} />
           <Paper
             onContextMenu={(e) => {

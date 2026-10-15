@@ -1,7 +1,7 @@
-use crate::{model::Record, DownloadError, DownloadRequest, Engine, Result, TaskState};
+use crate::{DownloadError, DownloadRequest, Engine, Result, TaskState, model::Record};
 use reqwest::{
-    header::{HeaderMap, HeaderName, HeaderValue},
     Client, Response,
+    header::{HeaderMap, HeaderName, HeaderValue},
 };
 use sha2::{Digest, Sha256};
 use std::{
@@ -175,6 +175,19 @@ pub(crate) fn temporary_path(r: &Record) -> PathBuf {
     r.request
         .directory
         .join(format!(".vortex-{}.part", r.task.id))
+}
+pub(crate) async fn owns_final_file(r: &Record) -> Result<bool> {
+    if r.task.state == TaskState::Complete {
+        return Ok(true);
+    }
+    let Some(expected) = &r.final_hash else {
+        return Ok(false);
+    };
+    match hash(&r.task.path, &CancellationToken::new()).await {
+        Ok(actual) => Ok(&actual == expected),
+        Err(_) if !tokio::fs::try_exists(&r.task.path).await.unwrap_or(true) => Ok(false),
+        Err(error) => Err(error),
+    }
 }
 pub(crate) fn committed(r: &Record) -> u64 {
     r.chunks

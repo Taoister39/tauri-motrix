@@ -22,6 +22,7 @@ import TaskItemAction from "@/business/task/TaskItemAction";
 import { TaskDownloadDes } from "@/client/task_compose";
 import { TASK_STATUS_ENUM } from "@/constant/task";
 import { DownloadTask } from "@/services/download";
+import { useTaskStore } from "@/store/task";
 import { parseByteVo } from "@/utils/download";
 import {
   getTaskName,
@@ -58,6 +59,7 @@ function TaskItem({
   const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { connections, gid, status } = task;
+  const busy = useTaskStore((state) => state.deletingTaskIds.includes(gid));
 
   const totalLength = Number(task.totalLength);
   const completedLength = Number(task.completedLength) || 0;
@@ -109,7 +111,7 @@ function TaskItem({
   }, []);
 
   return (
-    <ListItem disablePadding>
+    <ListItem disablePadding aria-busy={busy}>
       <ListItemButton
         sx={({ palette }) => ({
           bgcolor: palette.background.paper,
@@ -140,6 +142,11 @@ function TaskItem({
           primary={getTaskName(task)}
           secondary={
             <Fragment>
+              {busy && (
+                <Typography variant="body2" role="status">
+                  {t("task.DeletionPending", { ns: "translation" })}
+                </Typography>
+              )}
               <Typography
                 variant="body2"
                 sx={{ color: "text.primary", display: "inline" }}

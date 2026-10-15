@@ -47,6 +47,11 @@ reqwest = "0.12.15"
 tauri-motrix-vortex = { path = "../crates/vortex" }
 uuid = { version = "1.16.0", features = ["v4", "serde"] }
 base64 = "0.22"
+trash.workspace = true
+same-file.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"

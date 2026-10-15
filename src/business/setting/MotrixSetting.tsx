@@ -81,17 +81,6 @@ function MotrixSetting() {
         />
       </SettingItem>
 
-      <SettingItem label={t("setting.NoConfirmBeforeDeleteTask")}>
-        <Android12Switch
-          checked={!!motrix?.no_confirm_before_delete_task}
-          onChange={(e) => {
-            patchMotrix({
-              no_confirm_before_delete_task: e.target.checked,
-            });
-          }}
-        />
-      </SettingItem>
-
       <SettingItem label={t("setting.AutoCheckUpdate")}>
         <Android12Switch
           checked={!!motrix?.auto_check_update}

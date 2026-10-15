@@ -18,6 +18,8 @@ fs2 = "0.4.3"
 httpdate = "1"
 tempfile = "3"
 percent-encoding = "2"
+trash = "5.2.9"
+same-file = "1.0.6"
 
 [workspace.lints.clippy]
 dbg_macro = "deny"

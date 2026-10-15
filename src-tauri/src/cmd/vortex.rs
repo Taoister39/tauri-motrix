@@ -22,6 +22,7 @@ pub async fn vortex_get(id: String) -> Result<TaskSnapshot, String> {
 }
 #[tauri::command]
 pub async fn vortex_control(id: String, action: String) -> Result<(), String> {
+    let _guard = crate::service::task_deletion::control_guard(&id).await?;
     let engine = engine().await?;
     let result = match action.as_str() {
         "pause" => engine.pause(&id).await,

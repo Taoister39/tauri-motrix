@@ -31,6 +31,14 @@ Open **Settings → Aria2 Engine → RPC Settings** to change the RPC port (1024
 
 Saving restarts the built-in aria2 engine and restores its saved task session. If the new port is occupied or the restart fails, the previous settings are retained. Clearing the secret disables RPC authentication.
 
+## Removing tasks and files
+
+Removing a task opens a confirmation dialog. Files are kept by default, including unfinished download data. Select **Also delete downloaded files** to move task files to the system Recycle Bin or Trash. This also applies to multiple selected tasks and preserves download history.
+
+If recycling fails, a second dialog lists file outcomes and asks whether to permanently delete the remaining files. Permanent deletion requires explicit confirmation. Canceling keeps failed tasks stopped; files already recycled are not automatically restored. Successful tasks are removed independently. Only task files and their download control files are processed; unrelated files in the same folder are retained.
+
+Task removal always requires confirmation. Existing `no_confirm_before_delete_task` configuration values remain compatible but no longer bypass the dialog. This affects the built-in aria2 and Vortex engines; external RPC clients can still control aria2 independently.
+
 ## Development
 
 To run the development server, execute the following commands after all prerequisites for Tauri are installed:

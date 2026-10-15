@@ -1,6 +1,6 @@
 use crate::{
-    DownloadError, DownloadRequest, EngineConfig, Result, TaskEvent, TaskId, TaskSnapshot,
-    TaskState, model::Record, storage, transfer,
+    DownloadError, DownloadRequest, EngineConfig, RemovalAssets, Result, TaskEvent, TaskId,
+    TaskSnapshot, TaskState, model::Record, storage, transfer,
 };
 use fs2::FileExt;
 use sqlx::SqlitePool;
@@ -83,7 +83,7 @@ impl Engine {
         // Preserve database insertion order when re-enqueuing recovered tasks.
         let mut queue = Vec::new();
         for mut record in records {
-            if record.task.state == TaskState::Removed {
+            if record.task.state == TaskState::Removed && !record.preserve_files {
                 let _ = tokio::fs::remove_file(transfer::temporary_path(&record)).await;
             }
             if record.task.state == TaskState::Complete {
@@ -176,6 +176,7 @@ impl Engine {
             validator: None,
             chunks: vec![],
             final_hash: None,
+            preserve_files: false,
         };
         self.publish(&mut record, true).await?;
         self.launch(id.clone()).await;
@@ -210,13 +211,38 @@ impl Engine {
         self.resume(id).await
     }
     pub async fn remove(&self, id: &str) -> Result<()> {
+        self.remove_with_file_retention(id, false).await
+    }
+    pub async fn removal_assets(&self, id: &str) -> Result<RemovalAssets> {
+        let _guard = self.0.commands.lock().await;
+        self.ensure_open()?;
+        self.stop(id).await?;
+        let mut r = self.record(id).await?;
+        if !matches!(r.task.state, TaskState::Complete | TaskState::Removed) {
+            r.task.state = TaskState::Paused;
+            self.publish(&mut r, true).await?;
+        }
+        let mut files = vec![transfer::temporary_path(&r)];
+        if transfer::owns_final_file(&r).await? {
+            files.push(r.task.path.clone());
+        }
+        Ok(RemovalAssets {
+            directory: r.request.directory,
+            files,
+        })
+    }
+    pub async fn remove_with_file_retention(&self, id: &str, preserve_files: bool) -> Result<()> {
         let _guard = self.0.commands.lock().await;
         self.ensure_open()?;
         self.stop(id).await?;
         let mut r = self.record(id).await?;
         // Persist the tombstone first so a crash cannot resurrect a removed task.
         r.task.state = TaskState::Removed;
+        r.preserve_files = preserve_files;
         self.publish(&mut r, true).await?;
+        if preserve_files {
+            return Ok(());
+        }
         match tokio::fs::remove_file(transfer::temporary_path(&r)).await {
             Ok(()) => (),
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => (),

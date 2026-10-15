@@ -5,6 +5,6 @@ mod storage;
 mod transfer;
 pub use engine::Engine;
 pub use model::{
-    DownloadError, DownloadRequest, EngineConfig, Result, TaskEvent, TaskId, TaskSnapshot,
-    TaskState,
+    DownloadError, DownloadRequest, EngineConfig, RemovalAssets, Result, TaskEvent, TaskId,
+    TaskSnapshot, TaskState,
 };

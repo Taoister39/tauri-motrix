@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { TaskItemProps } from "@/business/task/TaskItem";
 import { TaskActionButton } from "@/client/task_compose";
 import { TASK_STATUS_ENUM } from "@/constant/task";
+import { useTaskStore } from "@/store/task";
 
 export interface TaskItemActionProps
   extends Pick<
@@ -36,6 +37,7 @@ function TaskItemAction({
   onShowInfo,
 }: TaskItemActionProps) {
   const { t } = useTranslation();
+  const busy = useTaskStore((state) => state.deletingTaskIds.includes(gid));
 
   const statusActionElem = useMemo(() => {
     switch (status) {
@@ -44,6 +46,7 @@ function TaskItemAction({
         return (
           <TaskActionButton
             title={t("task.Pause")}
+            disabled={busy}
             icon={<PauseOutlined />}
             onClick={() => onPause(gid)}
           />
@@ -52,6 +55,7 @@ function TaskItemAction({
         return (
           <TaskActionButton
             title={t("task.Resume")}
+            disabled={busy}
             icon={<PlayArrowOutlined />}
             onClick={() => onResume(gid)}
           />
@@ -60,18 +64,20 @@ function TaskItemAction({
         return (
           <TaskActionButton
             title={t("task.Retry")}
+            disabled={busy}
             icon={<RefreshOutlined />}
             onClick={() => onResume(gid)}
           />
         );
     }
-  }, [onPause, onResume, status, t, gid]);
+  }, [onPause, onResume, status, t, gid, busy]);
 
   return (
     <Box>
       {statusActionElem}
       <TaskActionButton
-        title={t("task.Close")}
+        title={t("task.Delete")}
+        disabled={busy}
         onClick={() => onStop(gid)}
         icon={<CloseOutlined />}
       />

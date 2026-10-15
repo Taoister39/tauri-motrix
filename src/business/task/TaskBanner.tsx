@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { TaskBannerAction } from "@/client/task_compose";
 import { TASK_STATUS_ENUM } from "@/constant/task";
+import { useTaskStore } from "@/store/task";
 
 interface TaskBannerProps {
   selectedTaskIds: string[];
@@ -30,6 +31,9 @@ function TaskBanner({
 
   const count = selectedTaskIds.length;
   const noneSelected = count === 0;
+  const busy = useTaskStore((state) =>
+    selectedTaskIds.some((id) => state.deletingTaskIds.includes(id)),
+  );
 
   return (
     <Box
@@ -48,8 +52,8 @@ function TaskBanner({
         onClick={() => onSelectAll()}
       />
       <TaskBannerAction
-        title={t("task.CloseAll")}
-        disabled={noneSelected}
+        title={t("task.DeleteAll")}
+        disabled={noneSelected || busy}
         icon={<CloseOutlined />}
         onClick={() => onStop()}
         color="warning"
@@ -58,7 +62,7 @@ function TaskBanner({
       {fetchType === TASK_STATUS_ENUM.Active && (
         <>
           <TaskBannerAction
-            disabled={noneSelected}
+            disabled={noneSelected || busy}
             title={t("task.ResumeAll")}
             text={t("common.Start")}
             icon={<PlayArrowOutlined />}
@@ -68,7 +72,7 @@ function TaskBanner({
 
           <TaskBannerAction
             title={t("task.PauseAll")}
-            disabled={noneSelected}
+            disabled={noneSelected || busy}
             icon={<PauseOutlined />}
             onClick={() => onPause()}
             color="primary"

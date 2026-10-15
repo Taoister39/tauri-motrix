@@ -72,6 +72,8 @@ pub fn run() {
             cmd::vortex_list,
             cmd::vortex_get,
             cmd::vortex_control,
+            cmd::delete_tasks,
+            cmd::resolve_task_deletion,
             cmd::get_aria2_config,
             cmd::get_motrix_config,
             cmd::open_logs_dir,
