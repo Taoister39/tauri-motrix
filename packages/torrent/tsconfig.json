@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "lib": ["ES2021"],
+    "target": "ES2021",
+    "lib": ["ES2021", "DOM"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "module": "ESNext",
     "noEmit": true,
     "strict": true,

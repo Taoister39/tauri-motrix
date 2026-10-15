@@ -1,4 +1,4 @@
-import { Instance } from "parse-torrent";
+import type { TorrentFile } from "@tauri-motrix/torrent";
 
 import {
   AUDIO_SUFFIXES,
@@ -8,7 +8,7 @@ import {
   VIDEO_SUFFIXES,
 } from "@/constant/file";
 
-export const listTorrentFiles = (files: Instance["files"]) => {
+export const listTorrentFiles = (files: TorrentFile[] | undefined) => {
   const result = files?.map((file, index) => {
     const extension = getFileExtension(file.path);
     const item = {

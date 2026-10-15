@@ -98,6 +98,7 @@
     "UserAgent": "ユーザーエージェント（User-Agent）",
     "UserAgentHint": "空欄の場合はダウンロードエンジンの既定の User-Agent を使用します",
     "InvalidTorrent": "トレントを読み込めません。有効なトレントファイルを選択してください。",
+    "UnsupportedTorrentV2": "このトレントは BitTorrent v2 を使用しています。ファイルをプレビューできますが、現在のダウンロードエンジンはダウンロードに対応していません。",
     "ConfirmDelete": "ダウンロードタスク \"{{taskName}}\" を削除してもよろしいですか？",
     "ConfirmDeleteBatch": "{{tasksLength}} 個のダウンロードタスクを一括削除してもよろしいですか？",
     "Empty": "ダウンロードリストがありません",

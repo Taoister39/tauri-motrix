@@ -21,7 +21,7 @@ import TableContainer, {
 } from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import type { Instance } from "parse-torrent";
+import type { TorrentFile } from "@tauri-motrix/torrent";
 import { useMergedState } from "rc-util";
 import { Key, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -88,10 +88,7 @@ const ErrorIndicator = styled(Box)(({ theme }) => ({
   zIndex: 1,
 }));
 
-export type TaskFile = Omit<
-  NonNullable<Instance["files"]>[number],
-  "offset"
-> & {
+export type TaskFile = Omit<TorrentFile, "offset"> & {
   idx: number;
   extension: string;
   completedLength?: number;
@@ -148,8 +145,12 @@ export default function TaskFiles({
       return rowKey;
     }
 
-    return (record: TaskFile, index) =>
-      record[rowKey as keyof TaskFile] || `default_${index}`;
+    return (record: TaskFile, index) => {
+      const key = record[rowKey as keyof TaskFile];
+      return key && (typeof key === "string" || typeof key === "number")
+        ? key
+        : `default_${index}`;
+    };
   }, [rowKey]);
 
   const derivedSelectedKeySet = useMemo<Set<Key>>(

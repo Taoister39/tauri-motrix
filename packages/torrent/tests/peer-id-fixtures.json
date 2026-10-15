@@ -1,0 +1,1324 @@
+[
+  {
+    "input": "-A~1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Ares",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Ares",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AN1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Ares",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AR1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Ares",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AV1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Avicora",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitPump",
+      "version": "12.34"
+    }
+  },
+  {
+    "input": "-AT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Artemis",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-AZ1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Vuze",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-BB1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitBuddy"
+    }
+  },
+  {
+    "input": "-BC1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitComet",
+      "version": "2.34"
+    }
+  },
+  {
+    "input": "-BE1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent SDK",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-BF1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitFlu"
+    }
+  },
+  {
+    "input": "-BG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BTG",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-bk1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitKitten (libtorrent)",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-BR1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitRocket"
+    }
+  },
+  {
+    "input": "-BS1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BTSlave",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-BT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-BW1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitWombat",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-BX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BittorrentX",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-CB1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Shareaza Plus",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-CD1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Enhanced CTorrent",
+      "version": "12.34"
+    }
+  },
+  {
+    "input": "-CT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "CTorrent"
+    }
+  },
+  {
+    "input": "-DP1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Propogate Data Client",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-DE1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-DE0001-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "0.0.0"
+    }
+  },
+  {
+    "input": "-DE0012-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "0.0.1"
+    }
+  },
+  {
+    "input": "-DE0123-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "0.1.2"
+    }
+  },
+  {
+    "input": "-DE123A-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-DE123B-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-DE123Z-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-DE12A0-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "1.2.10"
+    }
+  },
+  {
+    "input": "-DE360W-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Deluge",
+      "version": "3.6.0"
+    }
+  },
+  {
+    "input": "-EB1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "EBit",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-ES1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Electric Sheep",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-FC1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "FileCroc",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-FG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "FlashGet",
+      "version": "2.34"
+    }
+  },
+  {
+    "input": "-FX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Freebox BitTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-FT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "FoxTorrent/RedSwoosh",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-GR1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "GetRight"
+    }
+  },
+  {
+    "input": "-GS1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "GSTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-HL1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Halite",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-HN1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Hydranode",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-KG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "KGet",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-KT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "KTorrent"
+    }
+  },
+  {
+    "input": "-LC1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "LeechCraft",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-LH1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "LH-ABC",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-LK1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "linkage",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-LP1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Lphant",
+      "version": "12.34"
+    }
+  },
+  {
+    "input": "-LT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "libtorrent (Rasterbar)"
+    }
+  },
+  {
+    "input": "-lt1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "libTorrent (Rakshasa) / rTorrent*"
+    }
+  },
+  {
+    "input": "-LW1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "LimeWire"
+    }
+  },
+  {
+    "input": "-MO1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "MonoTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-MP1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "MooPolice",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-MR1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Miro",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-MT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "MoonlightTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-NE1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BT Next Evolution",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-NX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Net Transport",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-OS1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "OneSwarm",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-OT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "OmegaTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-PC1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "CacheLogic"
+    }
+  },
+  {
+    "input": "-PT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Popcorn Time",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-PD1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Pando",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-PE1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "PeerProject",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-pX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "pHoeniX",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-qB1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-qB0001-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "0.0.0"
+    }
+  },
+  {
+    "input": "-qB0012-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "0.0.1"
+    }
+  },
+  {
+    "input": "-qB0123-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "0.1.2"
+    }
+  },
+  {
+    "input": "-qB123A-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-qB123B-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-qB123Z-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-qB12A0-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "1.2.10"
+    }
+  },
+  {
+    "input": "-qB360W-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qBittorrent",
+      "version": "3.6.0"
+    }
+  },
+  {
+    "input": "-QD1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "qqdownload",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-RT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Retriever",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-RZ1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "RezTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-S~1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Shareaza alpha/beta",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SB1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "SwiftBit",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SD1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Xunlei",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "GS Torrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SN1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "ShareNET",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SP1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitSpirit",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-SS1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "SwarmScope",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-ST1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "SymTorrent"
+    }
+  },
+  {
+    "input": "-st1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "SharkTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-SZ1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Shareaza",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-TG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Torrent GO",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-TN1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Torrent.NET",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-TR1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "1.23"
+    }
+  },
+  {
+    "input": "-TR0001-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "0.1"
+    }
+  },
+  {
+    "input": "-TR0012-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "0.12"
+    }
+  },
+  {
+    "input": "-TR0123-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "0.12"
+    }
+  },
+  {
+    "input": "-TR123A-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "1.23"
+    }
+  },
+  {
+    "input": "-TR123B-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "1.23"
+    }
+  },
+  {
+    "input": "-TR123Z-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "1.23+"
+    }
+  },
+  {
+    "input": "-TR12A0-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "1.2A"
+    }
+  },
+  {
+    "input": "-TR360W-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Transmission",
+      "version": "3.60"
+    }
+  },
+  {
+    "input": "-TS1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "TorrentStorm",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-TT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "TuoTu",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-UL1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "uLeecher!",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-UE1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent Embedded",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-UT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-UT0001-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "0.0.0"
+    }
+  },
+  {
+    "input": "-UT0012-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "0.0.1"
+    }
+  },
+  {
+    "input": "-UT0123-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "0.1.2"
+    }
+  },
+  {
+    "input": "-UT123A-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.2.3 Alpha"
+    }
+  },
+  {
+    "input": "-UT123B-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.2.3 Beta"
+    }
+  },
+  {
+    "input": "-UT123Z-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-UT12A0-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.2.A"
+    }
+  },
+  {
+    "input": "-UT360W-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "3.6.0"
+    }
+  },
+  {
+    "input": "-UM1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent Mac",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-UW1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent Web",
+      "version": "1.2.3"
+    }
+  },
+  {
+    "input": "-WD1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent Desktop",
+      "version": "12.34"
+    }
+  },
+  {
+    "input": "-WT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Bitlet",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-WW1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "12.34"
+    }
+  },
+  {
+    "input": "-WW0001-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "0.1"
+    }
+  },
+  {
+    "input": "-WW0012-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "0.12"
+    }
+  },
+  {
+    "input": "-WW0123-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "1.23"
+    }
+  },
+  {
+    "input": "-WW123A-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "12.3A"
+    }
+  },
+  {
+    "input": "-WW123B-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "12.3B"
+    }
+  },
+  {
+    "input": "-WW123Z-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "12.3Z"
+    }
+  },
+  {
+    "input": "-WW12A0-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "12.A0"
+    }
+  },
+  {
+    "input": "-WW360W-xxxxxxxxxxxx",
+    "expected": {
+      "client": "WebTorrent",
+      "version": "36.W"
+    }
+  },
+  {
+    "input": "-WY1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "FireTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-VG1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Vagaa",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-XL1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Xunlei",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-XT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "XanTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-XF1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Xfplay",
+      "version": "1.23"
+    }
+  },
+  {
+    "input": "-XX1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "XTorrent"
+    }
+  },
+  {
+    "input": "-XC1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "XTorrent"
+    }
+  },
+  {
+    "input": "-ZT1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "ZipTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-7T1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "aTorrent",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-ZO1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Zona",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "-#@1234-xxxxxxxxxxxx",
+    "expected": {
+      "client": "Invalid PeerID",
+      "version": "1.2.3.4"
+    }
+  },
+  {
+    "input": "A123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "ABC"
+    }
+  },
+  {
+    "input": "O123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Osprey Permaseed"
+    }
+  },
+  {
+    "input": "Q123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BTQueue"
+    }
+  },
+  {
+    "input": "R123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Tribler"
+    }
+  },
+  {
+    "input": "S123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Shad0w"
+    }
+  },
+  {
+    "input": "T123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTornado"
+    }
+  },
+  {
+    "input": "U123--xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "UPnP NAT"
+    }
+  },
+  {
+    "input": "M1-2-3--xxxxxxxxxxxx",
+    "expected": {
+      "client": "Mainline"
+    }
+  },
+  {
+    "input": "Q1-2-3--xxxxxxxxxxxx",
+    "expected": {
+      "client": "Queen Bee"
+    }
+  },
+  {
+    "input": "-UT170-xxxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent",
+      "version": "1.7.0 RC"
+    }
+  },
+  {
+    "input": "Azureusxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Azureus",
+      "version": "1"
+    }
+  },
+  {
+    "input": "xxxxxAzureusxxxxxxxx",
+    "expected": {
+      "client": "Azureus",
+      "version": "2.0.3.2"
+    }
+  },
+  {
+    "input": "-aria2-xxxxxxxxxxxxx",
+    "expected": {
+      "client": "Aria",
+      "version": "2"
+    }
+  },
+  {
+    "input": "PRC.P---xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent Plus!",
+      "version": "II"
+    }
+  },
+  {
+    "input": "P87.P---xxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent Plus!"
+    }
+  },
+  {
+    "input": "S587Plusxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent Plus!"
+    }
+  },
+  {
+    "input": "BLZxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Blizzard Downloader"
+    }
+  },
+  {
+    "input": "xxxxxxxxxxBGxxxxxxxx",
+    "expected": {
+      "client": "BTGetit"
+    }
+  },
+  {
+    "input": "btugaxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BTugaXP"
+    }
+  },
+  {
+    "input": "xxxxxBTugaxxxxxxxxxx",
+    "expected": {
+      "client": "BTugaXP"
+    }
+  },
+  {
+    "input": "oernuxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BTugaXP"
+    }
+  },
+  {
+    "input": "BTDWV-xxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Deadman Walking"
+    }
+  },
+  {
+    "input": "Deadman Walking-xxxx",
+    "expected": {
+      "client": "Deadman"
+    }
+  },
+  {
+    "input": "Extxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "External Webseed"
+    }
+  },
+  {
+    "input": "-G3xxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "G3 Torrent"
+    }
+  },
+  {
+    "input": "271-xxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "GreedBT",
+      "version": "2.7.1"
+    }
+  },
+  {
+    "input": "arclightxxxxxxxxxxxx",
+    "expected": {
+      "client": "Hurricane Electric"
+    }
+  },
+  {
+    "input": "-WSxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "HTTP Seed"
+    }
+  },
+  {
+    "input": "10-------xxxxxxxxxxx",
+    "expected": {
+      "client": "JVtorrent"
+    }
+  },
+  {
+    "input": "LIMExxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Limewire"
+    }
+  },
+  {
+    "input": "martinixxxxxxxxxxxxx",
+    "expected": {
+      "client": "Martini Man"
+    }
+  },
+  {
+    "input": "Pandoxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Pando"
+    }
+  },
+  {
+    "input": "PEERAPPxxxxxxxxxxxxx",
+    "expected": {
+      "client": "PeerApp"
+    }
+  },
+  {
+    "input": "xxxxbtfansxxxxxxxxxx",
+    "expected": {
+      "client": "SimpleBT"
+    }
+  },
+  {
+    "input": "a00---0xxxxxxxxxxxxx",
+    "expected": {
+      "client": "Swarmy"
+    }
+  },
+  {
+    "input": "a02---0xxxxxxxxxxxxx",
+    "expected": {
+      "client": "Swarmy"
+    }
+  },
+  {
+    "input": "T00---0xxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTornado"
+    }
+  },
+  {
+    "input": "346-xxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "TorrentTopia"
+    }
+  },
+  {
+    "input": "DansClientxxxxxxxxxx",
+    "expected": {
+      "client": "XanTorrent"
+    }
+  },
+  {
+    "input": "-MG1xxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "MediaGet"
+    }
+  },
+  {
+    "input": "-MG21xxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "MediaGet",
+      "version": "2.1"
+    }
+  },
+  {
+    "input": "S3-xxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Amazon AWS S3"
+    }
+  },
+  {
+    "input": "DNAxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTorrent DNA"
+    }
+  },
+  {
+    "input": "OPxxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Opera"
+    }
+  },
+  {
+    "input": "Oxxxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Opera"
+    }
+  },
+  {
+    "input": "Mbrstxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Burst!"
+    }
+  },
+  {
+    "input": "turbobtxxxxxxxxxxxxx",
+    "expected": {
+      "client": "TurboBT"
+    }
+  },
+  {
+    "input": "btpdxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BT Protocol Daemon"
+    }
+  },
+  {
+    "input": "Plusxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Plus!"
+    }
+  },
+  {
+    "input": "XBTxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "XBT"
+    }
+  },
+  {
+    "input": "-BOWxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitsOnWheels"
+    }
+  },
+  {
+    "input": "eXxxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "eXeem"
+    }
+  },
+  {
+    "input": "-MLxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "MLdonkey"
+    }
+  },
+  {
+    "input": "BitLetxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Bitlet"
+    }
+  },
+  {
+    "input": "APxxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "AllPeers"
+    }
+  },
+  {
+    "input": "BTMxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BTuga Revolution"
+    }
+  },
+  {
+    "input": "xxRSxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Rufus"
+    }
+  },
+  {
+    "input": "xxBMxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitMagnet"
+    }
+  },
+  {
+    "input": "QVODxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "QVOD"
+    }
+  },
+  {
+    "input": "TBxxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Top-BT"
+    }
+  },
+  {
+    "input": "TIXxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "Tixati"
+    }
+  },
+  {
+    "input": "-FLxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "folx"
+    }
+  },
+  {
+    "input": "-UMxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent Mac"
+    }
+  },
+  {
+    "input": "-UTxxxxxxxxxxxxxxxxx",
+    "expected": {
+      "client": "µTorrent"
+    }
+  },
+  {
+    "input": "AZ2500BTxxxxxxxxxxxx",
+    "expected": {
+      "client": "BitTyrant (Azureus Mod)"
+    }
+  }
+]

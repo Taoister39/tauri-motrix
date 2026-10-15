@@ -98,6 +98,7 @@
     "UserAgent": "用户代理（User-Agent）",
     "UserAgentHint": "留空时使用下载引擎的默认 User-Agent",
     "InvalidTorrent": "无法解析种子，请选择有效的种子文件。",
+    "UnsupportedTorrentV2": "此种子使用 BitTorrent v2。可以预览文件，但当前下载引擎暂不支持下载。",
     "ConfirmDelete": "确定你想移除 \"{{taskName}}\" 下载任务？",
     "ConfirmDeleteBatch": "确定你想移除 {{tasksLength}} 个下载任务？",
     "Empty": "没有下载任务",

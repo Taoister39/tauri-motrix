@@ -1,4 +1,4 @@
-import bitTorrentPeerId, { type Parsed } from "bittorrent-peerid";
+import { parsePeerId } from "@tauri-motrix/torrent";
 
 import { UNKNOWN_PEER_ID, UNKNOWN_PEER_ID_NAME } from "@/constant/speed";
 
@@ -61,22 +61,14 @@ export const peerIdParser = (str: string) => {
     return UNKNOWN_PEER_ID_NAME;
   }
 
-  let parsed: Parsed;
-  let decodedStr;
   try {
-    // decodeURI or decodeURIComponent cannot parse '%2DUT360W%2D%92%B6%EBh%1F%A1%DBfo%F6%D5I'
-    decodedStr = unescape(str);
-    const buffer = Buffer.from(decodedStr, "binary");
-    parsed = bitTorrentPeerId(buffer);
-  } catch (e) {
-    console.log("peerIdParser.fail", e, str, decodedStr);
+    const parsed = parsePeerId(str);
+    return parsed.version
+      ? `${parsed.client} v${parsed.version}`
+      : parsed.client;
+  } catch {
     return UNKNOWN_PEER_ID_NAME;
   }
-
-  const result = parsed.version
-    ? `${parsed.client} v${parsed.version}`
-    : parsed.client;
-  return result;
 };
 
 export const bitfieldToPercent = (text: string) => {

@@ -10,10 +10,12 @@
   },
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "build": "rslib build",
+    "typecheck": "tsc --noEmit",
     "dev": "rslib build --watch",
     "prepare": "pnpm build"
   },

@@ -1,6 +1,6 @@
 import { Alert, Box, Grid, Tab, Tabs, TextField } from "@mui/material";
+import { decodeTorrentFile } from "@tauri-motrix/torrent";
 import { useBoolean } from "ahooks";
-import { remote } from "parse-torrent";
 import { FormEvent, Ref, useImperativeHandle, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -42,6 +42,7 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
   const [torrentFiles, setTorrentFiles] = useState<TaskFile[]>([]);
   const [parsing, setParsing] = useState(false);
   const [parseError, setParseError] = useState(false);
+  const [unsupportedTorrent, setUnsupportedTorrent] = useState(false);
   const parseVersion = useRef(0);
   const submitPending = useRef(false);
   const {
@@ -71,6 +72,7 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
     setValue("selectFiles", []);
     setParsing(false);
     setParseError(false);
+    setUnsupportedTorrent(false);
   };
   const onClose = () => {
     if (submitPending.current) return;
@@ -107,24 +109,36 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
     if (!files.length) return;
     const version = parseVersion.current;
     setParsing(true);
-    remote(files[0], (error, torrent) => {
-      if (parseVersion.current !== version) return;
-      setParsing(false);
-      const parsedFiles = listTorrentFiles(torrent?.files) ?? [];
-      if (error || !parsedFiles.length) {
+    void decodeTorrentFile(files[0]).then(
+      (torrent) => {
+        if (parseVersion.current !== version) return;
+        setParsing(false);
+        const parsedFiles = listTorrentFiles(torrent.files) ?? [];
+        if (!parsedFiles.length) {
+          setParseError(true);
+          return;
+        }
+        setUnsupportedTorrent(torrent.version === "v2");
+        setTorrentFiles(parsedFiles);
+        setValue(
+          "selectFiles",
+          parsedFiles.map((file) => file.idx),
+        );
+      },
+      () => {
+        if (parseVersion.current !== version) return;
+        setParsing(false);
         setParseError(true);
-        return;
-      }
-      setTorrentFiles(parsedFiles);
-      setValue(
-        "selectFiles",
-        parsedFiles.map((file) => file.idx),
-      );
-    });
+      },
+    );
   };
 
   const onSubmit = async (form: TaskForm) => {
-    if (source === "torrent" && (parsing || !torrentFiles.length)) return;
+    if (
+      source === "torrent" &&
+      (parsing || unsupportedTorrent || !torrentFiles.length)
+    )
+      return;
     try {
       const options = buildDownloadOptions(form, source, motrix?.http_engine);
       if (source === "torrent") {
@@ -171,7 +185,10 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
       fullWidth
       maxWidth="sm"
       loading={isSubmitting}
-      disableOk={source === "torrent" && (parsing || !torrentFiles.length)}
+      disableOk={
+        source === "torrent" &&
+        (parsing || unsupportedTorrent || !torrentFiles.length)
+      }
     >
       <Box
         component="fieldset"
@@ -225,6 +242,9 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
             />
             {parseError && (
               <Alert severity="error">{t("task.InvalidTorrent")}</Alert>
+            )}
+            {unsupportedTorrent && (
+              <Alert severity="warning">{t("task.UnsupportedTorrentV2")}</Alert>
             )}
             {!!torrentFiles.length && (
               <Controller

@@ -9,16 +9,4 @@ declare module "*.svg?react" {
   export default ReactComponent;
 }
 
-declare module "bittorrent-peerid" {
-  interface Parsed {
-    version?: string;
-    client: string;
-  }
-
-  const fn: (param: Buffer | string) => Parsed;
-  export default fn;
-
-  export { Parsed };
-}
-
 declare const OS_PLATFORM: NodeJS.Platform;

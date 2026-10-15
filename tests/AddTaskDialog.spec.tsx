@@ -1,11 +1,14 @@
 import {
+  decodeTorrentFile,
+  type ParsedTorrentFile,
+} from "@tauri-motrix/torrent";
+import {
   act,
   fireEvent,
   render,
   screen,
   waitFor,
 } from "@testing-library/react";
-import { remote } from "parse-torrent";
 import { createRef } from "react";
 import { useNavigate } from "react-router";
 
@@ -23,7 +26,7 @@ jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 jest.mock("react-router", () => ({ useNavigate: jest.fn() }));
-jest.mock("parse-torrent", () => ({ remote: jest.fn() }), { virtual: true });
+jest.mock("@tauri-motrix/torrent", () => ({ decodeTorrentFile: jest.fn() }));
 jest.mock("swr", () => ({ mutate: jest.fn() }));
 jest.mock("@/hooks/aria2");
 jest.mock("@/hooks/motrix");
@@ -46,11 +49,19 @@ const torrent = {
     { name: "two.txt", path: "two.txt", length: 2, offset: 1 },
   ],
 };
-type TorrentCallback = (error: Error | null, parsed?: typeof torrent) => void;
-const parseTorrent = remote as unknown as jest.Mock<
-  void,
-  [File, TorrentCallback]
->;
+const parseTorrent = jest.mocked(decodeTorrentFile);
+const parsedTorrent = (version: "v1" | "v2" | "hybrid" = "v1") =>
+  ({ ...torrent, version }) as ParsedTorrentFile;
+
+function deferredParse() {
+  let resolve!: (torrent: ParsedTorrentFile) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<ParsedTorrentFile>((accept, fail) => {
+    resolve = accept;
+    reject = fail;
+  });
+  return { promise, resolve, reject };
+}
 
 function openDialog(source: TaskSource = "url") {
   const ref = createRef<AddTaskDialogRef>();
@@ -82,7 +93,7 @@ beforeEach(() => {
     motrix: { http_engine: "aria2c", new_task_show_downloading: true },
   } as ReturnType<typeof useMotrix>);
   jest.mocked(useTaskStore).mockReturnValue(fetchTasks);
-  parseTorrent.mockImplementation((_, callback) => callback(null, torrent));
+  parseTorrent.mockResolvedValue(parsedTorrent());
 });
 
 it.each(["aria2c", "vortex"] as const)(
@@ -169,19 +180,91 @@ it("requires at least one torrent file to be selected", async () => {
 });
 
 it("reports invalid torrents and ignores an older parse result after replacement", async () => {
-  const callbacks: TorrentCallback[] = [];
-  parseTorrent.mockImplementation((_, callback) => {
-    callbacks.push(callback);
-  });
+  const old = deferredParse();
+  const invalid = deferredParse();
+  parseTorrent
+    .mockReturnValueOnce(old.promise)
+    .mockReturnValueOnce(invalid.promise);
   openDialog("torrent");
   await upload("old.torrent");
   await upload("invalid.torrent");
-  act(() => callbacks[1](new Error("invalid")));
-  act(() => callbacks[0](null, torrent));
+  await act(async () => invalid.reject(new Error("invalid")));
+  await act(async () => old.resolve(parsedTorrent()));
   expect(screen.getByText("task.InvalidTorrent")).toBeInTheDocument();
   expect(screen.queryByText("one.txt")).not.toBeInTheDocument();
   expect(screen.queryByText("common.Submit")).not.toBeInTheDocument();
 });
+
+it("previews pure v2 files, blocks form submission and permits a hybrid replacement", async () => {
+  parseTorrent.mockResolvedValueOnce(parsedTorrent("v2"));
+  openDialog("torrent");
+  await upload("v2.torrent");
+  expect(await screen.findByText("one.txt")).toBeInTheDocument();
+  expect(screen.getByText("task.UnsupportedTorrentV2")).toBeInTheDocument();
+  expect(screen.queryByText("common.Submit")).not.toBeInTheDocument();
+  await act(async () => fireEvent.submit(screen.getByRole("dialog")));
+  expect(addTorrentApi).not.toHaveBeenCalled();
+  parseTorrent.mockResolvedValueOnce(parsedTorrent("hybrid"));
+  await upload("hybrid.torrent");
+  expect(
+    screen.queryByText("task.UnsupportedTorrentV2"),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByText("common.Submit"));
+  await waitFor(() =>
+    expect(addTorrentApi).toHaveBeenCalledWith(
+      "dG9ycmVudA==",
+      expect.objectContaining({ "select-file": "1,2" }),
+    ),
+  );
+});
+
+it("blocks submission while parsing and ignores an old rejection after replacement", async () => {
+  const pending = deferredParse();
+  parseTorrent.mockReturnValueOnce(pending.promise);
+  openDialog("torrent");
+  await upload();
+  expect(screen.queryByText("common.Submit")).not.toBeInTheDocument();
+  await act(async () => fireEvent.submit(screen.getByRole("dialog")));
+  expect(addTorrentApi).not.toHaveBeenCalled();
+  await upload("replacement.torrent");
+  expect(await screen.findByText("one.txt")).toBeInTheDocument();
+  await act(async () => pending.reject(new Error("old failure")));
+  expect(screen.queryByText("task.InvalidTorrent")).not.toBeInTheDocument();
+  expect(screen.getByText("common.Submit")).toBeInTheDocument();
+});
+
+it.each(["close", "switch", "remove"])(
+  "ignores an old parse result after %s and clears the v2 state",
+  async (action) => {
+    const pending = deferredParse();
+    parseTorrent.mockReturnValueOnce(pending.promise);
+    const ref = openDialog("torrent");
+    await upload("old.torrent");
+    await act(async () => {
+      if (action === "close") ref.current?.close();
+      if (action === "switch")
+        fireEvent.click(screen.getByRole("tab", { name: "common.FromUrl" }));
+      if (action === "remove")
+        fireEvent.change(
+          screen.getByRole("dialog").querySelector('input[type="file"]')!,
+          { target: { files: [] } },
+        );
+    });
+    if (action === "close") act(() => ref.current?.open("torrent"));
+    await act(async () => pending.resolve(parsedTorrent("v2")));
+    expect(screen.queryByText("one.txt")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("task.UnsupportedTorrentV2"),
+    ).not.toBeInTheDocument();
+    if (action === "switch")
+      fireEvent.click(
+        screen.getByRole("tab", { name: "common.FromTorrentFile" }),
+      );
+    await upload("fresh.torrent");
+    expect(await screen.findByText("one.txt")).toBeInTheDocument();
+    expect(screen.getByText("common.Submit")).toBeInTheDocument();
+  },
+);
 
 it("retains edits on submission failure and clears them when reopened", async () => {
   jest.mocked(addTaskApi).mockRejectedValue(new Error("offline"));

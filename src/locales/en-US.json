@@ -98,6 +98,7 @@
     "UserAgent": "User-Agent",
     "UserAgentHint": "Leave empty to use the download engine's default User-Agent",
     "InvalidTorrent": "Unable to read the torrent. Please select a valid torrent file.",
+    "UnsupportedTorrentV2": "This torrent uses BitTorrent v2. Preview is available, but the current download engine does not support downloading it.",
     "ConfirmDelete": "Are you sure you want to remove download task \"{{taskName}}\"?",
     "ConfirmDeleteBatch": "Are you sure you want to remove {{tasksLength}} download tasks in batch?",
     "Empty": "No download list",

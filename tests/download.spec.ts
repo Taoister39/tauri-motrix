@@ -83,7 +83,7 @@ describe("peerIdParser", () => {
 
   it("should parse peerId correctly", () => {
     const testPeerId = "%2DUT360W%2D%92%B6%EBh%1F%A1%DBfo%F6%D5I"; // Example peer ID
-    const expected = "µTorrent v3.6.0 "; // Replace this with the expected parsed output
+    const expected = "µTorrent v3.6.0";
     expect(peerIdParser(testPeerId)).toBe(expected);
   });
 });

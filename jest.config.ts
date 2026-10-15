@@ -10,6 +10,20 @@ const watchPathIgnorePatterns = [
 const config: Config = {
   projects: [
     {
+      displayName: "torrent",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/packages/torrent/tests/**/*.(spec|test).ts"],
+      transform: {
+        "^.+\\.(t|j)s$": [
+          "@swc/jest",
+          { jsc: { parser: { syntax: "typescript" }, target: "es2021" } },
+        ],
+      },
+      moduleNameMapper: {
+        "^@tauri-motrix/torrent$": "<rootDir>/packages/torrent/dist/index.js",
+      },
+    },
+    {
       watchPathIgnorePatterns,
       testEnvironment: "jest-environment-jsdom",
       globals: {
@@ -21,7 +35,7 @@ const config: Config = {
         "<rootDir>/tests/**/*.(spec|test).(tsx|ts)",
         "<rootDir>/packages/aria2/tests/**/*.(spec|test).(tsx|ts)",
         "<rootDir>/packages/unified-base/tests/**/*.(spec|test).(tsx|ts)",
-        // "<rootDir>/packages/torrent/tests/**/*.(spec|test).(tsx|ts)",
+        "<rootDir>/apps/website/tests/**/*.(spec|test).(tsx|ts)",
       ],
       transform: {
         "^.+\\.(t|j)sx?$": [
@@ -58,6 +72,7 @@ const config: Config = {
         "^@tauri-motrix/ux-base/(theme|components|tokens)$":
           "<rootDir>/packages/ux-base/dist/$1.js",
         "^@tauri-motrix/ux-base$": "<rootDir>/packages/ux-base/dist/index.js",
+        "^@tauri-motrix/torrent$": "<rootDir>/packages/torrent/dist/index.js",
       },
     },
     {
