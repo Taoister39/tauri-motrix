@@ -155,6 +155,8 @@ interface MotrixConfig {
   auto_log_clean: 0 | 1 | 2 | 3;
   enable_auto_launch: boolean;
   minimize_to_tray_on_auto_launch: boolean;
+  global_shortcut_show_window?: string | null;
+  global_shortcut_new_download?: string | null;
   auto_resume_all: boolean;
   new_task_show_downloading: boolean;
   task_completed_notify: boolean;

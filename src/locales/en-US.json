@@ -235,5 +235,36 @@
     "TaskSubmitting": "A task is being submitted. Please try again shortly.",
     "TorrentReadFailed": "Unable to read the torrent file. Please select a valid .torrent file up to 10 MiB.",
     "ActionFailed": "Unable to handle the tray action. Please try again."
+  },
+  "shortcuts": {
+    "Title": "Global shortcuts",
+    "Description": "Available while Motrix is running, including in the system tray. No shortcuts are assigned by default.",
+    "ShowWindow": "Show Motrix",
+    "NewDownload": "New download",
+    "EditAction": "Set shortcut: {{action}}",
+    "ClearAction": "Clear shortcut: {{action}}",
+    "Clear": "Clear",
+    "Unbound": "Not set",
+    "Active": "Active",
+    "Combination": "Key combination",
+    "RecordHint": "Press Ctrl, Alt, or Command/Super with a letter, digit, or F1–F24. Shift is optional. Press Escape to cancel.",
+    "StatusFailed": "Unable to read shortcut status. Try reopening Settings.",
+    "Errors": {
+      "invalid": "Choose a supported key combination.",
+      "duplicate": "This combination is already assigned to the other action.",
+      "registration_failed": "Unable to register this combination. It may be reserved or used by another application.",
+      "unregistration_failed": "Unable to release the previous shortcut. The change was cancelled.",
+      "save_failed": "Unable to save shortcuts. The previous settings were retained.",
+      "rollback_failed": "Unable to fully restore the previous shortcuts. Check their status or restart Motrix.",
+      "unavailable": "Global shortcuts are unavailable in this desktop environment. Linux requires X11; Wayland is not supported.",
+      "not_ready": "Shortcuts are still initializing. Please try again shortly.",
+      "recording_failed": "Unable to start or finish shortcut recording. Retry restoring shortcuts before continuing."
+    },
+    "Loading": "Loading shortcuts",
+    "Retry": "Retry",
+    "RetryRestore": "Retry restoring shortcuts",
+    "starting": "Preparing shortcut recording…",
+    "saving": "Saving shortcut…",
+    "stopping": "Restoring global shortcut actions…"
   }
 }

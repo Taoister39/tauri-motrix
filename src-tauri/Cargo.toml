@@ -49,11 +49,10 @@ uuid = { version = "1.16.0", features = ["v4", "serde"] }
 base64 = "0.22"
 trash.workspace = true
 same-file.workspace = true
-
-[dev-dependencies]
 tempfile.workspace = true
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-global-shortcut.workspace = true
 tauri-plugin-autostart = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"

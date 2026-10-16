@@ -1,3 +1,4 @@
+import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import {
   decodeTorrentFile,
   type ParsedTorrentFile,
@@ -24,6 +25,9 @@ import { TaskSource } from "@/utils/task_options";
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: string) => key }),
+}));
+jest.mock("@tauri-apps/plugin-clipboard-manager", () => ({
+  readText: jest.fn(),
 }));
 jest.mock("react-router", () => ({ useNavigate: jest.fn() }));
 jest.mock("@tauri-motrix/torrent", () => ({ decodeTorrentFile: jest.fn() }));
@@ -83,6 +87,7 @@ async function upload(name = "test.torrent") {
 
 beforeEach(() => {
   jest.resetAllMocks();
+  jest.mocked(readText).mockResolvedValue("");
   jest.mocked(useNavigate).mockReturnValue(navigate);
   jest
     .mocked(useAria2)
@@ -343,4 +348,96 @@ it("blocks an unsupported torrent selected by the tray", async () => {
   ).toBeInTheDocument();
   expect(screen.queryByText("common.Submit")).not.toBeInTheDocument();
   expect(addTorrentApi).not.toHaveBeenCalled();
+});
+
+function shortcutDialog() {
+  const ref = createRef<AddTaskDialogRef>();
+  render(<AddTaskDialog ref={ref} />);
+  act(() => ref.current?.openFromShortcut());
+  return ref;
+}
+
+it("opens immediately, focuses the link, and prefills without submitting", async () => {
+  jest.mocked(readText).mockResolvedValue(" https://example.test/file.zip ");
+  shortcutDialog();
+  const input = screen.getByLabelText("common.DownloadLink");
+  await waitFor(() =>
+    expect(input).toHaveValue("https://example.test/file.zip"),
+  );
+  expect(input).toHaveFocus();
+  expect(addTaskApi).not.toHaveBeenCalled();
+});
+
+it("retains URL edits and avoids rereading the clipboard on repeated shortcuts", async () => {
+  const ref = shortcutDialog();
+  fireEvent.change(screen.getByLabelText("common.DownloadLink"), {
+    target: { value: "https://edited.test/" },
+  });
+  fireEvent.change(screen.getByLabelText("task.UserAgent"), {
+    target: { value: "Custom/1" },
+  });
+  act(() => ref.current?.openFromShortcut());
+  expect(screen.getByLabelText("common.DownloadLink")).toHaveValue(
+    "https://edited.test/",
+  );
+  expect(screen.getByLabelText("task.UserAgent")).toHaveValue("Custom/1");
+  expect(readText).toHaveBeenCalledTimes(1);
+});
+
+it("retains the active torrent tab and selected file on a shortcut", async () => {
+  const ref = openDialog("torrent");
+  await upload();
+  await screen.findByText("one.txt");
+  act(() => ref.current?.openFromShortcut());
+  expect(
+    screen.getByRole("tab", { name: "common.FromTorrentFile" }),
+  ).toHaveAttribute("aria-selected", "true");
+  expect(screen.getByText("test.torrent")).toBeInTheDocument();
+  expect(screen.getByText("one.txt")).toBeInTheDocument();
+  expect(readText).not.toHaveBeenCalled();
+  expect(addTorrentApi).not.toHaveBeenCalled();
+});
+
+it.each(["typing", "switch", "close", "reopen"])(
+  "ignores delayed clipboard content after %s",
+  async (action) => {
+    let resolve!: (text: string) => void;
+    jest.mocked(readText).mockReturnValue(
+      new Promise<string>((accept) => {
+        resolve = accept;
+      }),
+    );
+    const ref = shortcutDialog();
+    if (action === "typing")
+      fireEvent.change(screen.getByLabelText("common.DownloadLink"), {
+        target: { value: "edited" },
+      });
+    if (action === "switch")
+      fireEvent.click(
+        screen.getByRole("tab", { name: "common.FromTorrentFile" }),
+      );
+    if (action === "close" || action === "reopen")
+      act(() => ref.current?.close());
+    if (action === "reopen") act(() => ref.current?.open());
+    await act(async () => resolve("https://old.test/file"));
+    if (action === "switch")
+      fireEvent.click(screen.getByRole("tab", { name: "common.FromUrl" }));
+    if (action === "close")
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+      );
+    else
+      expect(screen.getByLabelText("common.DownloadLink")).toHaveValue(
+        action === "typing" ? "edited" : "",
+      );
+  },
+);
+
+it("keeps an empty usable form if the clipboard cannot be read", async () => {
+  jest.mocked(readText).mockRejectedValue(new Error("Clipboard unavailable"));
+  const ref = shortcutDialog();
+  await act(async () => ref.current?.openFromShortcut());
+  expect(screen.getByLabelText("common.DownloadLink")).toHaveValue("");
+  expect(Notice.error).not.toHaveBeenCalled();
+  expect(screen.getByText("common.Submit")).toBeEnabled();
 });

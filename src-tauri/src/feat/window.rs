@@ -24,6 +24,9 @@ pub fn quit(code: Option<i32>) {
 }
 
 pub fn clean() -> bool {
+    if let Some(app) = handle::Handle::global().app_handle() {
+        crate::service::shortcuts::shutdown(&app);
+    }
     use tokio::time::{timeout, Duration};
     let rt = tokio::runtime::Runtime::new().unwrap();
     let cleanup_result = rt.block_on(async {

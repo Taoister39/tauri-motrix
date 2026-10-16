@@ -43,7 +43,11 @@ beforeEach(() => {
 
 function setup() {
   const ref = createRef<AddTaskDialogRef>();
-  ref.current = { open: jest.fn(), close: jest.fn() };
+  ref.current = {
+    open: jest.fn(),
+    close: jest.fn(),
+    openFromShortcut: jest.fn(),
+  };
   const hook = renderHook(() => useTray(ref));
   const handlers = jest.mocked(connectTray).mock.calls[0][0];
   return { ref, handlers, ...hook };
@@ -69,6 +73,13 @@ it("imports the selected torrent into the confirmation panel", async () => {
     handlers.action({ action: "open_torrent", path: "test.torrent" }),
   );
   expect(ref.current?.open).toHaveBeenCalledWith("torrent", file);
+});
+
+it("uses the dedicated shortcut entry without resetting the normal dialog", async () => {
+  const { ref, handlers } = setup();
+  await act(async () => handlers.action({ action: "add_task_from_shortcut" }));
+  expect(ref.current?.openFromShortcut).toHaveBeenCalledTimes(1);
+  expect(ref.current?.open).not.toHaveBeenCalled();
 });
 
 it("keeps the existing form when the selected torrent cannot be read", async () => {

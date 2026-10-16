@@ -2,3 +2,8 @@
 identifier = "allow-tray-actions"
 description = "Allows the main window to consume queued tray actions and task control reports."
 commands.allow = ["take_tray_actions", "take_tray_reports"]
+
+[[permission]]
+identifier = "allow-global-shortcuts"
+description = "Allows the main window to inspect global shortcuts and suppress actions while recording."
+commands.allow = ["get_global_shortcut_status", "set_global_shortcut_recording"]

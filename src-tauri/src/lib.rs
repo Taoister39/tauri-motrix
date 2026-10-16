@@ -42,6 +42,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
+            service::shortcuts::install(app.handle());
             let app_handle = app.handle().clone();
             AsyncHandler::spawn(move || async move {
                 logging!(
@@ -78,6 +79,8 @@ pub fn run() {
             cmd::take_tray_reports,
             cmd::get_aria2_config,
             cmd::get_motrix_config,
+            cmd::get_global_shortcut_status,
+            cmd::set_global_shortcut_recording,
             cmd::open_logs_dir,
             cmd::open_app_dir,
             cmd::open_core_dir,
@@ -111,6 +114,9 @@ pub fn run() {
         tauri::RunEvent::WindowEvent { label, event, .. } => {
             if label == "main" {
                 match event {
+                    tauri::WindowEvent::Focused(false) | tauri::WindowEvent::Destroyed => {
+                        service::shortcuts::set_recording(false);
+                    }
                     tauri::WindowEvent::CloseRequested { api, .. } => {
                         api.prevent_close();
                         let window = core::handle::Handle::global().get_window().unwrap();

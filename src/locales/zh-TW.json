@@ -235,5 +235,36 @@
     "TaskSubmitting": "任務正在提交，請稍後重試。",
     "TorrentReadFailed": "無法讀取種子檔案，請選擇不超過 10 MiB 的有效 .torrent 檔案。",
     "ActionFailed": "無法處理系統匣操作，請重試。"
+  },
+  "shortcuts": {
+    "Title": "全域快捷鍵",
+    "Description": "Motrix 執行期間有效，駐留系統匣時也可使用。預設不綁定快捷鍵。",
+    "ShowWindow": "喚起 Motrix",
+    "NewDownload": "新增下載",
+    "EditAction": "設定快捷鍵：{{action}}",
+    "ClearAction": "清除快捷鍵：{{action}}",
+    "Clear": "清除",
+    "Unbound": "未綁定",
+    "Active": "已生效",
+    "Combination": "按鍵組合",
+    "RecordHint": "按下 Ctrl、Alt 或 Command/Super 與字母、數字或 F1–F24 的組合，可額外包含 Shift。按 Escape 取消。",
+    "StatusFailed": "無法讀取快捷鍵狀態，請重新開啟設定。",
+    "Errors": {
+      "invalid": "請選擇支援的按鍵組合。",
+      "duplicate": "此組合已綁定至另一個操作。",
+      "registration_failed": "無法註冊此組合，可能是系統保留按鍵或已被其他應用程式佔用。",
+      "unregistration_failed": "無法釋放原快捷鍵，已取消此次修改。",
+      "save_failed": "無法儲存快捷鍵，已保留原設定。",
+      "rollback_failed": "無法完全恢復原快捷鍵，請檢查狀態或重新啟動 Motrix。",
+      "unavailable": "目前桌面環境無法使用全域快捷鍵。Linux 需要 X11，暫不支援 Wayland。",
+      "not_ready": "快捷鍵正在初始化，請稍後再試。",
+      "recording_failed": "無法開始或結束快捷鍵錄入，請重試恢復快捷鍵後再繼續。"
+    },
+    "Loading": "正在載入快捷鍵",
+    "Retry": "重試",
+    "RetryRestore": "重試恢復快捷鍵",
+    "starting": "正在準備錄入快捷鍵…",
+    "saving": "正在儲存快捷鍵…",
+    "stopping": "正在恢復全域快捷鍵操作…"
   }
 }

@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import AboutDialog from "@/business/about/AboutDialog";
 import Aria2Setting from "@/business/setting/Aria2Setting";
 import AppearanceSetting from "@/business/setting/DisplaySetting";
+import GlobalShortcutSetting from "@/business/setting/GlobalShortcutSetting";
 import MotrixSetting from "@/business/setting/MotrixSetting";
 import VortexSetting from "@/business/setting/VortexSetting";
 import { DialogRef } from "@/components/BaseDialog";
@@ -81,6 +82,9 @@ function SettingsPage() {
         <Grid size={6}>
           <Box>
             <MotrixSetting />
+          </Box>
+          <Box>
+            <GlobalShortcutSetting />
           </Box>
           <Box>
             <VortexSetting />

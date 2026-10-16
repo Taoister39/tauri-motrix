@@ -28,6 +28,12 @@ Supports Windows, macOS, and Linux, with x64 and ARM64 builds on all three platf
 
 Tray task controls run in the background across aria2 and Vortex. Pause All includes queued tasks and BitTorrent seeding; Resume All resumes every paused task, including manually paused tasks, without retrying failed tasks. Tasks awaiting file deletion confirmation are skipped and reported. Opening a torrent from the tray always previews it before submission.
 
+## Global shortcuts
+
+Open **Settings → Global shortcuts** to assign or clear shortcuts for showing Motrix and opening a new download. Both are unbound by default. Use Ctrl, Alt, or Command/Super with a letter, digit, or F1–F24; Shift is optional. Changes take effect immediately while Motrix is running, including in the system tray. Registration failures appear in Settings and retain the previous binding.
+
+The new-download shortcut fills a single HTTP, HTTPS, FTP, or magnet link from the clipboard and waits for confirmation. Repeating it preserves an open form and any selected torrent. Global shortcuts support Windows, macOS, and Linux X11; Wayland is not supported.
+
 ## RPC downloads
 
 Open **Settings → Aria2 Engine → RPC Settings** to change the RPC port (1024–65535) and optional secret. Copy the RPC address into your browser extension or cloud-drive download tool, and use the same secret there. The default address is `http://127.0.0.1:16801/jsonrpc`.

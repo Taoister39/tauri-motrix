@@ -1,4 +1,5 @@
 import { Alert, Box, Grid, Tab, Tabs, TextField } from "@mui/material";
+import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import { decodeTorrentFile } from "@tauri-motrix/torrent";
 import { useBoolean } from "ahooks";
 import { FormEvent, Ref, useImperativeHandle, useRef, useState } from "react";
@@ -19,6 +20,7 @@ import { addTaskApi, addTorrentApi } from "@/services/download";
 import { addOneDir, findOneDirByPath } from "@/services/save_to_history";
 import { useTaskStore } from "@/store/task";
 import { getAsBase64, listTorrentFiles } from "@/utils/file";
+import { clipboardDownloadLink } from "@/utils/shortcuts";
 import {
   buildDownloadOptions,
   TaskForm,
@@ -28,6 +30,7 @@ import {
 
 export interface AddTaskDialogRef extends DialogRef {
   open: (source?: TaskSource, file?: File) => void;
+  openFromShortcut: () => void;
 }
 
 function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
@@ -44,7 +47,6 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
   const [parseError, setParseError] = useState(false);
   const [unsupportedTorrent, setUnsupportedTorrent] = useState(false);
   const parseVersion = useRef(0);
-  const submitPending = useRef(false);
   const {
     control,
     handleSubmit,
@@ -75,28 +77,39 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
     setUnsupportedTorrent(false);
   };
   const onClose = () => {
-    if (submitPending.current) return;
     clearTorrent();
     setFalse();
   };
+
+  const onOpen: AddTaskDialogRef["open"] = (initialSource = "url", file) => {
+    // if (isSubmitting) {
+    //   Notice.error(t("tray.TaskSubmitting"));
+    //   return;
+    // }
+    clearTorrent();
+    reset({
+      link: "",
+      split: 128,
+      dir: aria2?.dir ?? "",
+      out: "",
+      userAgent: "",
+      selectFiles: [],
+    });
+    setSource(initialSource);
+    setTrue();
+    if (file) onFilesChange([file]);
+  };
+
   useImperativeHandle(props.ref, () => ({
-    open: (initialSource = "url", file) => {
-      if (submitPending.current) {
-        Notice.error(t("tray.TaskSubmitting"));
-        return;
-      }
-      clearTorrent();
-      reset({
-        link: "",
-        split: 128,
-        dir: aria2?.dir ?? "",
-        out: "",
-        userAgent: "",
-        selectFiles: [],
-      });
-      setSource(initialSource);
-      setTrue();
-      if (file) onFilesChange([file]);
+    open: onOpen,
+    openFromShortcut: () => {
+      onOpen("url");
+      void readText()
+        .then((text) => {
+          const link = clipboardDownloadLink(text);
+          if (link) setValue("link", link);
+        })
+        .catch(() => {});
     },
     close: onClose,
   }));
@@ -168,13 +181,7 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
 
   const submitForm = async (event: FormEvent) => {
     event.preventDefault();
-    if (submitPending.current) return;
-    submitPending.current = true;
-    try {
-      await handleSubmit(onSubmit)(event);
-    } finally {
-      submitPending.current = false;
-    }
+    await handleSubmit(onSubmit)(event);
   };
 
   return (

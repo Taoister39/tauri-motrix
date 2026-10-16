@@ -21,6 +21,7 @@ pub async fn resolve_setup(app_handle: &AppHandle) {
     // core start engine
     log::trace!(target:"app", "init config");
     log_err!(Config::init_config().await);
+    crate::service::shortcuts::initialize(app_handle).await;
 
     // Refresh existing registrations so upgrades also receive the startup flag.
     // Use the OS status to respect autostart disabled outside the app.

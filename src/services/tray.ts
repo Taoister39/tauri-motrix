@@ -6,6 +6,7 @@ import { readFileAsBase64 } from "@/services/cmd";
 
 export type TrayAction =
   | { action: "add_task" }
+  | { action: "add_task_from_shortcut" }
   | { action: "open_torrent"; path: string }
   | { action: "downloads" }
   | { action: "settings" }

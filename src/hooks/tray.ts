@@ -23,6 +23,9 @@ export function useTray(addRef: RefObject<AddTaskDialogRef | null>) {
         async action(action) {
           const { t, navigate } = latest.current;
           switch (action.action) {
+            case "add_task_from_shortcut":
+              addRef.current?.openFromShortcut();
+              break;
             case "add_task":
               addRef.current?.open("url");
               break;

@@ -1,3 +1,5 @@
+use std::{io::Write, path::Path};
+
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
@@ -32,6 +34,8 @@ pub struct IMotrix {
 
     pub enable_auto_launch: Option<bool>,
     pub minimize_to_tray_on_auto_launch: Option<bool>,
+    pub global_shortcut_show_window: Option<String>,
+    pub global_shortcut_new_download: Option<String>,
 
     pub auto_check_update: Option<bool>,
 
@@ -122,7 +126,19 @@ impl IMotrix {
 
     /// Save IMotrix App Config
     pub fn save_file(&self) -> Result<()> {
-        help::save_yaml(&dirs::motrix_path()?, &self, Some("# tauri-motrix Config"))
+        self.save_to(&dirs::motrix_path()?)
+    }
+
+    fn save_to(&self, path: &Path) -> Result<()> {
+        let data = format!("# tauri-motrix Config\n\n{}", serde_yaml::to_string(self)?);
+        let mut pending = tempfile::NamedTempFile::new_in(
+            path.parent()
+                .ok_or_else(|| anyhow::anyhow!("Missing configuration directory"))?,
+        )?;
+        pending.write_all(data.as_bytes())?;
+        pending.as_file().sync_all()?;
+        pending.persist(path)?;
+        Ok(())
     }
 
     pub fn should_minimize_on_launch(&self, is_autostart: bool) -> bool {
@@ -150,6 +166,8 @@ impl IMotrix {
         patch!(language);
         patch!(enable_auto_launch);
         patch!(minimize_to_tray_on_auto_launch);
+        patch!(global_shortcut_show_window);
+        patch!(global_shortcut_new_download);
         patch!(auto_log_clean);
         patch!(auto_check_update);
         patch!(auto_resume_all);
@@ -167,6 +185,33 @@ impl IMotrix {
 #[cfg(test)]
 mod tests {
     use super::IMotrix;
+
+    #[test]
+    fn saving_configuration_replaces_the_file_without_truncating_it_on_failure() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("motrix.yaml");
+        std::fs::write(&path, "theme_mode: light").unwrap();
+        let config = IMotrix {
+            global_shortcut_show_window: Some("control+KeyM".into()),
+            ..Default::default()
+        };
+        config.save_to(&path).unwrap();
+        let saved: IMotrix =
+            serde_yaml::from_str(&std::fs::read_to_string(&path).unwrap()).unwrap();
+        assert_eq!(
+            saved.global_shortcut_show_window,
+            config.global_shortcut_show_window
+        );
+        let blocked = directory.path().join("blocked");
+        std::fs::create_dir(&blocked).unwrap();
+        std::fs::write(blocked.join("keep.txt"), "keep").unwrap();
+        assert!(config.save_to(&blocked).is_err());
+        assert_eq!(
+            std::fs::read_to_string(blocked.join("keep.txt")).unwrap(),
+            "keep"
+        );
+        assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(), 2);
+    }
 
     #[test]
     fn minimizes_only_autostart_launches_when_enabled() {

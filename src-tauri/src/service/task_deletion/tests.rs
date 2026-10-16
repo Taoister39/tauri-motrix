@@ -408,6 +408,7 @@ fn desktop_capabilities_cover_every_registered_application_command() {
         "allow-task-deletion",
         "allow-desktop-commands",
         "allow-tray-actions",
+        "allow-global-shortcuts",
     ] {
         assert!(
             capability["permissions"]

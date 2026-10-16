@@ -235,5 +235,36 @@
     "TaskSubmitting": "タスクを送信中です。しばらくしてから再試行してください。",
     "TorrentReadFailed": "トレントファイルを読み込めません。10 MiB 以下の有効な .torrent ファイルを選択してください。",
     "ActionFailed": "トレイの操作に失敗しました。再試行してください。"
+  },
+  "shortcuts": {
+    "Title": "グローバルショートカット",
+    "Description": "Motrix の実行中は、システムトレイに格納されている場合も使用できます。初期状態では未設定です。",
+    "ShowWindow": "Motrix を表示",
+    "NewDownload": "新規ダウンロード",
+    "EditAction": "ショートカットを設定：{{action}}",
+    "ClearAction": "ショートカットを解除：{{action}}",
+    "Clear": "解除",
+    "Unbound": "未設定",
+    "Active": "有効",
+    "Combination": "キーの組み合わせ",
+    "RecordHint": "Ctrl、Alt、Command/Super のいずれかと英字、数字、F1～F24 を押してください。Shift も追加できます。Escape でキャンセルします。",
+    "StatusFailed": "ショートカットの状態を取得できません。設定を開き直してください。",
+    "Errors": {
+      "invalid": "対応するキーの組み合わせを選択してください。",
+      "duplicate": "この組み合わせは別の操作に設定されています。",
+      "registration_failed": "登録できません。システムで予約されているか、別のアプリが使用している可能性があります。",
+      "unregistration_failed": "以前のショートカットを解除できないため、変更をキャンセルしました。",
+      "save_failed": "保存できません。以前の設定を維持しました。",
+      "rollback_failed": "以前のショートカットを完全に復元できません。状態を確認するか Motrix を再起動してください。",
+      "unavailable": "このデスクトップ環境では使用できません。Linux は X11 が必要で、Wayland には未対応です。",
+      "not_ready": "ショートカットを初期化しています。しばらくしてから再試行してください。",
+      "recording_failed": "ショートカットの記録を開始または終了できません。復元を再試行してください。"
+    },
+    "Loading": "ショートカットを読み込み中",
+    "Retry": "再試行",
+    "RetryRestore": "ショートカットの復元を再試行",
+    "starting": "ショートカットの記録を準備中…",
+    "saving": "ショートカットを保存中…",
+    "stopping": "グローバルショートカットを復元中…"
   }
 }

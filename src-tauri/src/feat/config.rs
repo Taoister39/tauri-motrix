@@ -11,6 +11,7 @@ use crate::{
 };
 
 static ARIA2_CONFIG_UPDATE: Mutex<()> = Mutex::const_new(());
+pub(crate) static MOTRIX_CONFIG_UPDATE: Mutex<()> = Mutex::const_new(());
 
 // Define update flags as bitflags for better performance
 #[derive(Clone, Copy)]
@@ -24,7 +25,13 @@ enum UpdateFlags {
 }
 
 /// expose outside for motrix config
-pub async fn patch_motrix(data: IMotrix) -> Result<()> {
+pub async fn patch_motrix(mut data: IMotrix) -> Result<()> {
+    let _update = MOTRIX_CONFIG_UPDATE.lock().await;
+    let shortcuts_changed =
+        data.global_shortcut_show_window.is_some() || data.global_shortcut_new_download.is_some();
+    if shortcuts_changed {
+        service::shortcuts::normalize_patch(&mut data, &Config::motrix().data())?;
+    }
     if data
         .http_engine
         .as_deref()
@@ -49,7 +56,7 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
     let upnp_changed =
         enable_upnp.is_some() || bt_listen_port.is_some() || dht_listen_port.is_some();
     let updated_motrix = Config::motrix().draft().clone();
-    let res: Result<()> = (|| {
+    let persist = || {
         if upnp_changed {
             feat::create_upnp_mappings(&updated_motrix)?;
         }
@@ -75,7 +82,12 @@ pub async fn patch_motrix(data: IMotrix) -> Result<()> {
 
         updated_motrix.save_file()?;
         Ok(())
-    })();
+    };
+    let res = if shortcuts_changed {
+        service::shortcuts::update(&updated_motrix, persist)
+    } else {
+        persist()
+    };
 
     match res {
         Ok(()) => {

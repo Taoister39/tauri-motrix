@@ -45,6 +45,7 @@ const MENU_GROUPS: &[&[(&str, &str)]] = &[
 #[serde(tag = "action", rename_all = "snake_case")]
 pub enum TrayAction {
     AddTask,
+    AddTaskFromShortcut,
     OpenTorrent { path: String },
     Downloads,
     Settings,
@@ -89,7 +90,7 @@ pub fn take_reports() -> Vec<ControlReport> {
     std::mem::take(&mut BRIDGE.lock().reports)
 }
 
-fn dispatch(app: &AppHandle, action: TrayAction) {
+pub(crate) fn dispatch(app: &AppHandle, action: TrayAction) {
     BRIDGE.lock().actions.push_back(action);
     create_window(true);
     if let Err(error) = app.emit_to("main", ACTIONS_EVENT, ()) {

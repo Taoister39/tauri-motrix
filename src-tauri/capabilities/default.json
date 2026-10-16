@@ -5,6 +5,7 @@
   "windows": ["main"],
   "permissions": [
     "allow-tray-actions",
+    "allow-global-shortcuts",
     "updater:allow-check",
     "updater:allow-download-and-install",
     "allow-task-deletion",
