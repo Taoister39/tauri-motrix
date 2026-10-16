@@ -91,7 +91,9 @@ pub fn run() {
             cmd::get_auto_launch_status,
             cmd::app_log,
             cmd::stop_engine,
-            cmd::read_file_as_base64
+            cmd::read_file_as_base64,
+            cmd::inspect_history_paths,
+            cmd::get_history_thumbnail
         ]);
 
     let app = builder

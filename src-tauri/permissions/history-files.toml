@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-history-files"
+description = "Allows the main window to inspect local history paths and request bounded file thumbnails."
+commands.allow = ["inspect_history_paths", "get_history_thumbnail"]

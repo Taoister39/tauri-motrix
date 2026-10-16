@@ -74,6 +74,7 @@ export function TaskActionButton(props: {
         props.onClick?.(e);
       }}
       title={props.title}
+      aria-label={props.title}
       disabled={props.disabled}
     >
       {props.icon}

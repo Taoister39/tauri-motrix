@@ -48,6 +48,12 @@ If recycling fails, a second dialog lists file outcomes and asks whether to perm
 
 Task removal always requires confirmation. Existing `no_confirm_before_delete_task` configuration values remain compatible but no longer bypass the dialog. This affects the built-in aria2 and Vortex engines; external RPC clients can still control aria2 independently.
 
+## Download history
+
+History shows file content thumbnails when the operating system can provide them, then falls back to the system file icon, including embedded executable icons on Windows. Application placeholders are used only when neither is available. Windows uses Shell images, and macOS uses Quick Look with Finder icons as a fallback. Linux reuses the standard thumbnail cache and installed thumbnailers, with GdkPixbuf for images and the desktop icon theme as a fallback; video and document previews depend on installed providers.
+
+Missing local files have struck-through names and a disabled file-location button. Availability refreshes when opening history or returning to the window. Each item has direct buttons to locate the file, copy its download link, and delete only the history record. Removing a history record does not delete its files.
+
 ## Development
 
 To run the development server, execute the following commands after all prerequisites for Tauri are installed:

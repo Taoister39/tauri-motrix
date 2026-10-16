@@ -203,7 +203,9 @@
     "License": "オープンソースライセンス"
   },
   "history": {
-    "Empty": "ダウンロード履歴がありません"
+    "Empty": "ダウンロード履歴がありません",
+    "FileMissing": "ファイルが存在しません",
+    "RevealFile": "ファイルマネージャーで表示"
   },
   "vortex": {
     "Engine": "HTTP(S) ダウンロードエンジン",

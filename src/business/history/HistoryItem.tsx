@@ -1,126 +1,90 @@
 import {
   DeleteOutline,
   FileOpenOutlined,
-  Folder,
   LinkOutlined,
 } from "@mui/icons-material";
-import {
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  listItemIconClasses,
-  ListItemText,
-  MenuItem,
-  typographyClasses,
-} from "@mui/material";
+import { Box, ListItem, ListItemText, Typography } from "@mui/material";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import dayjs from "dayjs";
-import { MouseEventHandler, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { HistoryStyledMenu } from "@/client/history_compose";
+import { HistoryThumbnail } from "@/business/history/HistoryThumbnail";
 import { TaskActionButton } from "@/client/task_compose";
 import { Notice } from "@/components/Notice";
-import { DownloadHistoryVO } from "@/services/download_history";
+import type { DownloadHistoryVO } from "@/services/download_history";
+import type { HistoryFileInspection } from "@/services/history_files";
 import { parseByteVo } from "@/utils/download";
 
 export interface HistoryItemProps {
   history: DownloadHistoryVO;
+  file?: HistoryFileInspection;
   onDelete: (id: DownloadHistoryVO["id"]) => void;
 }
 
-function HistoryItem({ history, onDelete }: HistoryItemProps) {
-  const {
-    engine,
-    id,
-    link,
-    name,
-    path,
-    created_at: downloaded_at,
-    total_length,
-  } = history;
-
+function HistoryItem({ history, file, onDelete }: HistoryItemProps) {
+  const { engine, id, link, name, path, created_at, total_length } = history;
   const { t } = useTranslation();
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const describe = useMemo(
-    () =>
-      `${engine} ${parseByteVo(total_length).join("")} ${dayjs.unix(downloaded_at).format("YYYY-MM-DD HH:mm:ss")}`,
-    [engine, downloaded_at, total_length],
-  );
-
-  const open = Boolean(anchorEl);
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleClick: MouseEventHandler<HTMLDivElement> = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const missing = file?.state === "missing";
+  const description = `${engine} ${parseByteVo(total_length).join("")} ${dayjs.unix(created_at).format("YYYY-MM-DD HH:mm:ss")}`;
 
   return (
     <ListItem
-      disablePadding
-      secondaryAction={
+      sx={{
+        bgcolor: "background.paper",
+        borderRadius: "8px",
+        minHeight: 72,
+        gap: 1.5,
+        px: 1.5,
+      }}
+    >
+      <HistoryThumbnail path={path} file={file} />
+      <ListItemText
+        sx={{ minWidth: 0 }}
+        disableTypography
+        primary={
+          <Typography
+            noWrap
+            title={missing ? `${name} — ${t("history.FileMissing")}` : name}
+            aria-label={
+              missing ? `${name} — ${t("history.FileMissing")}` : undefined
+            }
+            sx={{
+              textDecoration: missing ? "line-through" : undefined,
+              color: missing ? "text.secondary" : "text.primary",
+            }}
+          >
+            {name}
+          </Typography>
+        }
+        secondary={
+          <Typography variant="body2" color="text.secondary" noWrap>
+            {description}
+          </Typography>
+        }
+      />
+      <Box sx={{ display: "flex", flexShrink: 0 }}>
         <TaskActionButton
+          title={t("history.RevealFile")}
+          icon={<FileOpenOutlined />}
+          disabled={missing}
+          onClick={() =>
+            void revealItemInDir(path).catch((error) => Notice.error(error))
+          }
+        />
+        <TaskActionButton
+          title={t("task.CopyLink")}
+          icon={<LinkOutlined />}
+          onClick={() =>
+            void writeText(link).catch((error) => Notice.error(error))
+          }
+        />
+        <TaskActionButton
+          title={t("task.Delete")}
           icon={<DeleteOutline />}
           onClick={() => onDelete(id)}
         />
-      }
-    >
-      <ListItemButton
-        sx={({ palette }) => ({
-          bgcolor: palette.background.paper,
-          ":hover": { bgcolor: palette.background.paper },
-          borderRadius: "8px",
-          [`& .${listItemIconClasses.root}`]: {
-            minWidth: "40px",
-          },
-        })}
-        onClick={handleClick}
-      >
-        <ListItemIcon>
-          <Folder />
-        </ListItemIcon>
-        <ListItemText
-          sx={{
-            display: "table",
-            tableLayout: "fixed",
-            width: "100%",
-            [`& .${typographyClasses.body1}`]: {
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-            },
-          }}
-          primary={name}
-          secondary={describe}
-        />
-      </ListItemButton>
-
-      <HistoryStyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem
-          onClick={() => writeText(link).then(handleClose)}
-          disableRipple
-        >
-          <LinkOutlined />
-          {t("task.CopyLink")}
-        </MenuItem>
-        <MenuItem
-          onClick={() =>
-            revealItemInDir(path)
-              .then(handleClose)
-              .catch((e) => Notice.error(e))
-          }
-          disableRipple
-        >
-          <FileOpenOutlined />
-          {t("task.OpenFile")}
-        </MenuItem>
-      </HistoryStyledMenu>
+      </Box>
     </ListItem>
   );
 }

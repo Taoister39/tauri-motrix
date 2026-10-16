@@ -203,7 +203,9 @@
     "License": "开源许可证"
   },
   "history": {
-    "Empty": "没有下载记录"
+    "Empty": "没有下载记录",
+    "FileMissing": "文件已不存在",
+    "RevealFile": "在文件管理器中显示"
   },
   "vortex": {
     "Engine": "HTTP(S) 下载引擎",

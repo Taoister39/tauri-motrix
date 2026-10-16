@@ -9,6 +9,7 @@
     "updater:allow-check",
     "updater:allow-download-and-install",
     "allow-task-deletion",
+    "allow-history-files",
     "allow-desktop-commands",
     "core:default",
     "opener:default",

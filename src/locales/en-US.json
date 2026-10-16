@@ -203,7 +203,9 @@
     "License": "Open Source License"
   },
   "history": {
-    "Empty": "No download history"
+    "Empty": "No download history",
+    "FileMissing": "File no longer exists",
+    "RevealFile": "Show in file manager"
   },
   "vortex": {
     "Engine": "HTTP(S) download engine",

@@ -203,7 +203,9 @@
     "License": "開源授權"
   },
   "history": {
-    "Empty": "沒有下載記錄"
+    "Empty": "沒有下載記錄",
+    "FileMissing": "檔案已不存在",
+    "RevealFile": "在檔案管理員中顯示"
   },
   "vortex": {
     "Engine": "HTTP(S) 下載引擎",
