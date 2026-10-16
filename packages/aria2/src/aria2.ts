@@ -173,7 +173,7 @@ export class Aria2 {
   dispatchEvent(name: string, data: unknown) {
     const callbacks = this.eventSubscribeMap[name];
 
-    if (callbacks) {
+    if (callbacks?.length) {
       callbacks.forEach((fn) => fn(data));
     } else {
       this.offlineSubscribeMap[name] ??= [];
@@ -186,23 +186,21 @@ export class Aria2 {
 
   dispatchOffline<T>(method: string, callback: (data: T) => void): boolean {
     const { offlineSubscribeMap } = this;
+    const key = ensurePrefix(method);
+    const events = offlineSubscribeMap[key];
 
-    if (method in offlineSubscribeMap) {
-      offlineSubscribeMap[method].forEach(({ data, time }) => {
-        console.log(`offline queue call ${method}, cached at ${time}`);
+    if (events) {
+      delete offlineSubscribeMap[key];
+      events.forEach(({ data, time }) => {
+        console.log(`offline queue call ${key}, cached at ${time}`);
         callback(data as T);
       });
-      delete offlineSubscribeMap[method];
       return true;
     }
     return false;
   }
 
   addListener<T>(method: string, callback: (data: T) => void) {
-    if (this.dispatchOffline(method, callback)) {
-      return;
-    }
-
     const key = ensurePrefix(method);
     const { eventSubscribeMap } = this;
     if (eventSubscribeMap[key]?.includes(callback)) {
@@ -211,15 +209,13 @@ export class Aria2 {
 
     eventSubscribeMap[key] ??= [];
     eventSubscribeMap[key].push(callback);
+    this.dispatchOffline(key, callback);
   }
 
   setListener<T>(method: string, callback: (data: T) => void) {
-    if (this.dispatchOffline(method, callback)) {
-      return;
-    }
-
     const key = ensurePrefix(method);
     this.eventSubscribeMap[key] = [callback];
+    this.dispatchOffline(key, callback);
   }
 
   removeListener<T>(method: string, callback: (data: T) => void) {

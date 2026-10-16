@@ -50,7 +50,7 @@ export function getAria2(force = false) {
 }
 
 export interface Aria2BitTorrent {
-  info: {
+  info?: {
     name: string;
   };
   announceList: Array<[string]>;
@@ -60,6 +60,7 @@ export interface Aria2BitTorrent {
 
 export interface Aria2Task {
   infoHash?: string;
+  followedBy?: string[];
   bittorrent?: Aria2BitTorrent;
   bitfield?: string;
   numSeeders?: string;

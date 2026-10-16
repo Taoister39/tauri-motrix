@@ -207,27 +207,65 @@ describe("Aria2 Class", () => {
   });
 
   describe("offline queue", () => {
-    it("should dispatch offline events when listener is added", () => {
-      const mockCallback = jest.fn();
-      aria2.dispatchEvent("downloadStart", { gid: "123" });
-      aria2.addListener("downloadStart", mockCallback);
-      expect(mockCallback).toHaveBeenCalledWith({ gid: "123" });
-    });
+    it.each([
+      ["addListener", "onDownloadPause"],
+      ["addListener", "aria2.onDownloadPause"],
+      ["setListener", "onDownloadPause"],
+      ["setListener", "aria2.onDownloadPause"],
+    ] as const)(
+      "replays cached events and keeps receiving events with %s(%s)",
+      (operation, method) => {
+        const callback = jest.fn();
+        aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "first" }]);
+        aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "second" }]);
+        aria2[operation](method, callback);
+        expect(callback.mock.calls).toEqual([
+          [[{ gid: "first" }]],
+          [[{ gid: "second" }]],
+        ]);
+        expect(aria2.offlineSubscribeMap).toEqual({});
 
-    it("should not dispatch offline events if already dispatched", () => {
-      const mockCallback = jest.fn();
-      aria2.dispatchEvent("downloadStart", { gid: "123" });
-      aria2.addListener("downloadStart", mockCallback);
-      mockCallback.mockClear(); // reset call count
-      aria2.addListener("downloadStart", mockCallback);
-      expect(mockCallback).not.toHaveBeenCalled();
-    });
+        aria2[operation](method, callback);
+        aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "third" }]);
+        expect(callback).toHaveBeenCalledTimes(3);
+        expect(callback).toHaveBeenLastCalledWith([{ gid: "third" }]);
+      },
+    );
 
-    it("should dispatch offline events when setListener is used", () => {
-      const mockCallback = jest.fn();
-      aria2.dispatchEvent("downloadStart", { gid: "123" });
-      aria2.setListener("downloadStart", mockCallback);
-      expect(mockCallback).toHaveBeenCalledWith({ gid: "123" });
+    it.each(["addListener", "setListener"] as const)(
+      "installs the listener and clears the cache before %s replay reentry",
+      (operation) => {
+        const callback = jest.fn().mockImplementationOnce(() => {
+          aria2[operation]("onBtDownloadComplete", callback);
+          aria2.dispatchEvent("aria2.onBtDownloadComplete", [{ gid: "live" }]);
+        });
+        aria2.dispatchEvent("aria2.onBtDownloadComplete", [{ gid: "cached" }]);
+        aria2[operation]("onBtDownloadComplete", callback);
+        expect(callback.mock.calls).toEqual([
+          [[{ gid: "cached" }]],
+          [[{ gid: "live" }]],
+        ]);
+      },
+    );
+
+    it("replays events after the last listener is removed and replaces listeners", () => {
+      const previous = jest.fn();
+      const replacement = jest.fn();
+      aria2.addListener("onDownloadPause", previous);
+      aria2.removeListener("onDownloadPause", previous);
+      aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "cached" }]);
+      aria2.setListener("onDownloadPause", replacement);
+      aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "live" }]);
+      expect(previous).not.toHaveBeenCalled();
+      expect(replacement.mock.calls).toEqual([
+        [[{ gid: "cached" }]],
+        [[{ gid: "live" }]],
+      ]);
+
+      aria2.setListener("onDownloadPause", previous);
+      aria2.dispatchEvent("aria2.onDownloadPause", [{ gid: "replacement" }]);
+      expect(replacement).toHaveBeenCalledTimes(2);
+      expect(previous).toHaveBeenCalledWith([{ gid: "replacement" }]);
     });
   });
 

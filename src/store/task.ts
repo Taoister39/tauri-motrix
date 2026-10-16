@@ -40,7 +40,13 @@ import {
 import { usePollingStore } from "@/store/polling";
 import { arrayAddOrRemove } from "@/utils/array_add_or_remove";
 import { compactUndefined } from "@/utils/compact_undefined";
-import { getTaskFullPath, getTaskName, getTaskUri } from "@/utils/task";
+import {
+  checkTaskIsBT,
+  getTaskFullPath,
+  getTaskName,
+  getTaskUri,
+  isMagnetTask,
+} from "@/utils/task";
 
 export type WrapGid = [{ gid: string }];
 
@@ -66,11 +72,50 @@ interface TaskStore {
   addTask: (url: string, option: DownloadOption) => void;
   getTaskByGid: (gid: string) => DownloadTask;
   syncToDownloadHistory: (task: DownloadTask) => Promise<void>;
-  registerEvent: () => void;
-  onDownloadStart: (wrap: WrapGid) => void;
-  onDownloadStop: (wrap: WrapGid) => void;
-  onDownloadComplete: (wrap: WrapGid) => void;
-  onDownloadError: (wrap: WrapGid) => void;
+  registerEvent: () => Promise<void>;
+  onDownloadStart: (wrap: WrapGid) => Promise<void>;
+  onDownloadPause: (wrap: WrapGid) => Promise<void>;
+  onDownloadStop: (wrap: WrapGid) => Promise<void>;
+  onDownloadComplete: (wrap: WrapGid) => Promise<void>;
+  onDownloadError: (wrap: WrapGid) => Promise<void>;
+  onBtDownloadComplete: (wrap: WrapGid) => Promise<void>;
+}
+
+const aria2EventListeners = (
+  [
+    "onDownloadStart",
+    "onDownloadPause",
+    "onDownloadStop",
+    "onDownloadComplete",
+    "onDownloadError",
+    "onBtDownloadComplete",
+  ] as const
+).map((event) => ({
+  event,
+  async callback(wrap: WrapGid) {
+    try {
+      await useTaskStore.getState()[event](wrap);
+    } catch {
+      try {
+        await appLog(
+          APP_LOG_LEVEL.Error,
+          `[Motrix] aria2 event failed: ${event}, gid: ${wrap[0]?.gid}`,
+        );
+      } catch {
+        return;
+      }
+    }
+  },
+}));
+
+async function refreshAria2Task(
+  gid: string,
+  update: (task: DownloadTask) => Promise<void>,
+): Promise<void> {
+  await Promise.all([
+    useTaskStore.getState().fetchTasks(),
+    taskItemApi(gid).then(update),
+  ]);
 }
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -340,56 +385,75 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     return task;
   },
   async onDownloadStart([{ gid }]) {
-    const { fetchTasks, enableNotify } = get();
-    fetchTasks();
     usePollingStore.getState().resetInterval();
-
-    const task = await taskItemApi(gid);
-    const taskName = getTaskName(task, "unknown_start", 64);
-
-    if (enableNotify) {
-      Notice.success(t("task.StartMessage", { taskName }));
-    }
-
-    get().syncToDownloadHistory(task);
+    await refreshAria2Task(gid, async (task) => {
+      const taskName = getTaskName(task, "unknown_start", 64);
+      if (get().enableNotify) {
+        Notice.success(t("task.StartMessage", { taskName }));
+      }
+      await get().syncToDownloadHistory(task);
+    });
+  },
+  async onDownloadPause([{ gid }]) {
+    await refreshAria2Task(gid, (task) => get().syncToDownloadHistory(task));
   },
   async onDownloadStop([{ gid }]) {
-    const task = await taskItemApi(gid);
-    const taskName = getTaskName(task, "unknown_stop", 64);
-    if (get().enableNotify) {
-      Notice.success(t("task.StopMessage", { taskName }));
-    }
+    await refreshAria2Task(gid, async (task) => {
+      const taskName = getTaskName(task, "unknown_stop", 64);
+      if (get().enableNotify) {
+        Notice.success(t("task.StopMessage", { taskName }));
+      }
+      await get().syncToDownloadHistory(task);
+    });
   },
   async onDownloadComplete([{ gid }]) {
-    get().fetchTasks();
-    const task = await taskItemApi(gid);
-    const title = getTaskName(task, "unknown_complete", 64);
-
-    if (get().enableNotify) {
-      sendNotification({ title, body: t("common.Complete") });
-    }
-    get().syncToDownloadHistory(task);
+    await refreshAria2Task(gid, async (task) => {
+      if (
+        get().enableNotify &&
+        !checkTaskIsBT(task) &&
+        !task.followedBy?.length
+      ) {
+        sendNotification({
+          title: getTaskName(task, "unknown_complete", 64),
+          body: t("common.Complete"),
+        });
+      }
+      await get().syncToDownloadHistory(task);
+    });
+  },
+  async onBtDownloadComplete([{ gid }]) {
+    await refreshAria2Task(gid, async (task) => {
+      if (
+        get().enableNotify &&
+        !isMagnetTask(task) &&
+        !task.followedBy?.length
+      ) {
+        sendNotification({
+          title: getTaskName(task, "unknown_complete", 64),
+          body: t("common.Complete"),
+        });
+      }
+      await get().syncToDownloadHistory(task);
+    });
   },
   async onDownloadError([{ gid }]) {
-    const task = await taskItemApi(gid);
-    const { errorCode, errorMessage } = task;
-    const taskName = getTaskName(task, "unknown_error", 64);
-
-    appLog(
-      APP_LOG_LEVEL.Error,
-      `[Motrix] download error gid: ${gid}, #${errorCode}, ${errorMessage}`,
-    );
-
-    Notice.error(t("task.DownloadErrorMessage", { taskName }));
-
-    if (get().enableNotify) {
-      sendNotification({
-        title: taskName,
-        body: t("task.DownloadErrorMessage", { taskName }),
-      });
-    }
-
-    await Promise.all([get().syncToDownloadHistory(task), get().fetchTasks()]);
+    await refreshAria2Task(gid, async (task) => {
+      const taskName = getTaskName(task, "unknown_error", 64);
+      Notice.error(t("task.DownloadErrorMessage", { taskName }));
+      if (get().enableNotify) {
+        sendNotification({
+          title: taskName,
+          body: t("task.DownloadErrorMessage", { taskName }),
+        });
+      }
+      await Promise.all([
+        appLog(
+          APP_LOG_LEVEL.Error,
+          `[Motrix] aria2 onDownloadError, gid: ${gid}`,
+        ),
+        get().syncToDownloadHistory(task),
+      ]);
+    });
   },
   async registerEvent() {
     void registerVortexEvents(async (task, previous, initial) => {
@@ -419,18 +483,10 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         }
       }
     }).catch((error) => Notice.error(String(error)));
-    const {
-      onDownloadComplete,
-      onDownloadStart,
-      onDownloadStop,
-      onDownloadError,
-    } = get();
     const { addListener } = await getAria2();
-
-    addListener("onDownloadStart", onDownloadStart);
-    addListener("onDownloadStop", onDownloadStop);
-    addListener("onDownloadError", onDownloadError);
-    addListener("onDownloadComplete", onDownloadComplete);
+    for (const { event, callback } of aria2EventListeners) {
+      addListener(event, callback);
+    }
   },
   syncByMotrix(config) {
     set({
