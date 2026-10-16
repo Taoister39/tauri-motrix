@@ -4,6 +4,9 @@
   "description": "Capability for the main window",
   "windows": ["main"],
   "permissions": [
+    "allow-tray-actions",
+    "updater:allow-check",
+    "updater:allow-download-and-install",
     "allow-task-deletion",
     "allow-desktop-commands",
     "core:default",

@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-tray-actions"
+description = "Allows the main window to consume queued tray actions and task control reports."
+commands.allow = ["take_tray_actions", "take_tray_reports"]

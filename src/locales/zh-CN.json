@@ -193,7 +193,10 @@
   "update": {
     "CurrentlyOnLatest": "当前已是最新版本",
     "GotoReleasePage": "点击到发布页面",
-    "BreakChangeUpdateError": "可携式版本不支持应用程式内更新。请手动下载并替换。"
+    "BreakChangeUpdateError": "可携式版本不支持应用程式内更新。请手动下载并替换。",
+    "New": "新版",
+    "NewVersionAvailable": "有新版本可用",
+    "NewVersionTitle": "新版本 v{{version}}"
   },
   "about": {
     "Title": "关于应用程序",
@@ -211,5 +214,26 @@
     "ResumeDescription": "重启后自动恢复运行和排队的 Vortex 任务；暂停和失败任务保持停止。",
     "Retry": "重试",
     "AriaResume": "启动时恢复 aria2 任务"
+  },
+  "tray": {
+    "NewDownload": "新建下载…",
+    "OpenTorrent": "打开种子文件…",
+    "PauseAll": "全部暂停",
+    "ResumeAll": "全部继续",
+    "ShowWindow": "显示主窗口",
+    "Downloads": "下载任务",
+    "Settings": "设置…",
+    "CheckUpdates": "检查更新…",
+    "Quit": "退出 Tauri Motrix",
+    "TorrentFiles": "种子文件",
+    "ControlFailedTitle": "部分任务未能完成操作",
+    "ControlFailedBody": "打开 Tauri Motrix 查看任务操作结果。",
+    "ControlReport": "{{action}}：成功 {{succeeded}} 项，失败或跳过 {{failed}} 项。",
+    "Failure_unavailable": "引擎不可用",
+    "Failure_control_failed": "任务操作失败",
+    "Failure_deletion_pending": "任务删除正在等待确认",
+    "TaskSubmitting": "任务正在提交，请稍后重试。",
+    "TorrentReadFailed": "无法读取种子文件，请选择不超过 10 MiB 的有效 .torrent 文件。",
+    "ActionFailed": "无法处理托盘操作，请重试。"
   }
 }

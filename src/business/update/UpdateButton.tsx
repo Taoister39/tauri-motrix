@@ -1,44 +1,36 @@
 import { Button } from "@mui/material";
-import { check } from "@tauri-apps/plugin-updater";
-import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import useSWR from "swr";
 
-import UpdateViewer from "@/business/update/UpdateViewer";
-import { DialogRef } from "@/components/BaseDialog";
 import { useMotrix } from "@/hooks/motrix";
+import { fetchUpdate, useUpdateStore } from "@/services/updates";
 
 function UpdateButton(props: { className?: string }) {
-  const viewerRef = useRef<DialogRef>(null);
+  const { t } = useTranslation();
+  const updateInfo = useUpdateStore((state) => state.update);
   const { motrix } = useMotrix();
   const auto_check_update = !!motrix?.auto_check_update;
 
-  const { data: updateInfo } = useSWR(
-    auto_check_update || auto_check_update === null ? "checkUpdate" : null,
-    check,
-    {
-      errorRetryCount: 2,
-      revalidateIfStale: false,
-      focusThrottleInterval: 36e5, // 1 hour
-    },
-  );
+  useSWR(auto_check_update ? "checkUpdate" : null, fetchUpdate, {
+    errorRetryCount: 2,
+    revalidateIfStale: false,
+    focusThrottleInterval: 36e5, // 1 hour
+  });
 
   if (!updateInfo) {
     return null;
   }
 
   return (
-    <>
-      <UpdateViewer ref={viewerRef} />
-      <Button
-        className={props.className}
-        color="error"
-        variant="contained"
-        size="small"
-        onClick={() => viewerRef.current?.open()}
-      >
-        New
-      </Button>
-    </>
+    <Button
+      className={props.className}
+      color="error"
+      variant="contained"
+      size="small"
+      onClick={() => useUpdateStore.setState({ open: true })}
+    >
+      {t("update.New")}
+    </Button>
   );
 }
 

@@ -1,29 +1,25 @@
 import { Box, Button, LinearProgress } from "@mui/material";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { check as checkUpdate } from "@tauri-apps/plugin-updater";
-import { useBoolean } from "ahooks";
-import { Ref, useImperativeHandle, useMemo, useState } from "react";
+import type { Update } from "@tauri-apps/plugin-updater";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import useSWR from "swr";
 
-import { BaseDialog, DialogRef } from "@/components/BaseDialog";
+import { BaseDialog } from "@/components/BaseDialog";
 import { Notice } from "@/components/Notice";
 import { APP_REPO } from "@/constant/url";
 import { stopEngine } from "@/services/cmd";
 
-function UpdateViewer(props: { ref: Ref<DialogRef> }) {
+function UpdateViewer({
+  updateInfo,
+  open,
+  onClose,
+}: {
+  updateInfo: Update;
+  open: boolean;
+  onClose: () => void;
+}) {
   const { t } = useTranslation();
-
-  const [open, { setTrue, setFalse }] = useBoolean();
-
-  useImperativeHandle(props.ref, () => ({ close: setFalse, open: setTrue }));
-
-  const { data: updateInfo } = useSWR("checkUpdate", checkUpdate, {
-    errorRetryCount: 2,
-    revalidateIfStale: false,
-    focusThrottleInterval: 36e5, // 1 hour
-  });
 
   const [downloaded, setDownloaded] = useState(0);
   const [contentLength, setContentLength] = useState(0);
@@ -32,10 +28,10 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
 
   const markdownContent = useMemo(() => {
     if (!updateInfo?.body) {
-      return "New Version is available";
+      return t("update.NewVersionAvailable");
     }
     return updateInfo?.body;
-  }, [updateInfo]);
+  }, [updateInfo, t]);
 
   // ! this cannot be updated
   const breakChangeFlag = useMemo(
@@ -78,9 +74,8 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
             break;
         }
       });
-    } catch (err) {
-      // @ts-expect-error show message
-      Notice.error(err?.message || err.toString());
+    } catch (err: unknown) {
+      Notice.error(err instanceof Error ? err.message : String(err));
     } finally {
       setUpdateState(false);
     }
@@ -91,7 +86,7 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
       open={open}
       title={
         <Box display="flex" justifyContent="space-between">
-          {`New Version v${updateInfo?.version}`}
+          {t("update.NewVersionTitle", { version: updateInfo.version })}
           <Box>
             <Button
               variant="contained"
@@ -108,8 +103,13 @@ function UpdateViewer(props: { ref: Ref<DialogRef> }) {
       contentSx={{ minWidth: 360, maxWidth: 400, height: "50vh" }}
       okBtn={t("common.Update")}
       cancelBtn={t("common.Cancel")}
-      onClose={setFalse}
-      onCancel={setFalse}
+      onClose={() => {
+        if (!updateState) onClose();
+      }}
+      onCancel={() => {
+        if (!updateState) onClose();
+      }}
+      loading={updateState}
       onOk={onUpdate}
     >
       <Box sx={{ height: "calc(100% - 10px)", overflow: "auto" }}>

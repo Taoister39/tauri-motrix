@@ -1,9 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
-import { check as checkUpdate } from "@tauri-apps/plugin-updater";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import UpdateViewer from "@/business/update/UpdateViewer";
 import { SettingItem, SettingList } from "@/client/setting_compose";
 import { Android12Switch } from "@/client/styled_compose";
 import { DialogRef } from "@/components/BaseDialog";
@@ -11,6 +9,7 @@ import { Notice } from "@/components/Notice";
 import { LOG_LEVELS } from "@/constant/log";
 import { useMotrix } from "@/hooks/motrix";
 import { exitApp, openAppDir, openCoreDir, openLogsDir } from "@/services/cmd";
+import { checkForUpdates } from "@/services/updates";
 
 import ListenPortsViewer from "./ListenPortsViewer";
 
@@ -18,26 +17,10 @@ function MotrixSetting() {
   const { motrix, patchMotrix } = useMotrix();
   const { t } = useTranslation();
 
-  const updateRef = useRef<DialogRef>(null);
   const listenPortsRef = useRef<DialogRef>(null);
-
-  const onCheckUpdate = async () => {
-    try {
-      const info = await checkUpdate();
-      if (!info) {
-        Notice.success(t("update.CurrentlyOnLatest"));
-      } else {
-        updateRef.current?.open();
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      Notice.error(err.message || err.toString());
-    }
-  };
 
   return (
     <SettingList title={t("setting.Motrix")}>
-      <UpdateViewer ref={updateRef} />
       <ListenPortsViewer ref={listenPortsRef} />
 
       <SettingItem label={t("setting.LogLevelInfo")}>
@@ -102,7 +85,7 @@ function MotrixSetting() {
       <SettingItem label={t("setting.OpenLogsDir")} onClick={openLogsDir} />
       <SettingItem
         label={t("setting.CheckForUpdates")}
-        onClick={onCheckUpdate}
+        onClick={checkForUpdates}
       />
       <SettingItem label={t("common.Exit")} onClick={exitApp} />
     </SettingList>

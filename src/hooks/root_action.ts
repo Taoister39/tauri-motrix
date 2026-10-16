@@ -1,4 +1,3 @@
-import { emit } from "@tauri-apps/api/event";
 import { useMount } from "ahooks";
 import dayjs from "dayjs";
 import { useEffect } from "react";
@@ -20,7 +19,6 @@ export function useRootAction() {
 
   useMount(() => {
     registerEvent();
-    emit("motrix://web-ready");
   });
 
   useAutoSyncTacker();

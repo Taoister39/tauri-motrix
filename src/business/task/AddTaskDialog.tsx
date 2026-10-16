@@ -27,7 +27,7 @@ import {
 } from "@/utils/task_options";
 
 export interface AddTaskDialogRef extends DialogRef {
-  open: (source?: TaskSource) => void;
+  open: (source?: TaskSource, file?: File) => void;
 }
 
 function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
@@ -80,8 +80,11 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
     setFalse();
   };
   useImperativeHandle(props.ref, () => ({
-    open: (initialSource = "url") => {
-      if (submitPending.current) return;
+    open: (initialSource = "url", file) => {
+      if (submitPending.current) {
+        Notice.error(t("tray.TaskSubmitting"));
+        return;
+      }
       clearTorrent();
       reset({
         link: "",
@@ -93,6 +96,7 @@ function AddTaskDialog(props: { ref: Ref<AddTaskDialogRef> }) {
       });
       setSource(initialSource);
       setTrue();
+      if (file) onFilesChange([file]);
     },
     close: onClose,
   }));

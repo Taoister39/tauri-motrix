@@ -22,12 +22,14 @@ import { SWRConfig } from "swr";
 import logoIcon from "@/assets/logo.svg?react";
 import AddTaskDialog, { AddTaskDialogRef } from "@/business/task/AddTaskDialog";
 import UpdateButton from "@/business/update/UpdateButton";
+import UpdateHost from "@/business/update/UpdateHost";
 import { DialogHost } from "@/components/DialogHost";
 import { UxThemeBridge } from "@/components/UxThemeBridge";
 import { isWin } from "@/constant/environment";
 import { ADD_DIALOG, APP_WEBSITE_ORIGIN } from "@/constant/url";
 import { useRootAction } from "@/hooks/root_action";
 import { useCustomTheme } from "@/hooks/theme";
+import { useTray } from "@/hooks/tray";
 import LayoutItem from "@/layout/LayoutItem";
 import LayoutTraffic from "@/layout/LayoutTraffic";
 import TitleBar from "@/layout/TitleBar";
@@ -78,6 +80,7 @@ function Application() {
   const routerElements = useRoutes(routers);
 
   useRootAction();
+  useTray(addRef);
 
   useEffect(() => {
     const unlisten = listen<{ source?: "url" | "torrent" } | null>(
@@ -116,6 +119,7 @@ function Application() {
       <ThemeProvider theme={theme}>
         <UxThemeBridge>
           <DialogHost />
+          <UpdateHost />
           <AddTaskDialog ref={addRef} />
           <Paper
             onContextMenu={(e) => {

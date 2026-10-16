@@ -193,7 +193,10 @@
   "update": {
     "GotoReleasePage": "Go to release page",
     "CurrentlyOnLatest": "Currently on the Latest Version",
-    "BreakChangeUpdateError": "The portable version does not support in-app updates. Please manually download and replace it."
+    "BreakChangeUpdateError": "The portable version does not support in-app updates. Please manually download and replace it.",
+    "New": "New",
+    "NewVersionAvailable": "A new version is available",
+    "NewVersionTitle": "New Version v{{version}}"
   },
   "about": {
     "Title": "App About",
@@ -211,5 +214,26 @@
     "ResumeDescription": "Running and queued Vortex tasks resume after restart. Paused and failed tasks remain stopped.",
     "Retry": "Retry",
     "AriaResume": "Resume aria2 tasks at startup"
+  },
+  "tray": {
+    "NewDownload": "New Download…",
+    "OpenTorrent": "Open Torrent File…",
+    "PauseAll": "Pause All",
+    "ResumeAll": "Resume All",
+    "ShowWindow": "Show Main Window",
+    "Downloads": "Download Tasks",
+    "Settings": "Settings…",
+    "CheckUpdates": "Check for Updates…",
+    "Quit": "Quit Tauri Motrix",
+    "TorrentFiles": "Torrent files",
+    "ControlFailedTitle": "Some tasks could not be updated",
+    "ControlFailedBody": "Open Tauri Motrix to view task control results.",
+    "ControlReport": "{{action}}: {{succeeded}} succeeded; {{failed}} failed or skipped.",
+    "Failure_unavailable": "Engine unavailable",
+    "Failure_control_failed": "Task control failed",
+    "Failure_deletion_pending": "Task deletion is awaiting confirmation",
+    "TaskSubmitting": "A task is being submitted. Please try again shortly.",
+    "TorrentReadFailed": "Unable to read the torrent file. Please select a valid .torrent file up to 10 MiB.",
+    "ActionFailed": "Unable to handle the tray action. Please try again."
   }
 }

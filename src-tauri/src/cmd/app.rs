@@ -64,7 +64,7 @@ pub fn read_file_as_base64(path: String) -> CmdResult<String> {
 
     // Only allow .torrent files to be read from the frontend.
     let ext = path.extension().and_then(|s| s.to_str());
-    if ext != Some("torrent") {
+    if !ext.is_some_and(|value| value.eq_ignore_ascii_case("torrent")) {
         return Err("Only .torrent files are allowed".to_string());
     }
 
@@ -75,4 +75,28 @@ pub fn read_file_as_base64(path: String) -> CmdResult<String> {
 
     let bytes = wrap_err!(fs::read(path))?;
     Ok(STANDARD.encode(bytes))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn native_torrent_import_accepts_case_insensitive_extensions() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("selected.TORRENT");
+        fs::write(&path, b"torrent content").unwrap();
+        assert_eq!(
+            read_file_as_base64(path.to_string_lossy().into_owned()).unwrap(),
+            STANDARD.encode(b"torrent content")
+        );
+    }
+
+    #[test]
+    fn native_torrent_import_rejects_other_files() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("selected.txt");
+        fs::write(&path, b"text").unwrap();
+        assert!(read_file_as_base64(path.to_string_lossy().into_owned()).is_err());
+    }
 }

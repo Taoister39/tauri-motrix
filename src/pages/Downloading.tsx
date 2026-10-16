@@ -16,8 +16,9 @@ import { emit } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import { useLockFn } from "ahooks";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router";
 import { mutate } from "swr";
 
 import TaskBanner from "@/business/task/TaskBanner";
@@ -54,7 +55,12 @@ function DownloadingPage() {
     fetchTasks,
   } = useTaskStore();
 
-  const searchRef = useRef<string>("");
+  const [search, setSearch] = useState("");
+  const location = useLocation();
+  const resetSearch: unknown = location.state?.resetSearch;
+  useEffect(() => {
+    setSearch("");
+  }, [resetSearch]);
   const [dragOver, setDragOver] = useState(false);
   /** Paths from Tauri file drop (native drag-drop gives paths, not File objects) */
   const [pendingTorrentPaths, setPendingTorrentPaths] = useState<string[]>([]);
@@ -219,6 +225,7 @@ function DownloadingPage() {
           })}
         >
           <TextField
+            value={search}
             fullWidth
             size="small"
             sx={(theme) => ({
@@ -240,18 +247,18 @@ function DownloadingPage() {
               if (value.length === 0) {
                 setKeyword(value);
               }
-              searchRef.current = value;
+              setSearch(value);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setKeyword(searchRef.current);
+                setKeyword(search);
               }
             }}
             slotProps={{
               input: {
                 startAdornment: (
                   <span
-                    onClick={() => setKeyword(searchRef.current)}
+                    onClick={() => setKeyword(search)}
                     style={{
                       cursor: "pointer",
                       // color: "#757575",

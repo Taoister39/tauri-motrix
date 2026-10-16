@@ -193,7 +193,10 @@
   "update": {
     "GotoReleasePage": "リリースページへ移動",
     "CurrentlyOnLatest": "現在最新バージョンです",
-    "BreakChangeUpdateError": "ポータブル版はアプリ内アップデートをサポートしていません。手動でダウンロードして置き換えてください。"
+    "BreakChangeUpdateError": "ポータブル版はアプリ内アップデートをサポートしていません。手動でダウンロードして置き換えてください。",
+    "New": "新版",
+    "NewVersionAvailable": "新しいバージョンを利用できます",
+    "NewVersionTitle": "新しいバージョン v{{version}}"
   },
   "about": {
     "Title": "アプリについて",
@@ -211,5 +214,26 @@
     "ResumeDescription": "実行中と待機中の Vortex タスクは再起動後に再開します。一時停止・失敗タスクは停止したままです。",
     "Retry": "再試行",
     "AriaResume": "起動時に aria2 タスクを再開"
+  },
+  "tray": {
+    "NewDownload": "新しいダウンロード…",
+    "OpenTorrent": "トレントファイルを開く…",
+    "PauseAll": "すべて一時停止",
+    "ResumeAll": "すべて再開",
+    "ShowWindow": "メインウィンドウを表示",
+    "Downloads": "ダウンロードタスク",
+    "Settings": "設定…",
+    "CheckUpdates": "更新を確認…",
+    "Quit": "Tauri Motrix を終了",
+    "TorrentFiles": "トレントファイル",
+    "ControlFailedTitle": "一部のタスクを操作できませんでした",
+    "ControlFailedBody": "Tauri Motrix を開いて操作結果を確認してください。",
+    "ControlReport": "{{action}}：成功 {{succeeded}} 件、失敗またはスキップ {{failed}} 件。",
+    "Failure_unavailable": "エンジンを利用できません",
+    "Failure_control_failed": "タスクの操作に失敗しました",
+    "Failure_deletion_pending": "タスクの削除は確認待ちです",
+    "TaskSubmitting": "タスクを送信中です。しばらくしてから再試行してください。",
+    "TorrentReadFailed": "トレントファイルを読み込めません。10 MiB 以下の有効な .torrent ファイルを選択してください。",
+    "ActionFailed": "トレイの操作に失敗しました。再試行してください。"
   }
 }

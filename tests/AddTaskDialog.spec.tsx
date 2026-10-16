@@ -291,7 +291,7 @@ it("submits once and keeps the dialog locked until the task is accepted", async 
       accept = resolve;
     }),
   );
-  openDialog();
+  const ref = openDialog();
   fireEvent.change(screen.getByLabelText("common.DownloadLink"), {
     target: { value: "https://example.test/file" },
   });
@@ -300,6 +300,13 @@ it("submits once and keeps the dialog locked until the task is accepted", async 
   });
   fireEvent.click(screen.getByText("common.Submit"));
   await waitFor(() => expect(addTaskApi).toHaveBeenCalledTimes(1));
+  act(() =>
+    ref.current?.open("torrent", new File(["torrent"], "incoming.torrent")),
+  );
+  expect(Notice.error).toHaveBeenCalledWith("tray.TaskSubmitting");
+  expect(screen.getByLabelText("common.DownloadLink")).toHaveValue(
+    "https://example.test/file",
+  );
   expect(addTaskApi).toHaveBeenCalledWith("https://example.test/file", {
     dir: "Downloads",
     out: "",
@@ -313,4 +320,27 @@ it("submits once and keeps the dialog locked until the task is accepted", async 
   await waitFor(() =>
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
   );
+});
+
+it("previews a torrent selected by the tray without submitting it", async () => {
+  const ref = openDialog();
+  const file = new File(["torrent"], "selected.torrent");
+  await act(async () => ref.current?.open("torrent", file));
+  expect(parseTorrent).toHaveBeenCalledWith(file);
+  expect(await screen.findByText("one.txt")).toBeInTheDocument();
+  expect(addTorrentApi).not.toHaveBeenCalled();
+  expect(screen.getByLabelText("common.DownloadPath")).toHaveValue("Downloads");
+});
+
+it("blocks an unsupported torrent selected by the tray", async () => {
+  parseTorrent.mockResolvedValue(parsedTorrent("v2"));
+  const ref = openDialog();
+  await act(async () =>
+    ref.current?.open("torrent", new File(["torrent"], "v2.torrent")),
+  );
+  expect(
+    await screen.findByText("task.UnsupportedTorrentV2"),
+  ).toBeInTheDocument();
+  expect(screen.queryByText("common.Submit")).not.toBeInTheDocument();
+  expect(addTorrentApi).not.toHaveBeenCalled();
 });

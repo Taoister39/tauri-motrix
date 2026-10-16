@@ -24,6 +24,9 @@ Supports Windows, macOS, and Linux, with x64 and ARM64 builds on all three platf
 - 🚥 Supports speed limit
 - 🔌 Configurable aria2 RPC port and secret for third-party download tools
 - 🖥️ Optional minimize to tray on auto launch, configurable in Settings → Display (off by default). Manual launches still show the window.
+- Native tray shortcuts for new downloads, torrent files, all-task controls, navigation, settings, and updates.
+
+Tray task controls run in the background across aria2 and Vortex. Pause All includes queued tasks and BitTorrent seeding; Resume All resumes every paused task, including manually paused tasks, without retrying failed tasks. Tasks awaiting file deletion confirmation are skipped and reported. Opening a torrent from the tray always previews it before submission.
 
 ## RPC downloads
 
@@ -55,6 +58,8 @@ pnpm i
 pnpm check
 pnpm tauri dev
 ```
+
+After editing `src/locales/*.json`, run `pnpm prepare:locales` to refresh native translations without downloading aria2 again. `pnpm check` still prepares both the sidecar and translations.
 
 ## Contributions
 

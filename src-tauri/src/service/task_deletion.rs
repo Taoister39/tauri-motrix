@@ -101,6 +101,16 @@ pub struct DeletionState {
 }
 
 impl DeletionState {
+    fn is_pending(&self, engine: EngineKind, id: &str) -> bool {
+        let task = TaskRef {
+            engine,
+            id: id.into(),
+        };
+        self.pending
+            .values()
+            .any(|pending| pending.assets.contains_key(&task))
+    }
+
     fn expire_confirmations(&mut self) {
         self.pending
             .retain(|_, pending| pending.created_at.elapsed() < Duration::from_secs(900));
@@ -146,17 +156,16 @@ impl Backend for SystemBackend {
 }
 
 pub async fn control_guard(id: &str) -> Result<MutexGuard<'static, DeletionState>, String> {
+    control_guard_for(EngineKind::Vortex, id).await
+}
+
+pub async fn control_guard_for(
+    engine: EngineKind,
+    id: &str,
+) -> Result<MutexGuard<'static, DeletionState>, String> {
     let mut state = STATE.lock().await;
     state.expire_confirmations();
-    let task = TaskRef {
-        engine: EngineKind::Vortex,
-        id: id.into(),
-    };
-    if state
-        .pending
-        .values()
-        .any(|pending| pending.assets.contains_key(&task))
-    {
+    if state.is_pending(engine, id) {
         return Err("Task deletion is awaiting confirmation".into());
     }
     Ok(state)

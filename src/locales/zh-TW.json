@@ -193,7 +193,10 @@
   "update": {
     "GotoReleasePage": "前往發布頁面",
     "CurrentlyOnLatest": "目前已是最新版本",
-    "BreakChangeUpdateError": "可攜式版本不支援應用程式內更新。請手動下載並替換。"
+    "BreakChangeUpdateError": "可攜式版本不支援應用程式內更新。請手動下載並替換。",
+    "New": "新版",
+    "NewVersionAvailable": "有新版本可用",
+    "NewVersionTitle": "新版本 v{{version}}"
   },
   "about": {
     "Title": "關於應用程式",
@@ -211,5 +214,26 @@
     "ResumeDescription": "重新啟動後恢復執行和排隊的 Vortex 任務；暫停和失敗任務保持停止。",
     "Retry": "重試",
     "AriaResume": "啟動時恢復 aria2 任務"
+  },
+  "tray": {
+    "NewDownload": "新增下載…",
+    "OpenTorrent": "開啟種子檔案…",
+    "PauseAll": "全部暫停",
+    "ResumeAll": "全部繼續",
+    "ShowWindow": "顯示主視窗",
+    "Downloads": "下載任務",
+    "Settings": "設定…",
+    "CheckUpdates": "檢查更新…",
+    "Quit": "結束 Tauri Motrix",
+    "TorrentFiles": "種子檔案",
+    "ControlFailedTitle": "部分任務未能完成操作",
+    "ControlFailedBody": "開啟 Tauri Motrix 查看任務操作結果。",
+    "ControlReport": "{{action}}：成功 {{succeeded}} 項，失敗或略過 {{failed}} 項。",
+    "Failure_unavailable": "引擎無法使用",
+    "Failure_control_failed": "任務操作失敗",
+    "Failure_deletion_pending": "任務刪除正在等待確認",
+    "TaskSubmitting": "任務正在提交，請稍後重試。",
+    "TorrentReadFailed": "無法讀取種子檔案，請選擇不超過 10 MiB 的有效 .torrent 檔案。",
+    "ActionFailed": "無法處理系統匣操作，請重試。"
   }
 }

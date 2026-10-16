@@ -16,6 +16,28 @@ struct MockState {
     saves: usize,
 }
 
+#[tokio::test]
+async fn pending_deletions_only_block_controls_for_the_same_engine_and_task() {
+    let directory = tempfile::tempdir().unwrap();
+    let backend = MockBackend::default();
+    let selected = task(EngineKind::Aria2c, "shared-id");
+    let paths = fixture(&backend, directory.path(), &selected, &["file"]);
+    backend
+        .0
+        .lock()
+        .unwrap()
+        .recycle_failures
+        .insert(paths[0].clone());
+    let mut state = DeletionState::default();
+    let report = delete_with(&mut state, vec![selected], true, backend)
+        .await
+        .unwrap();
+    assert!(report.retry_token.is_some());
+    assert!(state.is_pending(EngineKind::Aria2c, "shared-id"));
+    assert!(!state.is_pending(EngineKind::Vortex, "shared-id"));
+    assert!(!state.is_pending(EngineKind::Aria2c, "other-id"));
+}
+
 #[derive(Clone, Default)]
 struct MockBackend(Arc<StdMutex<MockState>>);
 
@@ -375,7 +397,26 @@ fn desktop_capabilities_cover_every_registered_application_command() {
         .split(']')
         .next()
         .unwrap();
-    let permissions = include_str!("../../../permissions/task-deletion.toml");
+    let permissions = [
+        include_str!("../../../permissions/task-deletion.toml"),
+        include_str!("../../../permissions/tray.toml"),
+    ]
+    .join("\n");
+    let capability: Value =
+        serde_json::from_str(include_str!("../../../capabilities/default.json")).unwrap();
+    for identifier in [
+        "allow-task-deletion",
+        "allow-desktop-commands",
+        "allow-tray-actions",
+    ] {
+        assert!(
+            capability["permissions"]
+                .as_array()
+                .unwrap()
+                .contains(&json!(identifier)),
+            "Missing capability for {identifier}"
+        );
+    }
     for command in commands
         .split(',')
         .map(str::trim)
