@@ -54,3 +54,42 @@ export const designTokens = {
 
 export type ThemeMode = "light" | "dark" | "system";
 export type ComponentSize = "sm" | "md" | "lg";
+
+export const festivalTokens = {
+  fontFamily: '"DM Sans", "Segoe UI", system-ui, sans-serif',
+  posterFontFamily: '"Barlow Condensed", "Arial Narrow", sans-serif',
+  radius: 12,
+  spacing: 8,
+  light: {
+    primary: "#344ce9",
+    onPrimary: "#ffffff",
+    ink: "#182552",
+    muted: "#64708c",
+    canvas: "#edf1fc",
+    paper: "#fffef9",
+    outline: "#d5dced",
+    shadow: "#182552",
+    tint: "#e8ecff",
+    mint: "#dcfaf3",
+    onMint: "#126758",
+    pink: "#ff94ce",
+    lemon: "#f7ff80",
+    error: "#b32649",
+  },
+  dark: {
+    primary: "#a6b2ff",
+    onPrimary: "#182552",
+    ink: "#edf2ff",
+    muted: "#aab7d3",
+    canvas: "#101627",
+    paper: "#1b233b",
+    outline: "#34425e",
+    shadow: "#080e1c",
+    tint: "#293453",
+    mint: "#183b42",
+    onMint: "#8ce4d8",
+    pink: "#ff94ce",
+    lemon: "#f7ff80",
+    error: "#ff94ac",
+  },
+} as const;

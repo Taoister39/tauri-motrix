@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
+    "./festival": {
+      "types": "./dist/festival/index.d.ts",
+      "import": "./dist/festival/index.js"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
@@ -37,6 +41,9 @@
     "docs:build": "storybook build"
   },
   "devDependencies": {
+    "@mui/material": "catalog:",
+    "@emotion/react": "catalog:",
+    "@emotion/styled": "catalog:",
     "@stylexjs/babel-plugin": "catalog:stylex",
     "@stylexswc/rs-compiler": "catalog:stylex",
     "@rsbuild/core": "catalog:",
@@ -51,8 +58,22 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
+    "@mui/material": "catalog:",
+    "@emotion/react": "catalog:",
+    "@emotion/styled": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "@mui/material": {
+      "optional": true
+    },
+    "@emotion/react": {
+      "optional": true
+    },
+    "@emotion/styled": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@stylexjs/stylex": "catalog:stylex",

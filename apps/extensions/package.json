@@ -4,25 +4,28 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:edge": "cross-env NODE_ENV=production node ./edge/build.js",
-    "build": "rsbuild build",
-    "dev": "rsbuild dev --port 2542",
+    "build": "addfox build -b chrome --no-open",
+    "build:edge": "addfox build -b edge --no-open",
+    "dev": "addfox dev -b chrome",
+    "dev:edge": "addfox dev -b edge",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@mui/material": "catalog:",
+    "@mui/icons-material": "catalog:",
+    "@emotion/react": "catalog:",
+    "@emotion/styled": "catalog:",
     "@tauri-motrix/ux-base": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@rsbuild/core": "catalog:",
+    "@types/chrome": "catalog:",
     "@rsbuild/plugin-react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "typescript": "catalog:",
-    "cross-env": "^7.0.3",
-    "crx": "^5.0.1",
-    "yargs": "^18.0.0"
+    "addfox": "catalog:"
   },
   "packageManager": "pnpm@10.12.4"
 }

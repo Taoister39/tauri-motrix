@@ -21,6 +21,7 @@ export default tseslint.config(
       "packages/ux-base/src/generated/**",
       "**/storybook-static/**",
       "apps/extensions/unpacked/**",
+      "apps/extensions/.addfox/**",
     ],
   },
   {

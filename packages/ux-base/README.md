@@ -21,6 +21,25 @@ pnpm --filter @tauri-motrix/ux-base dev
 
 ## Usage
 
+### Motrix festival UI
+
+The opt-in `@tauri-motrix/ux-base/festival` entry provides a MUI-based design
+system alongside the existing StyleX components. Install its optional peers
+`@mui/material` (9.5 or later within major 9), `@emotion/react`, and
+`@emotion/styled` in consumers. Existing StyleX consumers need no migration.
+
+Wrap the application with `FestivalProvider` using `light`, `dark`, or `system`.
+It supplies the MUI theme, baseline, keyboard focus, and reduced-motion styles.
+`FestivalBrand`, `FestivalHero`, `FestivalToggleCard`, `FestivalResourceRow`, and
+`FestivalEmptyState` accept content and callbacks through props. Browser APIs and
+application state belong in the consumer. Shared festival scales live in
+`src/tokens.ts`; fonts and artwork are supplied by the application.
+
+See the Festival Storybook stories for both appearances. The extension imports
+this entry while the existing `/components` and `/theme` entries remain StyleX.
+
+### StyleX UI
+
 Import CSS once at the application entry point. Consumers do not need a StyleX
 compiler plugin. In Next.js, import CSS in the root layout and use interactive
 components from client components.

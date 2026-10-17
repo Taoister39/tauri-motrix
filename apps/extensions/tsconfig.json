@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "rsbuild.config.ts"]
+  "include": ["src", "addfox.config.ts"]
 }

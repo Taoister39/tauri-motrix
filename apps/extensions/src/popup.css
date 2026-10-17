@@ -1,34 +1,58 @@
-html,
+@font-face {
+  font-family: "DM Sans";
+  src: url("../public/assets/dm-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("../public/assets/dm-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("../public/assets/dm-black.ttf") format("truetype");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../public/assets/barlow-poster.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+html {
+  min-width: 320px;
+}
 body {
-  margin: 0;
-  width: 360px;
+  width: 420px;
+  margin-inline: auto !important;
 }
-.popup {
-  padding: 16px;
-  box-sizing: border-box;
-  background: Canvas;
-}
-.popup header,
-.popup .row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.popup header {
-  justify-content: space-between;
-}
-.popup h1 {
-  font-size: 18px;
-  margin: 0;
-}
-.popup form,
-.popup {
+.extension-shell {
+  height: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  overflow: hidden;
 }
-.popup p {
-  margin: 0;
-  overflow-wrap: anywhere;
+* {
+  box-sizing: border-box;
+}
+/* Action popups size their viewport from content, so viewport limits belong only in the preview. */
+.browser-preview body {
+  max-width: 100vw;
+}
+.browser-preview .extension-shell {
+  max-height: 100dvh;
+}
+@media (min-width: 600px) {
+  .browser-preview body {
+    padding-block: 24px;
+  }
+  .browser-preview .extension-shell {
+    border-radius: 16px;
+    box-shadow: 0 18px 80px #10162730;
+  }
 }

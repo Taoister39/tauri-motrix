@@ -3,6 +3,12 @@ packages:
   - apps/*
 
 catalog:
+  addfox: 0.2.9
+  "@mui/material": 9.5.0
+  "@mui/icons-material": 9.5.0
+  "@emotion/react": ^11.14.0
+  "@emotion/styled": ^11.14.0
+  "@types/chrome": ^0.1.24
   "@rsbuild/plugin-react": ^2.1.0
   react: ^19.3.0
   react-dom: ^19.3.0
@@ -29,3 +35,9 @@ catalogs:
     "@stylexswc/rs-compiler": 0.19.1
     "@stylexswc/unplugin": ^0.19.1
     "@stylexswc/jest": "^0.19.1"
+  mui7:
+    "@emotion/react": "^11.14.0"
+    "@emotion/styled": "^11.14.0"
+    "@mui/material": 7.2.0
+    "@mui/icons-material": 7.2.0
+    "@mui/x-data-grid": 8.5.1

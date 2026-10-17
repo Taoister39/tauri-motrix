@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Motrix Companion",
+  "description": "Discover resources in your current tab and send downloads to Motrix.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "Motrix Companion"
+  },
+  "permissions": ["storage", "activeTab", "downloads", "webRequest"],
+  "host_permissions": ["http://127.0.0.1/*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"]
+}
